@@ -6,20 +6,20 @@
 
 `SEMESTRE: 1º`
 
-Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo desenvolvido.
+Sistema de Controle de Gastos: uma aplicação web simples e acessível para registrar receitas e despesas, acompanhar saldos e organizar finanças pessoais com mais clareza e praticidade.
 
 ## Integrantes
 
-* Nome completo do aluno 1
-* Nome completo do aluno 2
-* Nome completo do aluno 3
-* Nome completo do aluno 4
-* Nome completo do aluno 5
+* Arlann Henrique Silva Rocha
+* Eduardo Mazei Sobrinho
+* Fernanda dos Santos Fraga
+* Pedro Augusto Cruz de Almeida
+* Dario Vieira Diniz Filho 
 
 
 ## Orientador
 
-* Nome completo do professor 1
+* Alisson Rabelo Arantes
 
 # Planejamento
 
