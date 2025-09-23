@@ -14,7 +14,8 @@ Sistema de Controle de Gastos: uma aplicação web simples e acessível para reg
 * Eduardo Mazei Sobrinho
 * Fernanda dos Santos Fraga
 * Pedro Augusto Cruz de Almeida
-* Dario Vieira Diniz Filho 
+* Dario Vieira Diniz Filho
+* Larissa Evelyn Marques da Silva
 
 
 ## Orientador
