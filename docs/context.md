@@ -7,7 +7,7 @@ endividamento. Embora existam ferramentas digitais para essa finalidade, muitas 
 apresentam interfaces complexas ou exigem conhecimentos prévios que afastam usuários 
 iniciantes. 
 
-Nesse contexto, o Sistema de Controle de Gastos surge como uma aplicação web 
+Nesse contexto, o Goal Wallet surge como uma aplicação web 
 simples e acessível, que busca democratizar o uso da tecnologia para organização 
 financeira. A plataforma permitirá o registro de entradas e saídas de dinheiro, a criação de 
 diferentes contas (como carteira, conta-corrente e poupança) e a visualização consolidada 
@@ -73,7 +73,7 @@ Dessa forma, a justificativa para o desenvolvimento do projeto não se limita ap
 
 ## Público-Alvo
 
-O Sistema de Controle de Gastos é direcionado a diferentes perfis de usuários que compartilham o interesse em melhorar sua organização financeira, mas apresentam necessidades distintas de acordo com sua faixa etária, momento de vida e nível de familiaridade tecnológica. 
+O Goal Wallet é direcionado a diferentes perfis de usuários que compartilham o interesse em melhorar sua organização financeira, mas apresentam necessidades distintas de acordo com sua faixa etária, momento de vida e nível de familiaridade tecnológica. 
 
 Jovens adultos (18 a 25 anos): em fase inicial de independência financeira, muitos ainda não possuem hábitos de planejamento estruturado e tendem a priorizar consumo imediato. Para esse grupo, a aplicação oferece recursos básicos e visuais claros que incentivam o registro das primeiras receitas e despesas, promovendo a construção de hábitos de organização. 
 
