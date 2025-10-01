@@ -69,12 +69,15 @@ O fluxo de usuário (User Flow) é uma técnica fundamental para mapear as sequ�
 Os protótipos (wireframes) ilustram a estrutura de cada tela e a relação entre elas, atendendo diretamente aos requisitos do sistema. Abaixo, são apresentadas as principais interfaces da plataforma, com os links para o código CSS que define o estilo de cada uma.
 
 
-⦁	Tela Inicial (Splash/Boas-vindas): É a primeira tela que o usuário vê quando abre o aplicativo ou entra no site. Normalmente é simples, com pouco conteúdo, para causar uma boa primeira impressão.
-Exibe a logo centralizada:
-O logotipo da aplicação/marca aparece bem no centro da tela, como destaque principal. Isso ajuda o usuário a reconhecer imediatamente onde ele está.
+Tela Inicial (Splash/Boas-vindas): É a primeira tela que o usuário vê quando abre o aplicativo ou entra no site. Normalmente é simples, com pouco conteúdo, para causar uma boa primeira impressão.
+
+Exibe a logo centralizada: O logotipo da aplicação/marca aparece bem no centro da tela, como destaque principal. Isso ajuda o usuário a reconhecer imediatamente onde ele está.
+
 Botões "Entrar" e "Criar Conta":
 Abaixo do logo (ou em posição de destaque), ficam dois botões:
+
 Entrar → para quem já tem cadastro e só precisa colocar login e senha.
+
 Criar Conta → para novos usuários que ainda não têm acesso e precisam se registrar.
 
 
