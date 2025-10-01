@@ -176,7 +176,6 @@ Em outros contextos pode ser: número de posts, atividades concluídas, progress
 > ⦁	Gráfico de gastos
 Um elemento visual (geralmente de pizza, barras ou linhas) que mostra como o usuário está gastando/destinando recursos.
 
-> ⦁	Facilita o entendimento dos hábitos de consumo sem precisar ler tabelas.
 
 
 
