@@ -163,15 +163,19 @@ Expansões futuras:
 > ⦁	Foto
 Um avatar ou foto de perfil do usuário, geralmente no topo da tela.
 Serve para personalizar a experiência e facilitar a identificação.
+
 > ⦁	Nome
 O nome do usuário exibido logo abaixo ou ao lado da foto.
 Pode vir acompanhado de informações adicionais, como e-mail ou username.
+
 > ⦁	Resumo de uso
 Pequeno painel com informações principais sobre o uso do app.
 Exemplos em um app financeiro: saldo, total gasto no mês, quantidade de transações.
 Em outros contextos pode ser: número de posts, atividades concluídas, progresso etc.
+
 > ⦁	Gráfico de gastos
 Um elemento visual (geralmente de pizza, barras ou linhas) que mostra como o usuário está gastando/destinando recursos.
+
 > ⦁	Facilita o entendimento dos hábitos de consumo sem precisar ler tabelas.
 
 
