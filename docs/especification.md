@@ -11,6 +11,15 @@
 |Descrição: Vendedor de 29 anos, com renda média-baixa (salário fixo + comissão). Tem despesas fixas como aluguel e transporte, mas costuma perder o controle financeiro no fim do mês. Busca equilibrar os gastos essenciais e começar a poupar para projetos pessoais, como a compra de uma moto.|
 |Necessidades: Registro de despesas fixas e repetidas e uma projeção do saldo para acompanhar se o dinheiro será suficiente até o fim do mês.| 
 
+|Perfil 3: Carla – A mãe Organizada|
+|-----------------------------------------------|
+|Descrição: Auxiliar administrativa de 37 anos, com renda média, responsável por administrar os gastos da família. Lida com despesas como escola dos filhos, mercado e contas fixas, mas tem dificuldade em visualizar para onde vai a maior parte do dinheiro. Seu objetivo é reduzir dívidas, manter as contas em dia e planejar férias em família.|
+|Necessidades: Interface simples e relatórios visuais que ajudem a identificar os maiores gastos.|
+
+|Perfil 3: Roberto – O adulto Endividado|
+|-----------------------------------------------|
+|Descrição: Motorista de aplicativo de 45 anos, com renda variável baseada nas corridas do dia a dia. Possui várias dívidas em aberto, utiliza o cartão de crédito com frequência e não acompanha com precisão quanto entra ou sai. Seu objetivo é quitar as dívidas aos poucos, organizar melhor os ganhos e construir uma reserva de emergência.|
+|Necessidades: Ferramenta clara para registrar movimentações, analisar padrões de gastos e visualizar alerta sobre despesas excessivas.| 
 
 
 
