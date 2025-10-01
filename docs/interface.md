@@ -31,13 +31,3 @@ Na área central, é exibido o Dashboard, que reúne informações principais de
 
 <img width="1440" height="1024" alt="GoalWallet(Community)" src="https://github.com/user-attachments/assets/3a130854-2386-4dad-8626-f37f5f601cb7" />
 
-
- 
-> **Links Úteis**:
-> - [Protótipos vs Wireframes](https://www.nngroup.com/videos/prototypes-vs-wireframes-ux-projects/)
-> - [Ferramentas de Wireframes](https://rockcontent.com/blog/wireframes/)
-> - [MarvelApp](https://marvelapp.com/developers/documentation/tutorials/)
-> - [Figma](https://www.figma.com/)
-> - [Adobe XD](https://www.adobe.com/br/products/xd.html#scroll)
-> - [Axure](https://www.axure.com/edu) (Licença Educacional)
-> - [InvisionApp](https://www.invisionapp.com/) (Licença Educacional)
