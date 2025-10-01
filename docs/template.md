@@ -136,11 +136,11 @@ Fica em evidência para o usuário ver logo de cara sua situação atual.
 
 > - Ações rápidas
 Ícones ou botões que levam direto para funções mais usadas, como:
--	Registrar gasto
--	Adicionar receita
--	Transferir dinheiro
-- Lista de movimentações
-- 
+> -	Registrar gasto
+> -	Adicionar receita
+> -	Transferir dinheiro
+> - Lista de movimentações
+
 Mostra as transações do usuário em formato de lista.
 
 Ex.: Compra no Mercado – R$ 50,00 ou Depósito – R$ 200,00.
