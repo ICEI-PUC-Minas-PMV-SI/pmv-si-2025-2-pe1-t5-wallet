@@ -16,7 +16,7 @@
 |Descrição: Auxiliar administrativa de 37 anos, com renda média, responsável por administrar os gastos da família. Lida com despesas como escola dos filhos, mercado e contas fixas, mas tem dificuldade em visualizar para onde vai a maior parte do dinheiro. Seu objetivo é reduzir dívidas, manter as contas em dia e planejar férias em família.|
 |Necessidades: Interface simples e relatórios visuais que ajudem a identificar os maiores gastos.|
 
-|Perfil 3: Roberto – O adulto Endividado|
+|Perfil 4: Roberto – O adulto Endividado|
 |-----------------------------------------------|
 |Descrição: Motorista de aplicativo de 45 anos, com renda variável baseada nas corridas do dia a dia. Possui várias dívidas em aberto, utiliza o cartão de crédito com frequência e não acompanha com precisão quanto entra ou sai. Seu objetivo é quitar as dívidas aos poucos, organizar melhor os ganhos e construir uma reserva de emergência.|
 |Necessidades: Ferramenta clara para registrar movimentações, analisar padrões de gastos e visualizar alerta sobre despesas excessivas.| 
