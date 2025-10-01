@@ -95,6 +95,34 @@ CPF → em apps brasileiros, usado para autenticação ou integração com servi
 
 Senha → o usuário cria uma senha que será usada depois para login.
 
+## Tela de Login: 
+Campos para E-mail e Senha
+
+Campo de texto onde o usuário digita o e-mail (ou outro identificador, como CPF/usuário).
+
+Campo de senha, ocultando os caracteres digitados para segurança.
+
+Link para recuperação de senha
+
+Geralmente escrito como “Esqueci minha senha”.
+
+Redireciona para um fluxo de redefinição, onde o usuário pode criar uma nova senha via e-mail, SMS ou outro método.
+
+Botão "Entrar"
+
+Após preencher e-mail e senha, o usuário clica nesse botão para acessar sua conta.
+
+O sistema valida as credenciais e libera o acesso.
+
+Opções de login social
+
+Botões extras para entrar usando contas externas, como:
+
+⦁	Google
+⦁	Facebook
+⦁	Outros provedores (ex: LinkedIn, GitHub etc., dependendo do app)
+Isso agiliza o login, sem necessidade de criar/lembrar senha.
+
 
 
 
