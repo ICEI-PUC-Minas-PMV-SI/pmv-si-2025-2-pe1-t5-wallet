@@ -3,7 +3,7 @@
 |Perfil 1: Mariana – A Universitária Planejadora                                                                                                                            | 
 |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |Estudante de 21 anos, cursando Administração, com renda baixa (estágio + ajuda dos pais). Costuma gastar muito em pequenas despesas diárias, como transporte por aplicativo| |e alimentação. Apesar da falta de controle financeiro, tem interesse em aprender a organizar melhor suas finanças e começar a guardar parte do que recebe. Busca mais      | | autonomia e quer se preparar financeiramente para o futuro.                                                                                                               |
-|Necessidades| Um aplicativo simples para registrar gastos cotidianos e entender onde o dinheiro está indo.                                                                 |
+|Necessidades: Um aplicativo simples para registrar gastos cotidianos e entender onde o dinheiro está indo.                                                                 |
 
 ## Personas
 
