@@ -176,6 +176,85 @@ Em outros contextos pode ser: número de posts, atividades concluídas, progress
 > ⦁	Gráfico de gastos:
 Um elemento visual (geralmente de pizza, barras ou linhas) que mostra como o usuário está gastando/destinando recursos.
 
+## Tela de Configurações: 
+
+Um menu com diversas opções
+
+A tela é basicamente uma lista de itens clicáveis, cada um levando para uma seção específica de configuração.
+
+Exemplos de opções mais comuns:
+
+> ⦁	Central de contas → onde o usuário pode gerenciar login, senha, dados pessoais, segurança etc.
+
+> ⦁	Notificações → ativar/desativar alertas por push, e-mail ou SMS.
+
+> ⦁	Suporte → acesso a FAQ, chat de atendimento ou envio de solicitação de ajuda.
+
+> ⦁	Sobre → informações sobre o app/sistema (versão, termos de uso, política de privacidade).
+
+> ⦁	Outras opções → como tema (claro/escuro), idioma, acessibilidade, permissões etc.
+
+## Tela de Erro no Login: 
+
+Mensagem de erro em destaque
+
+Aparece logo no topo (acima dos campos de e-mail e senha).
+
+Geralmente em vermelho ou com um ícone de alerta (⚠️).
+
+Texto comum: “E-mail ou senha incorretos. Tente novamente.”
+
+Mantém os campos preenchidos
+
+Para não frustrar o usuário, o sistema costuma manter o e-mail digitado e limpar apenas a senha.
+
+Assim ele não precisa digitar tudo de novo.
+
+Botão "Entrar" continua visível
+
+O usuário pode corrigir os dados e tentar novamente.
+
+Links auxiliares
+
+Ex.: “Esqueci minha senha” → ajuda quando o problema é realmente o esquecimento.
+
+## Aspectos de Responsividade da Aplicação
+
+A aplicação foi projetada seguindo princípios modernos de design responsivo, garantindo uma experiência consistente, acessível e eficiente em qualquer dispositivo, desde celulares até desktops grandes.
+
+> 1. Filosofia Mobile-First
+   
+O design prioriza primeiro a experiência em dispositivos móveis, adaptando o conteúdo e a navegação para telas pequenas.
+Após a otimização para mobile, a interface é gradualmente expandida para tablets e desktops, garantindo que todos os elementos sejam dimensionados corretamente e que a experiência do usuário seja fluida.
+
+Vantagem: usuários móveis que representam a maior parte do tráfego têm uma interface limpa, rápida e funcional.
+
+> 2. Dimensão de Elementos Interativos
+
+Botões e ícones foram dimensionados para serem facilmente clicáveis com o dedo:
+Tamanho mínimo recomendado: 44px × 44px, seguindo as diretrizes de acessibilidade da Apple e Google.
+Isso evita toques errados e melhora a experiência de navegação, principalmente em telas pequenas.
+Ícones, botões e links possuem espaçamento adequado entre si para prevenir confusão durante a interação.
+
+3. Unidades de Medida Flexíveis
+   
+O texto e outros elementos utilizam unidades relativas:
+
+rem (baseada na raiz do documento)
+
+em (baseada no elemento pai)
+
+Benefícios:
+
+> - Permite que o layout e tipografia se adaptem ao tamanho da tela.
+
+> - Facilita a acessibilidade, pois usuários que aumentam o zoom ou configuram fontes maiores veem o conteúdo corretamente.
+
+> - Elementos como margens, paddings e tamanhos de containers também usam unidades relativas sempre que possível, garantindo harmonia visual em diferentes resoluções..
+
+
+
+
 
 
 
