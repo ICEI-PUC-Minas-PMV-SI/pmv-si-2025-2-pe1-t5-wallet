@@ -59,6 +59,23 @@ Os ícones seguem um estilo flat e minimalista, com a cor branca sobre fundos es
 > - Cards: Fundo azul mais claro com bordas arredondadas (radius 12-16px) e uma leve sombra.
 > - Campos de Formulário: Fundo transparente, borda inferior branca e texto cinza/azul escuro. Possuem ícones de apoio para validação.
 
+## FLUXO DO USUÁRIO E PROTÓTIPOS
+Esta seção apresenta as interfaces da plataforma, discutindo como elas foram elaboradas para atender aos requisitos funcionais e não-funcionais, além de mapear a jornada do usuário.
+
+> - User Flow
+O fluxo de usuário (User Flow) é uma técnica fundamental para mapear as sequências de telas e as possíveis ações do usuário. Para o GoalWallet, essa técnica foi utilizada para alinhar os caminhos de navegação, como o processo de login e cadastro, e garantir que a transição entre as telas seja fluida e intuitiva.
+
+> - Protótipos e Interfaces
+Os protótipos (wireframes) ilustram a estrutura de cada tela e a relação entre elas, atendendo diretamente aos requisitos do sistema. Abaixo, são apresentadas as principais interfaces da plataforma, com os links para o código CSS que define o estilo de cada uma.
+
+
+⦁	Tela Inicial (Splash/Boas-vindas): É a primeira tela que o usuário vê quando abre o aplicativo ou entra no site. Normalmente é simples, com pouco conteúdo, para causar uma boa primeira impressão.
+Exibe a logo centralizada:
+O logotipo da aplicação/marca aparece bem no centro da tela, como destaque principal. Isso ajuda o usuário a reconhecer imediatamente onde ele está.
+Botões "Entrar" e "Criar Conta":
+Abaixo do logo (ou em posição de destaque), ficam dois botões:
+Entrar → para quem já tem cadastro e só precisa colocar login e senha.
+Criar Conta → para novos usuários que ainda não têm acesso e precisam se registrar.
 
 
 
