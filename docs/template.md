@@ -123,6 +123,43 @@ Botões extras para entrar usando contas externas, como:
 ⦁	Outros provedores (ex: LinkedIn, GitHub etc., dependendo do app)
 Isso agiliza o login, sem necessidade de criar/lembrar senha.
 
+# Dashboard (Home): 
+Saudação personalizada
+
+Um texto no topo, tipo: “Olá, Fernanda 👋” ou “Bem-vinda de volta!”.
+Dá um toque mais humano e próximo ao usuário. 
+
+⦁	Saldo total em destaque
+
+Um card centralizado e grande, mostrando o valor principal (ex.: saldo da conta ou carteira).
+Fica em evidência para o usuário ver logo de cara sua situação atual.
+
+> - Ações rápidas
+Ícones ou botões que levam direto para funções mais usadas, como:
+-	Registrar gasto
+-	Adicionar receita
+-	Transferir dinheiro
+- Lista de movimentações
+- 
+Mostra as transações do usuário em formato de lista.
+
+Ex.: Compra no Mercado – R$ 50,00 ou Depósito – R$ 200,00.
+Pode ter filtros (últimos 7 dias, este mês, etc.).
+
+Últimas transações
+Uma versão reduzida da lista, só mostrando as mais recentes.
+Às vezes fica em um card separado, com botão “Ver todas”.
+
+Botão para registrar entrada e saída
+Normalmente um botão flutuante (+) no canto inferior.
+O usuário pode escolher Entrada (receita) ou Saída (despesa).
+
+Adicionar demais coisas
+Expansões futuras:
+⦁	gráficos de despesas
+⦁	metas de economia
+
+
 
 
 
