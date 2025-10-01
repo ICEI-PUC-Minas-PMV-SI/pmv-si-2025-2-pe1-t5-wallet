@@ -29,6 +29,9 @@ Na área central, é exibido o Dashboard, que reúne informações principais de
 
 ![Exemplo de Wireframe](img/wireframe-example.png)
 
+![GoalWalletExample](GoalWallet(Community).png)
+
+
  
 > **Links Úteis**:
 > - [Protótipos vs Wireframes](https://www.nngroup.com/videos/prototypes-vs-wireframes-ux-projects/)
