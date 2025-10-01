@@ -18,11 +18,16 @@ Elementos fixos:
 > - Cabeçalho: Contém o logo do sistema, posicionado no canto superior central ou esquerdo, e ícones de acesso rápido.
 > - Rodapé: Consiste em uma barra de navegação inferior com ícones para acesso rápido (Home, Carteiras, Configurações).
 
-
+Componentes principais:
+> - Dashboard (Home): Exibe o saldo consolidado, botões de ação rápida (Registrar Entrada/Saída), uma lista de movimentações recentes e um gráfico de gastos.
 
 ## Cores
+A paleta de cores principal é composta por tons de azul que evocam confiança e seriedade. As cores de apoio, como verde e vermelho, são utilizadas para reforçar a semântica das transações.
 
-Apresente a paleta de cores que será utilizada. Uma ferramenta interessante para a criação de palestas de cores é o *Adobe Color* ([https://color.adobe.com/pt/create/color-wheel](https://color.adobe.com/pt/create/color-wheel)).
+|Função
+|-------------
+|
+|
 
 
 ## Tipografia
