@@ -28,7 +28,7 @@ Na área central, é exibido o Dashboard, que reúne informações principais de
 À direita da tela, são apresentadas informações do usuário, como nome, foto de perfil, economia mensal e meta de economia. Abaixo, aparecem as próximas despesas com suas respectivas datas de vencimento, seguidas por um gráfico de categorias de gastos, organizado por cores para moradia, transporte e alimentação.
 
 
-![GoalWalletExample](<docs/img/GoalWallet(Community).png>)
+![GoalWalletExample] (<docs/img/GoalWallet(Community).png>)
 <img width="1440" height="1024" alt="GoalWallet(Community)" src="https://github.com/user-attachments/assets/3a130854-2386-4dad-8626-f37f5f601cb7" />
 
 
