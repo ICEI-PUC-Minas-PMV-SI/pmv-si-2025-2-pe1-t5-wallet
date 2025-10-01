@@ -29,8 +29,7 @@ Na área central, é exibido o Dashboard, que reúne informações principais de
 
 ![Exemplo de Wireframe](img/wireframe-example.png)
 
-![GoalWalletExample](<img width="1440" height="1024" alt="image" src="https://github.com/user-attachments/assets/6bef00d7-d159-40a1-bf54-1d08bddae3b6" />
-)
+![GoalWalletExample](<docs/img/GoalWallet(Community).png>)
 
 
  
