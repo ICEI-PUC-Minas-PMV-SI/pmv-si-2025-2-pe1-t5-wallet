@@ -8,9 +8,9 @@ A documentação aborda o Guia de Estilo completo, que define os elementos de de
 ## Design
 Guia de estilo - GoalWallet
 Esta seção detalha os princípios e padrões de design que compõem a identidade visual do GoalWallet, servindo como guia para o desenvolvimento e padronização da interface.
-Identidade Visual
+>Identidade Visual
 A identidade visual do GoalWallet foi concebida para transmitir confiança, modernidade e praticidade. Com um estilo minimalista e inspirado em fintechs, a aplicação utiliza uma paleta de cores baseada em tons de azul, com alto contraste em branco e cores de apoio (verde e vermelho) para sinalizar entradas e saídas de forma intuitiva.
-Layout Padrão do Site/App
+>Layout Padrão do Site/App
 O layout da aplicação foi projetado com uma estrutura responsiva, adaptável tanto para dispositivos móveis (mobile) quanto para desktops. O design utiliza cards arredondados com bordas suaves e um grid system (Flexbox/Grid) para organizar os blocos de conteúdo de maneira fluida.
 
 
