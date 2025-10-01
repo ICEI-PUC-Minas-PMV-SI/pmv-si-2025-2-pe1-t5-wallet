@@ -3,8 +3,13 @@
 
 |Perfil 1: Mariana – A Universitária Planejadora|
 |-----------------------------------------------|
-|Descrição:Estudante de 21 anos, cursando Administração, com renda baixa (estágio + ajuda dos pais). Costuma gastar muito em pequenas despesas diárias, como transporte por |aplicativo e alimentação. Apesar da falta de controle financeiro, tem interesse em aprender a organizar melhor suas finanças e começar a guardar parte do que recebe. Busca |mais autonomia e quer se preparar financeiramente para o futuro.|
+|Descrição: Estudante de 21 anos, cursando Administração, com renda baixa (estágio + ajuda dos pais). Costuma gastar muito em pequenas despesas diárias, como transporte por |aplicativo e alimentação. Apesar da falta de controle financeiro, tem interesse em aprender a organizar melhor suas finanças e começar a guardar parte do que recebe. Busca |mais autonomia e quer se preparar financeiramente para o futuro.|
 |Necessidades:  Um aplicativo simples para registrar gastos cotidianos e entender| 
+
+|Perfil 2: João – O Jovem Trabalhador|
+|-----------------------------------------------|
+|Descrição: Vendedor de 29 anos, com renda média-baixa (salário fixo + comissão). Tem despesas fixas como aluguel e transporte, mas costuma perder o controle financeiro no fim do mês. Busca equilibrar os gastos essenciais e começar a poupar para projetos pessoais, como a compra de uma moto.|
+|Necessidades: Registro de despesas fixas e repetidas e uma projeção do saldo para acompanhar se o dinheiro será suficiente até o fim do mês.| 
 
 
 
