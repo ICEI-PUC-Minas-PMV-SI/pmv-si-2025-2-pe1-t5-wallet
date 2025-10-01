@@ -46,13 +46,21 @@ As fontes Poppins e Inter foram escolhidas para garantir a legibilidade e a cons
 ## Iconografia
 Os ícones seguem um estilo flat e minimalista, com a cor branca sobre fundos escuros. A biblioteca Font Awesome é utilizada como referência para os ícones.
 
-> 
->
 > - Home: Acesso ao dashboard.
 > - Carteira: Gestão de contas e carteiras.
 > - Configurações: Acesso a preferências e ajustes.
 > - Adicionar: Criar nova entrada/saída.
 > - Visibilidade: Mostrar/ocultar senha.
 > - Gráfico: Acesso a relatórios e estatísticas.
+
+## Componentes Padrão
+⦁	Botões:	Primário (ação principal): Fundo branco, texto azul, bordas arredondadas.
+         	Secundário (alternativo): Fundo azul escuro, borda branca, texto branco.
+⦁	Cards: Fundo azul mais claro com bordas arredondadas (radius 12-16px) e uma leve sombra.
+⦁	Campos de Formulário: Fundo transparente, borda inferior branca e texto cinza/azul escuro. Possuem ícones de apoio para validação.
+
+
+
+
 
 
