@@ -24,13 +24,13 @@ Componentes principais:
 ## Cores
 A paleta de cores principal é composta por tons de azul que evocam confiança e seriedade. As cores de apoio, como verde e vermelho, são utilizadas para reforçar a semântica das transações.
 
-|Função         |Cor         |
-|---------------|------------|
-|Azul Principal |Azul Escuro |
-|Contraste      |Branco      |
-|Entrada        |Verde       |
-|Saída          |Vermelho    |
-|Neutro         |Cinza Claro |
+|Função         |Cor         |Hexadecimal |
+|---------------|------------|------------|
+|Azul Principal |Azul Escuro |#0A3D91     |
+|Contraste      |Branco      |#FFFFFF     |
+|Entrada        |Verde       |#2ECC71     |
+|Saída          |Vermelho    |#E74C3C     |
+|Neutro         |Cinza Claro |#F4F6F8     |
 
 ## Tipografia
 
