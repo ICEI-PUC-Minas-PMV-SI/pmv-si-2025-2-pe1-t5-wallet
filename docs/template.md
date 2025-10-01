@@ -34,8 +34,14 @@ A paleta de cores principal é composta por tons de azul que evocam confiança e
 
 ## Tipografia
 
-Apresente as fontes que serão utilizadas e sua função no site. As principais funções são: Título de página, Título de Seção, Rótulos de componentes e Corpo de Texto.
+As fontes Poppins e Inter foram escolhidas para garantir a legibilidade e a consistência visual. A tabela abaixo detalha o uso de cada fonte e seu propósito na interface.
 
+|Uso                    |Fonte             |Peso |Características             |
+|-----------------------|------------------|-----|----------------------------|
+|Título de Página       |Poppins Bold      |700  |Moderna, forte, destaque.   |
+|Título de Seção        |Poppins SemiBold  |600  |Consistente, intermediário. |
+|Rótulos de Componentes |Inter Medium      |500  |Alta legibilidade, direto.  |
+|Corpo de Texto         |Inter Regular     |400  |Leve, leitura confortável.  |
 
 ## Iconografia
 
