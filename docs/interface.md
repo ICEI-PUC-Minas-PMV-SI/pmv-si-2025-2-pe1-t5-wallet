@@ -27,8 +27,8 @@ Na área central, é exibido o Dashboard, que reúne informações principais de
 
 À direita da tela, são apresentadas informações do usuário, como nome, foto de perfil, economia mensal e meta de economia. Abaixo, aparecem as próximas despesas com suas respectivas datas de vencimento, seguidas por um gráfico de categorias de gastos, organizado por cores para moradia, transporte e alimentação.
 
-![Exemplo de Wireframe](img/wireframe-example.png)
-
+![Exemplo de Wireframe](https://1drv.ms/i/c/8737784f1fbdc841/EdpcUMUzDnBEsHAvpmblPXIBzG-CaETJnS6OKi1ag2XY6A?e=otyPzI)
+img/wireframe-example.png
  
 > **Links Úteis**:
 > - [Protótipos vs Wireframes](https://www.nngroup.com/videos/prototypes-vs-wireframes-ux-projects/)
