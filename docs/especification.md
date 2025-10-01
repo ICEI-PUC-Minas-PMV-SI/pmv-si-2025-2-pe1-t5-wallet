@@ -11,15 +11,13 @@
 |Necessidades: Um aplicativo simples para registrar gastos cotidianos e entender onde o dinheiro está indo.      
 
 
-|Perfil 1: Mariana – A Universitária Planejadora                                                                                                                            | 
+|Perfil 3: Carla – A mãe Organizada                                                                                                                           | 
 |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Estudante de 21 anos, cursando Administração, com renda baixa (estágio + ajuda dos pais). Costuma gastar muito em pequenas despesas diárias, como transporte por aplicativo| |e alimentação. Apesar da falta de controle financeiro, tem interesse em aprender a organizar melhor suas finanças e começar a guardar parte do que recebe. Busca mais      | | autonomia e quer se preparar financeiramente para o futuro.                                                                                                               |
+|
 |Necessidades: Um aplicativo simples para registrar gastos cotidianos e entender onde o dinheiro está indo. 
 
-|Perfil 1: Mariana – A Universitária Planejadora                                                                                                                            | 
-|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|Estudante de 21 anos, cursando Administração, com renda baixa (estágio + ajuda dos pais). Costuma gastar muito em pequenas despesas diárias, como transporte por aplicativo| |e alimentação. Apesar da falta de controle financeiro, tem interesse em aprender a organizar melhor suas finanças e começar a guardar parte do que recebe. Busca mais      | | autonomia e quer se preparar financeiramente para o futuro.                                                                                                               |
-|Necessidades: Um aplicativo simples para registrar gastos cotidianos e entender onde o dinheiro está indo.      
+|Perfil 1: Mariana – A Universitária Planejadora                                                                                                                            | Auxiliar administrativa de 37 anos, com renda média, responsável por administrar os gastos da família. Lida com despesas como escola dos filhos, mercado e contas fixas, mas tem dificuldade em visualizar para onde vai a maior parte do dinheiro. Seu objetivo é reduzir dívidas, manter as contas em dia e planejar férias em família.. 
+|Necessidades: Interface simples e relatórios visuais que ajudem a identificar os maiores gastos.      
 
 
 
