@@ -6,7 +6,7 @@ Este documento técnico, elaborado em conformidade com as normas da ABNT, aprese
 A documentação aborda o Guia de Estilo completo, que define os elementos de design como paleta de cores, tipografia, iconografia e componentes padrão. Além disso, apresenta a visão geral da interação do usuário através dos protótipos interativos (wireframes) e do fluxo de usuário (User Flow), que mapeiam as possíveis ações e caminhos do usuário no sistema. O objetivo principal é fornecer uma base sólida para o desenvolvimento da aplicação, garantindo que os requisitos funcionais, não-funcionais e as histórias de usuário sejam atendidos de forma coesa, prática e visualmente agradável.
 
 ## Design
-## Guia de estilo - GoalWallet
+### Guia de estilo - GoalWallet
 
 Detalhe os layouts que serão utilizados. Apresente onde será colocado o logo do sistema. Defina os menus padrões, entre outras coisas.
 
