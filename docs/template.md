@@ -236,7 +236,7 @@ Tamanho mínimo recomendado: 44px × 44px, seguindo as diretrizes de acessibilid
 Isso evita toques errados e melhora a experiência de navegação, principalmente em telas pequenas.
 Ícones, botões e links possuem espaçamento adequado entre si para prevenir confusão durante a interação.
 
-3. Unidades de Medida Flexíveis
+> 3. Unidades de Medida Flexíveis
    
 O texto e outros elementos utilizam unidades relativas:
 
