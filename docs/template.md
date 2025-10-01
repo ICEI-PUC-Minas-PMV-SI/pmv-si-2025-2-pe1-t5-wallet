@@ -80,6 +80,21 @@ Entrar → para quem já tem cadastro e só precisa colocar login e senha.
 
 Criar Conta → para novos usuários que ainda não têm acesso e precisam se registrar.
 
+## Tela de Cadastro: 
+
+a página/tela onde o usuário que ainda não tem conta fornece seus dados para criar um perfil no sistema.
+Solicita dados pessoais:
+
+Os campos geralmente aparecem em formato de formulário:
+
+Nome → campo de texto para o usuário digitar o nome completo.
+
+E-mail → usado como identificação e para comunicação.
+
+CPF → em apps brasileiros, usado para autenticação ou integração com serviços.
+
+Senha → o usuário cria uma senha que será usada depois para login.
+
 
 
 
