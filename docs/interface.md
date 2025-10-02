@@ -15,11 +15,11 @@ Principais Funcionalidades
 
 - Análises e Gráficos: representação visual dos gastos, permitindo acompanhar padrões e identificar oportunidades de economia.
 
-> - Gestão de Receitas e Despesas: campos para registrar entradas e saídas, com data, tipo, conta vinculada e valor.
+- Gestão de Receitas e Despesas: campos para registrar entradas e saídas, com data, tipo, conta vinculada e valor.
 
-> - Controle de Pagamentos: lista de próximos pagamentos e assinaturas agendadas.
+- Controle de Pagamentos: lista de próximos pagamentos e assinaturas agendadas.
 
-> - Gerenciamento de Contas Bancárias: cadastro de múltiplas contas e exibição dos respectivos saldos.
+- Gerenciamento de Contas Bancárias: cadastro de múltiplas contas e exibição dos respectivos saldos.
 
 
 
