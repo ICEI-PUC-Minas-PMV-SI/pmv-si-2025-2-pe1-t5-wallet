@@ -48,18 +48,17 @@ Lembre-se que você deve ser enumerar e descrever precisamente e personalizada t
 
 Com base na análise das personas forma identificadas as seguintes histórias de usuários:
 
-|EU COMO... `PERSONA`| QUERO/PRECISO ... `FUNCIONALIDADE` |PARA ... `MOTIVO/VALOR`                 |
-|--------------------|------------------------------------|----------------------------------------|
-|Mariana  | Quero registrar todas as minhas  despesas diárias de transporte e  alimentação           | Para entender quanto do  meu orçamento é consumido  nessas categorias               |
-|Mariana      | Quero classificar minhas  
-despesas em categorias como  alimentação, transporte e lazer                 | Para identificar quais áreas  exigem maior controle. |
-|João       | Quero cadastrar meu salário e  contas fixas como transações  recorrentes                 | Para não precisar registrá las manualmente todo mês. |
-|João       | Quero visualizar a projeção do  meu saldo até o fim do mês                 | Para saber se conseguirei  pagar todas as despesas  sem entrar no negativo |
-|Carla       | Quero separar os gastos da casa  por categorias (alimentação,  escola, transporte, lazer)                 | Para ter clareza sobre onde  está sendo gasto mais  
-dinheiro. |
-|Carla       | Quero acessar uma projeção  mensal de saldo | Para planejar os próximos  meses e evitar dívidas.
-|Roberto       | Quero registrar diariamente  meus ganhos variáveis e minhas  despesas com gasolina                 | Para ter clareza sobre meu  lucro real. |
-|Roberto        | Quero criar uma meta de “quitar  dívida do cartão de crédito”                | Para acompanhar meu progresso e manter a motivação em sair do endividamento. |
+| EU COMO... `PERSONA` | QUERO/PRECISO ... `FUNCIONALIDADE`                               | PARA ... `MOTIVO/VALOR`                                                     |
+|-----------------------|------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| Mariana               | Quero registrar todas as minhas despesas diárias de transporte e alimentação | Para entender quanto do meu orçamento é consumido nessas categorias          |
+| Mariana               | Quero classificar minhas despesas em categorias como alimentação, transporte e lazer | Para identificar quais áreas exigem maior controle                           |
+| João                  | Quero cadastrar meu salário e contas fixas como transações recorrentes | Para não precisar registrá-las manualmente todo mês                          |
+| João                  | Quero visualizar a projeção do meu saldo até o fim do mês        | Para saber se conseguirei pagar todas as despesas sem entrar no negativo     |
+| Carla                 | Quero separar os gastos da casa por categorias (alimentação, escola, transporte, lazer) | Para ter clareza sobre onde está sendo gasto mais dinheiro                   |
+| Carla                 | Quero acessar uma projeção mensal de saldo                      | Para planejar os próximos meses e evitar dívidas                            |
+| Roberto               | Quero registrar diariamente meus ganhos variáveis e minhas despesas com gasolina | Para ter clareza sobre meu lucro real                                       |
+| Roberto               | Quero criar uma meta de “quitar dívida do cartão de crédito”     | Para acompanhar meu progresso e manter a motivação em sair do endividamento  |
+
 
 Apresente aqui as histórias de usuário que são relevantes para o projeto de sua solução. As Histórias de Usuário consistem em uma ferramenta poderosa para a compreensão e elicitação dos requisitos funcionais e não funcionais da sua aplicação. Se possível, agrupe as histórias de usuário por contexto, para facilitar consultas recorrentes à essa parte do documento.
 
