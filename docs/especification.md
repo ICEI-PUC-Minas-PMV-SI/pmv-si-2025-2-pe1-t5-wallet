@@ -78,16 +78,27 @@ As tabelas que se seguem apresentam os requisitos funcionais e não funcionais q
 
 |ID    | Descrição do Requisito  | Prioridade | 
 |------|-----------------------------------------|----| 
-|RF-001| A aplicação deve permitir que o usuário gerencie suas tarefas | ALTA |  
-|RF-002| A aplicação deve permitir a emissão de um relatório de tarefas realizadas no mês   | MÉDIA | 
+|RF-001| Permitir o registro de receitas e despesas, vinculadas a contas.  | Alta |  
+|RF-002| Permitir o cadastro e acompanhamento de múltiplas contas (carteira, corrente, poupança).    | Alta |
+|RF-003| Exibir saldo atualizado por conta e saldo consolidado.    | Alta | 
+|RF-004| Listar histórico de transações realizadas.    | Alta | 
+|RF-005| Cadastrar transações fixas e repetidas (salário, aluguel, contas  mensais).    | MÉDIA | 
+|RF-006| Permitir a categorização de receitas e despesas, incluindo categorias e subcategorias personalizadas.   | MÉDIA | 
+|RF-007| Exibir projeção de saldo futuro, com base em transações fixas e planejadas.     | Baixa | 
+|RF-008| Permitir a criação e o acompanhamento de metas financeiras (ex.: viagem, quitar dívida, comprar bem).   |Baixa | 
 
 
 ### Requisitos não Funcionais
 
 |ID     | Descrição do Requisito  |Prioridade |
 |-------|-------------------------|----|
-|RNF-001| A aplicação deve ser responsiva | MÉDIA | 
-|RNF-002| A aplicação deve processar requisições do usuário em no máximo 3s |  BAIXA | 
+|RNF-001|O sistema deve possuir interface simples e intuitiva, adequada a iniciantes.   | Alta | 
+|RNF-002| Deve garantir resposta rápida às interações do usuário.   |  Alta |
+|RNF-003| Deve ser compatível com navegadores modernos (Chrome,  Firefox, Edge) e diferentes resoluções de tela.   |  Alta | 
+|RNF-004| Deve garantir a integridade e confiabilidade dos dados.   |  Alta | 
+|RNF-005| Implementar validações mínimas nos campos (ex: valores  numéricos, datas válidas) para reduzir erros.   |  Média | 
+|RNF-006| O sistema deve ser leve e acessível em conexões de internet  de baixa velocidade.   |  Média | 
+|RNF-007| O sistema deve estar disponível em padrão responsivo,  funcionando bem em desktop, tablet e smartphone.   |  Baixa | 
 
 Com base nas Histórias de Usuário, enumere os requisitos da sua solução. Classifique esses requisitos em dois grupos:
 
@@ -108,10 +119,17 @@ todos os aspectos capturados nas Histórias de Usuário foram cobertos.
 
 O projeto está restrito pelos itens apresentados na tabela a seguir.
 
-|ID| Restrição                                             |
-|--|-------------------------------------------------------|
-|01| O projeto deverá ser entregue até o final do semestre |
-|02| Não pode ser desenvolvido um módulo de backend        |
+| ID | Restrição                                                                          |
+| -- | ---------------------------------------------------------------------------------- |
+| 01 | O sistema deve possuir interface simples e intuitiva, adequada a iniciantes        |
+| 02 | Deve garantir resposta rápida às interações do usuário                             |
+| 03 | Deve ser compatível apenas com navegadores modernos (Chrome, Firefox, Edge)        |
+| 04 | Deve garantir a integridade e confiabilidade dos dados                             |
+| 05 | Deve implementar validações mínimas nos campos (valores numéricos, datas)          |
+| 06 | O sistema deve ser leve e acessível em conexões de internet de baixa velocidade    |
+| 07 | O sistema deve estar disponível em padrão responsivo (desktop, tablet, smartphone) |
+| 08 | O escopo não inclui integração com bancos ou serviços financeiros externos         |
+| 09 | O projeto deverá ser concluído dentro do semestre letivo                           |
 
 
 Enumere as restrições à sua solução. Lembre-se de que as restrições geralmente limitam a solução candidata.
