@@ -1,6 +1,10 @@
 
 # Projeto de Interface
 
+## GoalWallet – Aplicativo de Controle Financeiro
+
+O GoalWallet é um aplicativo desenvolvido para ajudar usuários a gerenciar suas finanças de forma simples, organizada e acessível. Seu design moderno e intuitivo apresenta diversas funcionalidades que facilitam o controle do dinheiro no dia a dia.
+
 <img width="1398" height="741" alt="image" src="https://github.com/user-attachments/assets/dc1cf15d-10e2-47b6-aa25-361e674eea4d" />
 
 
