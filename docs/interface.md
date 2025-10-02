@@ -7,6 +7,19 @@ O GoalWallet é um aplicativo desenvolvido para ajudar usuários a gerenciar sua
 
 <img width="1398" height="741" alt="image" src="https://github.com/user-attachments/assets/dc1cf15d-10e2-47b6-aa25-361e674eea4d" />
 
+Principais Funcionalidades
+
+> - Cadastro e Login: criação de conta com nome, e-mail, CPF e senha; opção de login via redes sociais; mensagens de erro em caso de credenciais incorretas.
+
+> - Painel Financeiro (Dashboard): exibe saldo total, movimentações recentes, resumo de contas e transações, além de porcentagem de economia.
+
+> - Análises e Gráficos: representação visual dos gastos, permitindo acompanhar padrões e identificar oportunidades de economia.
+
+> - Gestão de Receitas e Despesas: campos para registrar entradas e saídas, com data, tipo, conta vinculada e valor.
+
+> - Controle de Pagamentos: lista de próximos pagamentos e assinaturas agendadas.
+
+> - Gerenciamento de Contas Bancárias: cadastro de múltiplas contas e exibição dos respectivos saldos.
 
 
 
