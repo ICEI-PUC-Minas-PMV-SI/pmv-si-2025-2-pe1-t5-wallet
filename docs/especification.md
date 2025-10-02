@@ -60,9 +60,7 @@ dinheiro. |
 |Carla       | Quero acessar uma projeção  mensal de saldo | Para planejar os próximos  meses e evitar dívidas.
 |Roberto       | Quero registrar diariamente  meus ganhos variáveis e minhas  despesas com gasolina                 | Para ter clareza sobre meu  lucro real. |
 |Roberto        | Quero criar uma meta de “quitar  dívida do cartão de crédito”                | Para acompanhar meu  
-progresso e manter a  
-motivação em sair do  
-endividamento. |
+progresso e manter a motivação em sair do endividamento. |
 
 Apresente aqui as histórias de usuário que são relevantes para o projeto de sua solução. As Histórias de Usuário consistem em uma ferramenta poderosa para a compreensão e elicitação dos requisitos funcionais e não funcionais da sua aplicação. Se possível, agrupe as histórias de usuário por contexto, para facilitar consultas recorrentes à essa parte do documento.
 
