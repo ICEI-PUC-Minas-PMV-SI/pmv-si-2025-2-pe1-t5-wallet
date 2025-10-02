@@ -15,9 +15,8 @@ Na Home, existem três áreas principais:
 
 > - Carteira: área destinada ao acompanhamento dos recursos financeiros do usuário.
 
-Em resumo, o fluxograma descreve de forma organizada as etapas de acesso (login/cadastro) e os módulos principais do sistema (transações, perfil e carteira), mostrando o caminho que o usuário percorre dentro da aplicação.
+Além dessas funções principais, o módulo Perfil reúne diversas opções que tornam a experiência mais completa e personalizada. Em Configurações, é possível ajustar preferências gerais do sistema. Na Central de Contas, o usuário pode gerenciar contas vinculadas. Em Notificações, é feito o controle dos alertas e avisos recebidos. A seção de Pagamentos permite realizar e acompanhar transações financeiras diretamente pelo sistema, enquanto o Suporte oferece um canal de ajuda em caso de dúvidas ou dificuldades. Já a área de Acessibilidade garante recursos voltados à inclusão, adaptando a aplicação a diferentes necessidades. Por fim, a opção Sair da Conta encerra a sessão com segurança.
 
-Fluxo de usuário (User Flow) é uma técnica que permite ao desenvolvedor mapear todo fluxo de telas do site ou app. Essa técnica funciona para alinhar os caminhos e as possíveis ações que o usuário pode fazer junto com os membros de sua equipe.
-
+Em resumo, o fluxograma descreve de forma organizada todas as etapas do sistema, desde o acesso inicial (login ou cadastro) até a navegação pelos módulos principais (Transações, Perfil e Carteira), mostrando claramente o caminho que o usuário percorre dentro da aplicação e as funcionalidades disponíveis em cada etapa.
 
 
