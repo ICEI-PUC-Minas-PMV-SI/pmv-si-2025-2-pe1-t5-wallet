@@ -31,9 +31,6 @@ O GoalWallet é um aplicativo desenvolvido para ajudar usuários a gerenciar sua
 
 > - Central de Contas e Notificações: personalização de preferências e alertas financeiros.
 
-
-<img width="503" height="778" alt="image" src="https://github.com/user-attachments/assets/d05ae53a-bc62-4dbd-9b93-0b522ed281a9" />
-
 Na Home, existem três áreas principais:
 
 > - Transações: permite ao usuário registrar movimentações financeiras, com as opções de Adicionar Receita e Adicionar Despesa.
@@ -41,6 +38,8 @@ Na Home, existem três áreas principais:
 > - Perfil: concentra as configurações e informações pessoais, oferecendo acesso a Configurações, Central de Contas, Notificações, Pagamentos, Suporte, Acessibilidade e também a opção de Sair da Conta.
 
 > - Carteira: área destinada ao acompanhamento dos recursos financeiros do usuário.
+
+<img width="503" height="778" alt="image" src="https://github.com/user-attachments/assets/d05ae53a-bc62-4dbd-9b93-0b522ed281a9" />
 
 Além dessas funções principais, o módulo Perfil reúne diversas opções que tornam a experiência mais completa e personalizada. Em Configurações, é possível ajustar preferências gerais do sistema. Na Central de Contas, o usuário pode gerenciar contas vinculadas. Em Notificações, é feito o controle dos alertas e avisos recebidos. A seção de Pagamentos permite realizar e acompanhar transações financeiras diretamente pelo sistema, enquanto o Suporte oferece um canal de ajuda em caso de dúvidas ou dificuldades. Já a área de Acessibilidade garante recursos voltados à inclusão, adaptando a aplicação a diferentes necessidades. Por fim, a opção Sair da Conta encerra a sessão com segurança.
 
