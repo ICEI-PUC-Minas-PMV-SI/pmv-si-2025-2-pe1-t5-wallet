@@ -31,6 +31,26 @@ O GoalWallet é um aplicativo desenvolvido para ajudar usuários a gerenciar sua
 
 > - Central de Contas e Notificações: personalização de preferências e alertas financeiros.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Fluxo de usuários
 Na Home, existem três áreas principais:
 
