@@ -23,7 +23,14 @@
 
 ## Personas
 
-Pedro Paulo tem 26 anos, é arquiteto recém-formado e autônomo. Pensa em se desenvolver profissionalmente através de um mestrado fora do país, pois adora viajar, é solteiro e sempre quis fazer um intercâmbio. Está buscando uma agência que o ajude a encontrar universidades na Europa que aceitem alunos estrangeiros.
+Maria - Estudante de 21 anos, cursando Administração, com renda baixa (estágio + ajuda dos pais). Costuma gastar muito em pequenas despesas diárias, como transporte por aplicativo e alimentação. Apesar da falta de controle financeiro, tem interesse em aprender a organizar melhor suas finanças e começar a guardar parte do que recebe. Busca |mais autonomia e quer se preparar financeiramente para o futuro.
+
+João - Vendedor de 29 anos, com renda média-baixa (salário fixo + comissão). Tem despesas fixas como aluguel e transporte, mas costuma perder o controle financeiro no fim do mês. Busca equilibrar os gastos essenciais e começar a poupar para projetos pessoais, como a compra de uma moto.
+
+Carla - Auxiliar administrativa de 37 anos, com renda média, responsável por administrar os gastos da família. Lida com despesas como escola dos filhos, mercado e contas fixas, mas tem dificuldade em visualizar para onde vai a maior parte do dinheiro. Seu objetivo é reduzir dívidas, manter as contas em dia e planejar férias em família.
+
+Roberto - Motorista de aplicativo de 45 anos, com renda variável baseada nas corridas do dia a dia. Possui várias dívidas em aberto, utiliza o cartão de crédito com frequência e não acompanha com precisão quanto entra ou sai. Seu objetivo é quitar as dívidas aos poucos, organizar melhor os ganhos e construir uma reserva de emergência.
+
 
 Enumere e detalhe as personas da sua solução. Para tanto, baseie-se tanto nos documentos disponibilizados na disciplina e/ou nos seguintes links:
 
@@ -43,8 +50,19 @@ Com base na análise das personas forma identificadas as seguintes histórias de
 
 |EU COMO... `PERSONA`| QUERO/PRECISO ... `FUNCIONALIDADE` |PARA ... `MOTIVO/VALOR`                 |
 |--------------------|------------------------------------|----------------------------------------|
-|Usuário do sistema  | Registrar minhas tarefas           | Não esquecer de fazê-las               |
-|Administrador       | Alterar permissões                 | Permitir que possam administrar contas |
+|Mariana  | Quero registrar todas as minhas  despesas diárias de transporte e  alimentação           | Para entender quanto do  meu orçamento é consumido  nessas categorias               |
+|Mariana      | Quero classificar minhas  
+despesas em categorias como  alimentação, transporte e lazer                 | Para identificar quais áreas  exigem maior controle. |
+|João       | Quero cadastrar meu salário e  contas fixas como transações  recorrentes                 | Para não precisar registrá las manualmente todo mês. |
+|João       | Quero visualizar a projeção do  meu saldo até o fim do mês                 | Para saber se conseguirei  pagar todas as despesas  sem entrar no negativo |
+|Carla       | Quero separar os gastos da casa  por categorias (alimentação,  escola, transporte, lazer)                 | Para ter clareza sobre onde  está sendo gasto mais  
+dinheiro. |
+|Carla       | Quero acessar uma projeção  mensal de saldo | Para planejar os próximos  meses e evitar dívidas.
+|Roberto       | Quero registrar diariamente  meus ganhos variáveis e minhas  despesas com gasolina                 | Para ter clareza sobre meu  lucro real. |
+|Roberto        | Quero criar uma meta de “quitar  dívida do cartão de crédito”                | Para acompanhar meu  
+progresso e manter a  
+motivação em sair do  
+endividamento. |
 
 Apresente aqui as histórias de usuário que são relevantes para o projeto de sua solução. As Histórias de Usuário consistem em uma ferramenta poderosa para a compreensão e elicitação dos requisitos funcionais e não funcionais da sua aplicação. Se possível, agrupe as histórias de usuário por contexto, para facilitar consultas recorrentes à essa parte do documento.
 
