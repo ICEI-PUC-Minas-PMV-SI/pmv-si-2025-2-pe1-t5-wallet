@@ -253,7 +253,14 @@ Benefícios:
 > - Elementos como margens, paddings e tamanhos de containers também usam unidades relativas sempre que possível, garantindo harmonia visual em diferentes resoluções..
 
 
-
+|clara é feia
+|----------------
+|
+|
+|
+|
+|
+|
 
 
 
