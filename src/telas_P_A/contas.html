@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contas Bancárias</title>
+  <meta name="description" content="Painel de contas bancárias - GoalWallet (demo responsivo)" />
+  <style>
+    :root{
+      --bg-start: #052a63;
+      --bg-end:   #0a3d91;
+      --surface: #ffffff;
+      --muted: #7a8aa3;
+      --success: #2ecc71;
+      --danger: #e74c3c;
+      --card-radius: 14px;
+      --glass: rgba(255,255,255,0.06);
+      --max-width: 480px;
+      --shadow: 0 8px 24px rgba(4,10,26,0.35);
+      --accent: #1f6feb;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,var(--bg-start), var(--bg-end));
+      color: #fff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:24px;
+      gap:24px;
+    }
+
+    .app {
+      width:100%;
+      max-width: var(--max-width);
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border-radius: 18px;
+      padding:20px;
+      box-shadow: var(--shadow);
+      position:relative;
+      min-height: 560px;
+      overflow: hidden;
+    }
+
+
+    header {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 12px;
+    }
+    .brand {
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .logo {
+      width:46px;
+      height:46px;
+      border-radius:10px;
+      background:linear-gradient(135deg,#fff 0%, rgba(255,255,255,0.9) 20%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--bg-end);
+      font-weight:700;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      flex-shrink:0;
+    }
+    .brand .title {
+      font-size:16px;
+      line-height:1;
+      letter-spacing:0.2px;
+      color:white;
+    }
+    .brand .subtitle {
+      font-size:12px;
+      margin-top:2px;
+      color:var(--muted);
+    }
+
+    .profile {
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      background: rgba(255,255,255,0.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      border:2px solid rgba(255,255,255,0.03);
+    }
+    .profile:focus{outline:3px solid rgba(255,255,255,0.06)}
+
+    main {
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      max-height: 68vh;
+      overflow: auto;
+      padding-right: 6px;
+    }
+
+    main::-webkit-scrollbar { width:10px; }
+    main::-webkit-scrollbar-track { background: transparent; }
+    main::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+
+    .section-head {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .section-head h2 {
+      margin:0;
+      font-size:18px;
+      color:white;
+    }
+    .edit-toggle {
+      background:transparent;
+      color:var(--muted);
+      border:none;
+      cursor:pointer;
+      font-size:14px;
+      padding:8px;
+      border-radius:8px;
+    }
+    .edit-toggle[aria-pressed="true"]{ color:var(--accent) }
+
+    .accounts-list {
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .account-card {
+      background: rgba(255,255,255,0.03);
+      padding:12px;
+      border-radius: var(--card-radius);
+      display:flex;
+      align-items:center;
+      gap:12px;
+      box-shadow: 0 6px 18px rgba(2,6,24,0.25);
+      transition: transform .18s ease, box-shadow .18s ease;
+      position:relative;
+    }
+    .account-card:hover{
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(2,6,24,0.35);
+    }
+
+    .bank-avatar {
+      width:48px;
+      height:48px;
+      border-radius: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-weight:700;
+      flex-shrink:0;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.18);
+    }
+
+    .account-info {
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+    }
+    .bank-name {
+      font-size:14px;
+      color: white;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .account-meta {
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .account-value {
+      font-weight:700;
+      font-size:14px;
+      min-width:96px;
+      text-align:right;
+    }
+    .positive { color: var(--success); }
+    .negative { color: var(--danger); }
+
+    .card-actions {
+      position: absolute;
+      right:10px;
+      top:10px;
+      display:flex;
+      gap:8px;
+      opacity:0;
+      transform: translateY(-6px);
+      transition: opacity .16s ease, transform .16s ease;
+      pointer-events:none;
+    }
+    .account-card[data-edit="true"] .card-actions {
+      opacity:1;
+      transform:none;
+      pointer-events:auto;
+    }
+    .card-action-btn {
+      background: rgba(255,255,255,0.06);
+      border: none;
+      padding:6px;
+      border-radius:8px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .card-action-btn:focus { outline:3px solid rgba(0,0,0,0.12) }
+
+    .actions {
+      margin-top:12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      position: sticky;
+      bottom: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+      padding:10px 6px;
+      border-radius: 12px;
+      justify-content:space-between;
+    }
+
+    .add-btn {
+      flex:1;
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:12px 14px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+      border:1px solid rgba(255,255,255,0.04);
+      color:white;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .add-btn .plus {
+      width:34px;
+      height:34px;
+      border-radius:8px;
+      display:inline-grid;
+      place-items:center;
+      background: rgba(255,255,255,0.06);
+      font-weight:700;
+      flex-shrink:0;
+    }
+
+    .hint {
+      font-size:12px;
+      color:var(--muted);
+      margin-top:8px;
+    }
+
+    .modal-backdrop {
+      position:fixed;
+      inset:0;
+      background: rgba(3,8,20,0.6);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:60;
+    }
+    .modal-backdrop.active { display:flex; }
+
+    .modal {
+      width:100%;
+      max-width:420px;
+      background: #f8fafc;
+      color: #061321;
+      border-radius:12px;
+      padding:18px;
+      box-shadow: 0 20px 60px rgba(2,6,24,0.6);
+    }
+    .modal h3 { margin:0 0 8px 0; }
+    .modal label { font-size:13px; color:#475569; display:block; margin:8px 0 6px; }
+    .input, .select {
+      width:100%;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid rgba(6,10,26,0.06);
+      font-size:14px;
+    }
+    .modal .modal-actions { display:flex; gap:8px; margin-top:12px; justify-content:flex-end; }
+    .btn {
+      padding:10px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      border:none;
+      font-weight:600;
+    }
+    .btn.ghost { background:transparent; color:#0f1724; }
+    .btn.primary { background:var(--bg-end); color:white; }
+
+    @media (max-width: 520px){
+      body{ padding:12px }
+      .app{ padding:16px; min-height:unset }
+      .brand .title { font-size:14px; }
+      .logo { width:42px; height:42px }
+      .bank-avatar { width:44px; height:44px }
+      .account-value { min-width:76px; font-size:13px; }
+      .section-head h2{ font-size:16px }
+    }
+
+    @media (min-width: 900px) {
+      body { align-items:center; padding:40px; }
+      .app { transform: scale(1.02) }
+    }
+
+    .sr-only { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+  </style>
+</head>
+<body>
+  <div class="app" role="main" aria-labelledby="page-title">
+    <header>
+      <div class="brand" aria-hidden="false">
+        <img src="logo.png" alt="">
+        <div>
+          <div class="title">GoalWallet</div>
+          <div class="subtitle">Contas conectadas</div>
+        </div>
+      </div>
+
+      <button class="profile" aria-label="Abrir perfil" title="Perfil">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z" fill="white" opacity="0.95"/>
+          <path d="M4 20c0-3.313 2.687-6 6-6h4c3.313 0 6 2.687 6 6v1H4v-1z" fill="white" opacity="0.08"/>
+        </svg>
+      </button>
+    </header>
+
+    <main id="scroll-area" tabindex="0" aria-live="polite">
+      <section class="section-head" aria-hidden="false">
+        <h2 id="page-title">Contas bancárias</h2>
+        <button id="editToggle" class="edit-toggle" aria-pressed="false" aria-controls="accountsList">Editar</button>
+      </section>
+
+      <section class="accounts-list" id="accountsList" aria-label="Lista de contas">
+        <article class="account-card" data-id="1" role="group" aria-label="Nubank - Conta corrente - R$4.350,00">
+          <div class="bank-avatar" style="background: linear-gradient(135deg,#7b2ff7,#a445f0)">N</div>
+          <div class="account-info">
+            <div class="bank-name">Nubank</div>
+            <div class="account-meta">Conta corrente • 01/23</div>
+          </div>
+          <div class="account-value positive">R$ 4.350,00</div>
+
+          <div class="card-actions" aria-hidden="true">
+            <button class="card-action-btn" title="Editar conta" data-action="edit" aria-label="Editar Nubank">
+              ✎
+            </button>
+            <button class="card-action-btn" title="Remover conta" data-action="delete" aria-label="Remover Nubank">
+              🗑
+            </button>
+          </div>
+        </article>
+
+        <article class="account-card" data-id="2" role="group" aria-label="Banco do Brasil - Poupança - R$820,50">
+          <div class="bank-avatar" style="background: linear-gradient(135deg,#FFD24C,#FFB84D); color:#163155">BB</div>
+          <div class="account-info">
+            <div class="bank-name">Banco do Brasil</div>
+            <div class="account-meta">Poupança • 03/21</div>
+          </div>
+          <div class="account-value negative">R$ 820,50</div>
+
+          <div class="card-actions" aria-hidden="true">
+            <button class="card-action-btn" title="Editar conta" data-action="edit" aria-label="Editar Banco do Brasil">✎</button>
+            <button class="card-action-btn" title="Remover conta" data-action="delete" aria-label="Remover Banco do Brasil">🗑</button>
+          </div>
+        </article>
+
+        <article class="account-card" data-id="3" role="group" aria-label="Inter - Conta digital - R$1.200,00">
+          <div class="bank-avatar" style="background: linear-gradient(135deg,#6b3e00,#c0782a)">I</div>
+          <div class="account-info">
+            <div class="bank-name">Inter</div>
+            <div class="account-meta">Conta digital • 07/19</div>
+          </div>
+          <div class="account-value positive">R$ 1.200,00</div>
+
+          <div class="card-actions" aria-hidden="true">
+            <button class="card-action-btn" title="Editar conta" data-action="edit" aria-label="Editar Inter">✎</button>
+            <button class="card-action-btn" title="Remover conta" data-action="delete" aria-label="Remover Inter">🗑</button>
+          </div>
+        </article>
+      </section>
+
+      <div class="actions" aria-hidden="false">
+        <button id="addAccountBtn" class="add-btn" aria-haspopup="dialog" aria-controls="addModal">
+          <span class="plus" aria-hidden="true">＋</span>
+          Adicionar nova conta
+        </button>
+      </div>
+
+      <div class="hint">Suas contas conectadas aparecem aqui. Você pode editar, remover ou adicionar novas contas.</div>
+    </main>
+
+    <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal" role="document" aria-labelledby="modalTitle">
+        <h3 id="modalTitle">Adicionar nova conta</h3>
+        <form id="accountForm">
+          <label for="bankName">Nome do banco</label>
+          <input id="bankName" class="input" name="bankName" type="text" placeholder="Ex: Nubank" required>
+
+          <label for="accountType">Tipo de conta</label>
+          <select id="accountType" class="select" name="accountType" required>
+            <option value="Conta corrente">Conta corrente</option>
+            <option value="Poupança">Poupança</option>
+            <option value="Conta digital">Conta digital</option>
+          </select>
+
+          <label for="accountDate">Data (mm/aa)</label>
+          <input id="accountDate" class="input" name="accountDate" type="text" inputmode="numeric" placeholder="01/23" pattern="\d{2}\/\d{2}" required>
+
+          <label for="accountValue">Saldo (R$)</label>
+          <input id="accountValue" class="input" name="accountValue" type="text" inputmode="decimal" placeholder="4350.00" required>
+
+          <div class="modal-actions">
+            <button type="button" class="btn ghost" id="cancelModal">Cancelar</button>
+            <button type="submit" class="btn primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    (function(){
+      const editToggle = document.getElementById('editToggle');
+      const accountsList = document.getElementById('accountsList');
+      const addAccountBtn = document.getElementById('addAccountBtn');
+      const modalBackdrop = document.getElementById('modalBackdrop');
+      const cancelModal = document.getElementById('cancelModal');
+      const accountForm = document.getElementById('accountForm');
+
+      let editMode = false;
+      editToggle.addEventListener('click', () => {
+        editMode = !editMode;
+        editToggle.setAttribute('aria-pressed', String(editMode));
+        document.querySelectorAll('.account-card').forEach(card => {
+          card.setAttribute('data-edit', editMode ? 'true' : 'false');
+        });
+      });
+
+      accountsList.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const action = btn.dataset.action;
+        const card = btn.closest('.account-card');
+        const bankName = card.querySelector('.bank-name').textContent;
+
+        if (action === 'delete') {
+          const confirmed = confirm('Remover ' + bankName + '?');
+          if (!confirmed) return;
+          card.remove();
+        } else if (action === 'edit') {
+          openModalForEdit(card);
+        }
+      });
+
+      addAccountBtn.addEventListener('click', () => {
+        openModal();
+      });
+
+      cancelModal.addEventListener('click', closeModal);
+      modalBackdrop.addEventListener('click', (e) => {
+        if (e.target === modalBackdrop) closeModal();
+      });
+
+      const accountDate = document.getElementById('accountDate');
+      accountDate.addEventListener('input', (e) => {
+        let v = e.target.value.replace(/[^\d]/g,'').slice(0,4);
+        if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+        e.target.value = v;
+      });
+
+      accountForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const data = new FormData(accountForm);
+        const bankName = data.get('bankName').trim();
+        const accountType = data.get('accountType');
+        const accountDate = data.get('accountDate');
+        let accountValueRaw = data.get('accountValue').replace(/[^\d,.\-]/g, '');
+        accountValueRaw = accountValueRaw.replace(',', '.');
+        let value = parseFloat(accountValueRaw) || 0;
+        const formatted = formatCurrency(value);
+        const editingId = modalBackdrop.dataset.editingId;
+        if (editingId) {
+          const card = document.querySelector('.account-card[data-id="'+editingId+'"]');
+          if (card) {
+            card.querySelector('.bank-name').textContent = bankName;
+            card.querySelector('.account-meta').textContent = accountType + ' • ' + accountDate;
+            const valueEl = card.querySelector('.account-value');
+            valueEl.textContent = formatted;
+            valueEl.classList.toggle('positive', value >= 0);
+            valueEl.classList.toggle('negative', value < 0);
+          }
+        } else {
+          const newId = String(Date.now());
+          const avatarColor = pickGradientFor(bankName);
+          const wrapper = document.createElement('article');
+          wrapper.className = 'account-card';
+          wrapper.setAttribute('data-id', newId);
+          wrapper.setAttribute('role','group');
+          wrapper.setAttribute('aria-label', bankName + ' - ' + accountType + ' - ' + formatted);
+          wrapper.innerHTML = `
+            <div class="bank-avatar" style="background:${avatarColor}">${initials(bankName)}</div>
+            <div class="account-info">
+              <div class="bank-name">${escapeHtml(bankName)}</div>
+              <div class="account-meta">${escapeHtml(accountType)} • ${escapeHtml(accountDate)}</div>
+            </div>
+            <div class="account-value ${value >= 0 ? 'positive' : 'negative'}">${formatted}</div>
+            <div class="card-actions" aria-hidden="true">
+              <button class="card-action-btn" title="Editar conta" data-action="edit" aria-label="Editar ${escapeHtml(bankName)}">✎</button>
+              <button class="card-action-btn" title="Remover conta" data-action="delete" aria-label="Remover ${escapeHtml(bankName)}">🗑</button>
+            </div>
+          `;
+          accountsList.appendChild(wrapper);
+          wrapper.setAttribute('data-edit', editMode ? 'true' : 'false');
+        }
+        closeModal();
+      });
+
+      function openModal(){
+        modalBackdrop.classList.add('active');
+        modalBackdrop.setAttribute('aria-hidden','false');
+        accountForm.reset();
+        delete modalBackdrop.dataset.editingId;
+        setTimeout(()=>document.getElementById('bankName').focus(), 120);
+      }
+      function closeModal(){
+        modalBackdrop.classList.remove('active');
+        modalBackdrop.setAttribute('aria-hidden','true');
+        delete modalBackdrop.dataset.editingId;
+      }
+      function openModalForEdit(card){
+        const id = card.dataset.id;
+        const name = card.querySelector('.bank-name').textContent;
+        const meta = card.querySelector('.account-meta').textContent.split('•').map(s=>s.trim());
+        const value = card.querySelector('.account-value').textContent.replace(/[^\d,.\-R$ ]/g,'').trim();
+        openModal();
+        modalBackdrop.dataset.editingId = id;
+        document.getElementById('modalTitle').textContent = 'Editar conta';
+        document.getElementById('bankName').value = name;
+        document.getElementById('accountType').value = meta[0] || '';
+        document.getElementById('accountDate').value = meta[1] || '';
+        document.getElementById('accountValue').value = value.replace('R$','').replace(/\./g,'').replace(',','.');
+      }
+
+      function formatCurrency(num){
+        const sign = num < 0 ? '-' : '';
+        const abs = Math.abs(num);
+        const parts = abs.toFixed(2).split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        return 'R$ ' + sign + parts[0] + ',' + parts[1];
+      }
+
+      function initials(name){
+        const parts = name.trim().split(' ');
+        if (parts.length === 1) return parts[0].slice(0,2).toUpperCase();
+        return (parts[0][0] + parts[1][0]).toUpperCase();
+      }
+
+      function pickGradientFor(seed){
+        const grads = [
+          'linear-gradient(135deg,#7b2ff7,#a445f0)',
+          'linear-gradient(135deg,#ffd24c,#ffb84d)',
+          'linear-gradient(135deg,#6b3e00,#c0782a)',
+          'linear-gradient(135deg,#2dd4bf,#14b8a6)',
+          'linear-gradient(135deg,#60a5fa,#3b82f6)',
+          'linear-gradient(135deg,#f472b6,#fb7185)'
+        ];
+        let h = 0;
+        for (let i=0;i<seed.length;i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+        return grads[h % grads.length];
+      }
+
+      function escapeHtml(s){
+        return s.replace(/[&<>"'`]/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;', '`':'&#96;'}[m]));
+      }
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          if (modalBackdrop.classList.contains('active')) closeModal();
+        }
+      });
+
+      document.querySelectorAll('.account-card').forEach(card => {
+        card.setAttribute('data-edit','false');
+      });
+
+    })();
+  </script>
+</body>
+</html>
