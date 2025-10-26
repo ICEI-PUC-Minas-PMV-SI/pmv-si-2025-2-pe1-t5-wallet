@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GoalWallet — Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <main class="container-dashboard">
+    <!-- Header -->
+    <header class="dashboard-header">
+      <div>
+        <h2>Olá, Fernanda!</h2>
+        <p>Que bom ter você de volta 👋</p>
+      </div>
+      <img src="img/logo.png" alt="Logo Goal Wallet" />
+    </header>
+
+    <!-- Card de saldo -->
+    <section class="saldo-card">
+      <h3>Saldo Total</h3>
+      <p class="valor">R$ 4.950,00</p>
+
+      <div class="botoes">
+        <button class="button small">Registrar Entrada</button>
+        <button class="button small outline">Registrar Saída</button>
+      </div>
+    </section>
+
+    <!-- Movimentações -->
+    <section class="movimentos">
+      <h3>Movimentações Recentes</h3>
+      <ul>
+        <li><span>Pix recebido</span> <span class="positivo">+ R$ 150,00</span></li>
+        <li><span>Supermercado</span> <span class="negativo">- R$ 98,00</span></li>
+        <li><span>Assinatura Netflix</span> <span class="negativo">- R$ 39,90</span></li>
+      </ul>
+    </section>
+
+    <!-- Gráfico estático -->
+    <section class="grafico">
+      <h3>Gráfico de Gastos</h3>
+      <div class="barras">
+        <div class="barra" style="height: 70%;"></div>
+        <div class="barra" style="height: 40%;"></div>
+        <div class="barra" style="height: 90%;"></div>
+        <div class="barra" style="height: 30%;"></div>
+        <div class="barra" style="height: 60%;"></div>
+        <div class="barra" style="height: 80%;"></div>
+        <div class="barra" style="height: 50%;"></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
