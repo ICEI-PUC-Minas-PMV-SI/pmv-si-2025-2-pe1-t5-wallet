@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Menu de Configurações</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, #053867 0%, #0b4a86 60%, #0f5aa7 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .back {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .back svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+      opacity: 0.95;
+      transform: translateX(-2px);
+    }
+
+    .title {
+      font-weight: 700;
+      font-size: 22px;
+    }
+
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .menu-item {
+      background: linear-gradient(180deg, #f6f8fb 0%, #eef4fb 100%);
+      color: #06324e;
+      border-radius: 12px;
+      padding: 16px 14px;
+      box-shadow: 0 6px 18px rgba(2, 8, 23, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      border: 2px solid transparent;
+      font-weight: 600;
+      transition: transform .12s ease, box-shadow .15s ease;
+      text-decoration: none;
+    }
+
+    .menu-item:active {
+      transform: translateY(1px);
+    }
+
+    .menu-item:hover {
+      box-shadow: 0 10px 20px rgba(1, 8, 22, 0.08);
+    }
+
+    .arrow {
+      width: 18px;
+      height: 18px;
+      opacity: 0.65;
+      fill: #06324e;
+    }
+
+    .logout {
+      color: #c62828;
+      font-weight: 700;
+    }
+
+    .logout .arrow {
+      fill: #c62828;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="back">
+      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </div>
+    <div class="title">Configurações</div>
+  </div>
+
+  <nav class="menu">
+    <a href="#" class="menu-item">Central de contas 
+      <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+
+    <a href="#" class="menu-item">Notificações 
+      <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+
+    <a href="#" class="menu-item">Pagamentos 
+      <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+
+    <!-- quando clicar aqui, vai para a página idioma.html -->
+    <a href="idioma.html" class="menu-item">Idioma 
+      <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+
+    <a href="acessibilidade.html" class="menu-item">Acessibilidade 
+      <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+
+    <a href="suporte.html" class="menu-item">Suporte 
+      <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+
+    <a href="#" class="menu-item">Sobre 
+      <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+
+    <a href="#" class="menu-item logout">Sair da conta 
+      <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+  </nav>
+
+</body>
+</html>

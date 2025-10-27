@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Idioma</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, #053867 0%, #0b4a86 60%, #0f5aa7 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .back {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .back svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+      opacity: 0.95;
+      transform: translateX(-2px);
+    }
+
+    .title {
+      font-weight: 700;
+      font-size: 22px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.92);
+      margin-bottom: 18px;
+    }
+
+    .choices {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 100px; /* espaço para o botão fixo */
+    }
+
+    .choice {
+      background: linear-gradient(180deg, #f6f8fb 0%, #eef4fb 100%);
+      color: #06324e;
+      border-radius: 12px;
+      padding: 16px 14px;
+      box-shadow: 0 6px 18px rgba(2, 8, 23, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform .12s ease;
+    }
+
+    .choice:active {
+      transform: translateY(1px);
+    }
+
+    .check {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(1,8,22,0.06);
+    }
+
+    .check.empty {
+      background: #f1f6fa;
+      border: 1px solid rgba(6,50,78,0.06);
+    }
+
+    .check.checked {
+      background: #d9f5e8;
+      border: 2px solid #2ab96a;
+    }
+
+    .check svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .label-small {
+      font-size: 12px;
+      color: #8a9fb6;
+      font-weight: 600;
+    }
+
+    .label-main {
+      font-size: 16px;
+      font-weight: 700;
+      color: #06324e;
+    }
+
+    .explain {
+      margin-top: 14px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.5;
+      max-width: 90%;
+    }
+
+    /* Botão de salvar */
+    .save-btn {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ffffff;
+      color: #110980;
+      font-weight: 700;
+      font-size: 16px;
+      padding: 14px 0;
+      width: 90%;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      transition: background .2s;
+    }
+
+    .save-btn:hover {
+      background: #e4e6e4;
+    }
+
+    /* Mensagem de sucesso */
+    .success-msg {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.95);
+      color: #06324e;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .success-msg.show {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a href="configuracoes.html" class="back">
+      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </a>
+    <div class="title">Idioma</div>
+  </div> 
+
+  <div class="subtitle">Selecione um idioma</div>
+
+  <div class="choices" id="choices">
+    <div class="choice selected" data-value="pt">
+      <div class="left">
+        <div class="label-small">Idioma padrão</div>
+        <div class="label-main">Português (Brasil)</div>
+      </div>
+      <div class="check checked">
+        <svg viewBox="0 0 24 24"><path fill="#0b7f45" d="M9 16.2l-3.5-3.5L4 14.2 9 19l12-12-1.5-1.5z"/></svg>
+      </div>
+    </div>
+
+    <div class="choice" data-value="en">
+      <div class="left">
+        <div style="height:14px"></div>
+        <div class="label-main">English (US)</div>
+      </div>
+      <div class="check empty">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.3" fill="none" stroke="#97aabd" stroke-width="1.2"/></svg>
+      </div>
+    </div>
+
+    <div class="choice" data-value="es">
+      <div class="left">
+        <div style="height:14px"></div>
+        <div class="label-main">Español (LatAm)</div>
+      </div>
+      <div class="check empty">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.3" fill="none" stroke="#97aabd" stroke-width="1.2"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="explain">
+    Escolha o idioma da interface. O app pode reiniciar para aplicar algumas mudanças.
+  </div>
+
+  <button class="save-btn" id="saveBtn">Salvar idioma</button>
+  <div class="success-msg" id="successMsg">✅ Idioma salvo com sucesso!</div>
+
+  <script>
+    let selectedValue = "pt"; // padrão
+
+    // seleção de idioma
+    document.querySelectorAll('.choice').forEach(choice => {
+      choice.addEventListener('click', () => {
+        document.querySelectorAll('.choice').forEach(c => {
+          c.classList.remove('selected');
+          const chk = c.querySelector('.check');
+          chk.classList.remove('checked');
+          chk.classList.add('empty');
+          chk.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.3" fill="none" stroke="#97aabd" stroke-width="1.2"/></svg>';
+        });
+
+        choice.classList.add('selected');
+        const check = choice.querySelector('.check');
+        check.classList.remove('empty');
+        check.classList.add('checked');
+        check.innerHTML = '<svg viewBox="0 0 24 24"><path fill="#0b7f45" d="M9 16.2l-3.5-3.5L4 14.2 9 19l12-12-1.5-1.5z"/></svg>';
+
+        selectedValue = choice.dataset.value;
+      });
+    });
+
+    // botão salvar
+    const saveBtn = document.getElementById('saveBtn');
+    const successMsg = document.getElementById('successMsg');
+
+    saveBtn.addEventListener('click', () => {
+      // simulação de salvar idioma
+      successMsg.classList.add('show');
+
+      // esconde depois de 2 segundos
+      setTimeout(() => {
+        successMsg.classList.remove('show');
+      }, 2000);
+    });
+  </script>
+
+</body>
+</html>

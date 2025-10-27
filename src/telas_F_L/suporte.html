@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Suporte GoalWallet</title>
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(180deg, #053867 0%, #0b4a86 60%, #0f5aa7 100%);
+    color: #fff;
+    min-height: 100vh;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Cabeçalho */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .back {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: background .2s;
+  }
+
+  .back:hover {
+    background: rgba(255,255,255,0.12);
+  }
+
+  .back svg {
+    width: 18px;
+    height: 18px;
+    fill: #fff;
+    transform: translateX(-2px);
+  }
+
+  .title {
+    font-weight: 700;
+    font-size: 22px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 20px;
+  }
+
+  /* Formulário */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 6px;
+  }
+
+  .input-field {
+    width: 100%;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1em;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #06324e;
+    outline: none;
+    transition: box-shadow 0.2s;
+  }
+
+  .input-field:focus {
+    box-shadow: 0 0 0 2px rgba(56, 193, 114, 0.5);
+  }
+
+  textarea.input-field {
+    resize: none;
+    min-height: 140px;
+  }
+
+  /* Botão de envio */
+  .submit-button {
+    width: 100%;
+    padding: 16px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 12px;
+    background-color: #2ab96a;
+    color: white;
+    font-size: 1.05em;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .submit-button:active {
+    transform: scale(0.98);
+  }
+
+  .submit-button:hover {
+    background-color: #249f5c;
+  }
+
+  /* Mensagem de info */
+  .info-text {
+    font-size: 0.85em;
+    text-align: center;
+    line-height: 1.4;
+    color: rgba(255,255,255,0.75);
+    margin-top: 22px;
+  }
+
+  /* Mensagem de sucesso */
+  .success-msg {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.95);
+    color: #06324e;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .success-msg.show {
+    opacity: 1;
+  }
+</style>
+</head>
+
+<body>
+  <div class="header">
+    <a href="configuracoes.html" class="back">
+      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </a>
+    <div class="title">Suporte</div>
+  </div>
+
+  <div class="subtitle">Fale com o suporte da GoalWallet</div>
+
+  <form id="supportForm">
+    <input type="email" class="input-field" placeholder="Seu e-mail" required>
+    <input type="text" class="input-field" placeholder="Assunto ou problema" required>
+    <textarea class="input-field" placeholder="Descreva seu problema detalhadamente" required></textarea>
+    <button type="submit" class="submit-button">Enviar solicitação</button>
+  </form>
+
+  <p class="info-text">
+    Tempo médio de resposta: até <b>24h úteis</b>.<br>
+    Ou envie um e-mail direto para <b>suporte@goalwallet.com</b>.
+  </p>
+
+  <div class="success-msg" id="successMsg">✅ Solicitação enviada com sucesso!</div>
+
+  <script>
+    const form = document.getElementById('supportForm');
+    const successMsg = document.getElementById('successMsg');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+
+      // Simulação de envio
+      successMsg.classList.add('show');
+      setTimeout(() => successMsg.classList.remove('show'), 2000);
+
+      form.reset();
+    });
+  </script>
+</body>
+</html>
