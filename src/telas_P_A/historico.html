@@ -3,15 +3,162 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Histórico</title>
-  <link rel="stylesheet" href="css/historico.css" />
+  <title>Histórico — GoalWallet</title>
+  <style>
+    :root{
+      --bg-start:#052a63;
+      --bg-end:#0a3d91;
+      --surface:#ffffff;
+      --glass:rgba(255,255,255,0.04);
+      --muted:#7a8aa3;
+      --muted-2:#9aa9d0;
+      --success:#2ecc71;
+      --danger:#e74c3c;
+      --shadow:0 8px 24px rgba(4,10,26,0.35);
+      --shadow-soft:0 6px 18px rgba(2,12,40,0.18);
+      --max-width:960px;
+      --radius:18px;
+      --card-radius:12px;
+      --card-padding:12px;
+      --gap:12px;
+      --font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --transition-fast:180ms;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:var(--font-family);-webkit-font-smoothing:antialiased;color:var(--surface)}
+    body{
+      background: linear-gradient(180deg,var(--bg-start), var(--bg-end));
+      display:flex;align-items:center;justify-content:center;
+      padding:28px;
+      min-height:100vh;
+      line-height:1.3;
+    }
+
+    .app{
+      width:100%;
+      max-width:var(--max-width);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      backdrop-filter: blur(8px) saturate(110%);
+      border-radius:var(--radius);
+      padding:20px;
+      box-shadow: var(--shadow);
+      position:relative;
+      min-height:640px;
+      overflow:hidden;
+    }
+
+    .header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+    .brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .logo{width:56px;height:56px;border-radius:12px;background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-soft);flex-shrink:0}
+    .brand h1{font-size:18px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+    .subtitle{font-size:12px;margin-top:2px;color:var(--muted)}
+
+    .pill{background:transparent;padding:6px 10px;border-radius:10px;font-size:13px;color:var(--muted);border:none;cursor:pointer}
+    .pill[aria-pressed="true"]{ background: rgba(255,255,255,0.02); color:var(--surface); }
+
+    .section-title{font-size:15px;margin:6px 0 12px 0;color:var(--surface)}
+
+    .grid-2{display:block;gap:20px}
+    @media(min-width:760px){
+      .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+    }
+
+    .card{
+      background:var(--glass);
+      border-radius:var(--card-radius);
+      padding:var(--card-padding);
+      box-shadow:0 6px 18px rgba(2,12,40,0.12);
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      transition:transform var(--transition-fast) ease, box-shadow var(--transition-fast) ease;
+    }
+    .card:hover{ transform:translateY(-3px); box-shadow:var(--shadow); }
+
+    .small{font-size:13px;color:var(--surface)}
+    .subtle{font-size:12px;color:var(--muted)}
+    .amount{font-weight:700}
+    .amount.expense{color:var(--danger)}
+    .amount.income{color:var(--success)}
+
+    .list-wrapper{display:block;margin-top:8px}
+    .scheduled{
+      display:grid;
+      gap:10px;
+      max-height:320px;
+      overflow:auto;
+      padding-right:10px;
+      -webkit-overflow-scrolling:touch;
+    }
+
+    .scheduled { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
+    .scheduled::-webkit-scrollbar{ width:10px; height:10px; }
+    .scheduled::-webkit-scrollbar-track{
+      background: linear-gradient(180deg, rgba(255,255,255,0.008), rgba(255,255,255,0.02));
+      border-radius:12px;
+      margin:6px 0;
+    }
+    .scheduled::-webkit-scrollbar-thumb{
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.08));
+      border-radius:12px;
+      border:2px solid rgba(10,61,145,0.04);
+      min-height:28px;
+      transition:background .12s ease;
+    }
+    .scheduled::-webkit-scrollbar-thumb:hover{
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.12));
+    }
+
+    .actions{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
+    .btn{padding:10px 14px;border-radius:12px;border:none;cursor:pointer;font-weight:600;transition:transform var(--transition-fast) ease, filter var(--transition-fast) ease}
+    .btn.green{background:var(--success);color:#05321a}
+    .btn.red{background:var(--danger);color:#fff}
+
+    .tx-left{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .tx-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-width:120px}
+
+    .tx-actions{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:flex-end;
+      margin-top:8px;
+      flex-wrap:nowrap;
+    }
+    .icon-btn{
+      background:transparent;border:0;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:15px;display:inline-flex;align-items:center;justify-content:center;min-width:36px;
+      color:var(--muted);
+    }
+    .icon-btn:hover{ background: rgba(10,61,145,0.06); color:var(--surface); }
+    .confirm-btn{ padding:8px 10px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.03);color:var(--surface); font-size:13px }
+
+    .status-pill{ font-size:13px;padding:6px 10px;border-radius:999px;display:inline-block;margin-top:8px;font-weight:700;border:1px solid rgba(255,255,255,0.06) }
+    .status-paid{ background: rgba(46,204,113,0.16); color:#063f26 }
+    .status-pending{ background: rgba(231,76,60,0.12); color:#4b1411 }
+
+    .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(3,8,20,0.6);opacity:0;pointer-events:none;transition:all .18s}
+    .modal.open{opacity:1;pointer-events:auto}
+    .sheet{
+      width:420px;max-width:92%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.98));
+      color:#0b254d;border-radius:12px;padding:18px;box-shadow:0 12px 40px rgba(2,12,40,0.45);
+      transform:translateY(20px);opacity:0;transition:transform 240ms ease, opacity 240ms ease;
+    }
+    .modal.open .sheet{ transform:translateY(0); opacity:1; }
+
+    .field{display:flex;flex-direction:column;margin-bottom:10px}
+    .field label{font-size:13px;margin-bottom:6px;color:#0b254d}
+    .field input, .field select{padding:8px;border-radius:8px;border:1px solid #e6eefb;background:white;color:#0b254d}
+
+    #toast{position:fixed;right:18px;bottom:18px;background:#0b254d;color:white;padding:12px 16px;border-radius:10px;box-shadow:0 6px 18px rgba(2,12,40,.3);display:none}
+    .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+  </style>
 </head>
 <body>
   <main class="app" role="main" aria-labelledby="main-title">
     <header class="header">
       <div class="brand">
         <div class="logo" aria-hidden="true">
-         <img src="logo.png" alt="">
+         <img src="logo.png" alt="" style="width:44px;height:44px;object-fit:contain">
         </div>
         <div>
           <h1 id="main-title">GoalWallet</h1>
@@ -66,7 +213,7 @@
     <div class="modal" id="modal" aria-hidden="true">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
         <h3 id="modal-title">Nova transação</h3>
-        <form id="tx-form">
+        <form id="tx-form" novalidate>
           <div class="field">
             <label for="t-title">Título</label>
             <input id="t-title" name="title" type="text" autocomplete="off" />
@@ -134,8 +281,11 @@
   </template>
 
   <script>
-
+    /***********************
+     * Config & Storage
+     ***********************/
     const STORAGE_KEY = 'goalwallet_transactions_v1';
+    // Dados iniciais (apenas exemplo — serão sobrescritos por localStorage se presentes)
     let transactions = [
       { id: '1', title: 'Assinatura Netflix', cents: 2990, date: '2025-10-10', recurring:true, type:'expense', status:'paid', account:'nubank' },
       { id: '2', title: 'Aluguel', cents: 120000, date: '2025-11-05', recurring:true, type:'expense', status:'pending', account:'caixa' },
@@ -157,6 +307,7 @@
 
     let saveTimer = null;
     function saveToStorage(){
+      // pequeno debounce para evitar gravações imediatas em sequência
       clearTimeout(saveTimer);
       saveTimer = setTimeout(()=>{
         try{
@@ -164,38 +315,58 @@
         }catch(e){
           console.warn('Falha ao salvar localStorage', e);
         }
-      }, 260);
+      }, 220);
     }
 
+    /***********************
+     * Helpers de Formato
+     ***********************/
     const formatBRL = (cents) => new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' }).format((Number(cents)||0)/100);
 
+    // Aceita várias entradas: "1.234,56", "1234.56", "R$ 1.234,56", "1234", - "1.234"
     function parseLocaleMoney(str){
       if(str === null || str === undefined) return NaN;
       if(typeof str === 'number') return Math.round(str*100);
-      let cleaned = String(str).replace(/\s/g,'').replace(/[^\d\.,-]/g,'').trim();
+      let cleaned = String(str).trim();
+      if(cleaned === '') return NaN;
+      // remove símbolos de moeda e espaços
+      cleaned = cleaned.replace(/[^\d\.,-]/g,'').trim();
       if(cleaned === '') return NaN;
       const negative = cleaned.includes('-');
       cleaned = cleaned.replace(/-/g,'');
       const hasDot = cleaned.indexOf('.') !== -1;
       const hasComma = cleaned.indexOf(',') !== -1;
       if(hasDot && hasComma){
+        // ex: 1.234,56 -> remove pontos e trocar vírgula por ponto
         const tmp = cleaned.replace(/\./g,'').replace(/,/g,'.');
         const f = parseFloat(tmp);
         return isNaN(f) ? NaN : Math.round((negative?-1:1)*f*100);
       }
       if(hasComma){
+        // ex: 1234,56 -> trocar vírgula por ponto
         const tmp = cleaned.replace(/\./g,'').replace(/,/g,'.');
         const f = parseFloat(tmp);
         return isNaN(f) ? NaN : Math.round((negative?-1:1)*f*100);
       }
+      // apenas ponto decimal ou nenhum separador
       const f = parseFloat(cleaned);
       return isNaN(f) ? NaN : Math.round((negative?-1:1)*f*100);
+    }
+
+    function unformatForEditing(formatted){
+      const cents = parseLocaleMoney(formatted);
+      if(isNaN(cents)) return '';
+      // retorno com vírgula para edição (ex: 1234,56)
+      return (cents/100).toFixed(2).replace('.', ',');
     }
 
     function getTotalPendingCents(){
       return transactions.filter(t => t.status === 'pending' && t.type === 'expense').reduce((s,t) => s + (Number(t.cents)||0), 0);
     }
 
+    /***********************
+     * UI: Toast
+     ***********************/
     function showToast(msg){
       const t = document.getElementById('toast');
       t.textContent = msg;
@@ -205,6 +376,9 @@
       window._toastTimeout = setTimeout(()=>{ t.style.opacity = '0'; setTimeout(()=> t.style.display = 'none', 250); }, 2200);
     }
 
+    /***********************
+     * Templates & Render
+     ***********************/
     const pendentesList = document.getElementById('pendentes-list');
     const historicoList = document.getElementById('historico-list');
     const tpl = document.getElementById('tx-card-tpl');
@@ -214,10 +388,20 @@
       node.dataset.id = tx.id;
       node.querySelector('.tx-title').textContent = tx.title;
       const d = tx.date ? new Date(tx.date) : null;
-      node.querySelector('.tx-sub').textContent = 'Venc. ' + (d ? d.toLocaleDateString('pt-BR',{day:'2-digit', month:'short'}) : '—') + (tx.recurring? ' • Mensal':'');
+      // Mostra dia+mês; se ano diferente do atual, mostra ano também
+      let dateLabel = '—';
+      if(d && !isNaN(d.getTime())){
+        const opts = { day:'2-digit', month:'short' };
+        dateLabel = d.toLocaleDateString('pt-BR', opts);
+        const thisYear = new Date().getFullYear();
+        if(d.getFullYear() !== thisYear) dateLabel += ' ' + d.getFullYear();
+      }
+      node.querySelector('.tx-sub').textContent = 'Venc. ' + dateLabel + (tx.recurring? ' • Mensal':'');
+
       const amt = node.querySelector('.tx-amt');
       amt.className = 'amount tx-amt ' + (tx.type === 'expense' ? 'expense' : 'income');
       amt.textContent = formatBRL(tx.cents);
+
       const pill = node.querySelector('.tx-status');
       pill.className = 'status-pill ' + (tx.status === 'paid' ? 'status-paid' : 'status-pending');
       pill.textContent = tx.status === 'paid' ? 'Pago' : 'Pendente';
@@ -225,7 +409,6 @@
       const actions = node.querySelector('.tx-actions');
       actions.innerHTML = '';
 
-      
       if(tx.status === 'pending'){
         const confirmBtn = document.createElement('button');
         confirmBtn.type = 'button';
@@ -254,10 +437,18 @@
       return node;
     }
 
+    let isEditMode = false;
+
     function renderList({container, filterFn}){
       container.innerHTML = '';
       const frag = document.createDocumentFragment();
-      const filtered = transactions.filter(filterFn);
+      // ordenar por data crescente (mais próxima) — items sem data ficam no fim
+      const filtered = transactions.filter(filterFn).slice().sort((a,b)=>{
+        if(!a.date && !b.date) return 0;
+        if(!a.date) return 1;
+        if(!b.date) return -1;
+        return new Date(a.date) - new Date(b.date);
+      });
       if(filtered.length === 0){
         const empty = document.createElement('div');
         empty.className = 'muted';
@@ -266,6 +457,7 @@
       } else {
         filtered.forEach(tx => {
           const card = createCard(tx);
+          // se não estiver em modo edição, esconde os botões de editar/excluir
           if(!isEditMode){
             const actions = card.querySelector('.tx-actions');
             Array.from(actions.children).forEach(btn => {
@@ -286,10 +478,14 @@
       document.getElementById('total').textContent = 'Total a vencer: ' + formatBRL(getTotalPendingCents());
       saveToStorage();
     }
-   
+
+    /***********************
+     * Actions: confirm/delete/etc.
+     ***********************/
     function confirmPayment(id){
       const tx = transactions.find(t => t.id === id);
       if(!tx) return;
+      if(tx.status === 'paid'){ showToast('Transação já está marcada como paga.'); return; }
       tx.status = 'paid';
       showToast('Pagamento confirmado.');
       reRenderAll();
@@ -298,12 +494,16 @@
     function deleteTx(id){
       const tx = transactions.find(t => t.id === id);
       if(!tx) return;
+      // confirmação simples — pode ser substituída por modal customizado
       if(!confirm('Deseja excluir esta transação? Esta ação não pode ser desfeita.')) return;
       transactions = transactions.filter(t => t.id !== id);
       showToast('Transação excluída.');
       reRenderAll();
     }
 
+    /***********************
+     * Modal & Form
+     ***********************/
     const modal = document.getElementById('modal');
     const sheet = modal.querySelector('.sheet');
     const addIncome = document.getElementById('add-income');
@@ -340,7 +540,8 @@
       document.body.style.overflow = 'hidden';
       document.getElementById('modal-title').textContent = tx.type === 'income' ? 'Editar receita' : 'Editar despesa';
       form.elements['title'].value = tx.title;
-      form.elements['value'].value = formatBRL(tx.cents);
+      // valor para edição: "1234,56" (sem R$)
+      form.elements['value'].value = unformatForEditing(tx.cents);
       form.elements['date'].value = tx.date || '';
       form.elements['account'].value = tx.account || 'nubank';
       Array.from(form.elements['type']).forEach(r=> r.checked = (r.value === tx.type));
@@ -363,6 +564,7 @@
     modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
     document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
 
+    // Trap focus dentro do sheet
     sheet.addEventListener('keydown', (e)=>{
       if(e.key !== 'Tab') return;
       const focusable = sheet.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])');
@@ -377,18 +579,18 @@
       }
     });
 
+    /***********************
+     * Máscara simples para campo de valor
+     ***********************/
     const tValue = document.getElementById('t-value');
-    function unformatForEditing(formatted){
-      const cents = parseLocaleMoney(formatted);
-      if(isNaN(cents)) return '';
-      return (cents/100).toFixed(2).replace('.', ',');
-    }
     function maskMoneyInputSimple(el){
       el.addEventListener('input', ()=>{
         const raw = el.value;
+        // permite apenas dígitos, vírgula, ponto e sinal negativo
         const cleaned = raw.replace(/[^\d\.,-]/g,'');
         const parts = cleaned.split(/[,\.]/);
         if(parts.length > 2){
+          // se houver mais de um separador, junta os primeiros como parte inteira
           const decimals = parts.slice(-1);
           const ints = parts.slice(0, -1).join('');
           el.value = ints + ',' + decimals.join('');
@@ -410,11 +612,23 @@
           el.value = (before + cleaned + after).replace(/[^\d\.,-]/g,'');
         }
       });
-      el.addEventListener('focus', ()=>{ if(el.value.trim() === '') return; const editable = unformatForEditing(el.value); if(editable !== '') el.value = editable; });
-      el.addEventListener('blur', ()=>{ const cents = parseLocaleMoney(el.value); if(!isNaN(cents)) el.value = formatBRL(cents); else el.value = ''; });
+      el.addEventListener('focus', ()=>{
+        if(el.value.trim() === '') return;
+        // transforma R$ 1.234,56 -> 1234,56 para edição
+        const editable = unformatForEditing(el.value);
+        if(editable !== '') el.value = editable;
+      });
+      el.addEventListener('blur', ()=>{
+        const cents = parseLocaleMoney(el.value);
+        if(!isNaN(cents)) el.value = formatBRL(cents);
+        else el.value = '';
+      });
     }
     maskMoneyInputSimple(tValue);
 
+    /***********************
+     * Form submit (create/update)
+     ***********************/
     form.addEventListener('submit', (e)=>{
       e.preventDefault();
       const title = form.elements['title'].value.trim();
@@ -439,7 +653,17 @@
         tx.status = status || (type === 'expense' ? 'pending' : 'paid');
         showToast('Transação atualizada.');
       } else {
-        const tx = { id: String(Date.now()), title, cents, date: dateVal || null, recurring:true, type, status: status || (type === 'expense' ? 'pending' : 'paid'), account };
+        // id simples baseado em timestamp + random para reduzir colisões
+        const tx = {
+          id: String(Date.now()) + '-' + Math.floor(Math.random()*9000+1000),
+          title,
+          cents,
+          date: dateVal || null,
+          recurring:true,
+          type,
+          status: status || (type === 'expense' ? 'pending' : 'paid'),
+          account
+        };
         transactions.unshift(tx);
         showToast('Transação salva.');
       }
@@ -448,8 +672,10 @@
       closeModal();
     });
 
+    /***********************
+     * Modo Edição (toggle)
+     ***********************/
     const toggleEdit = document.getElementById('toggle-edit');
-    let isEditMode = false;
     function setEditMode(on){
       isEditMode = !!on;
       toggleEdit.setAttribute('aria-pressed', String(isEditMode));
@@ -458,6 +684,9 @@
     }
     toggleEdit.addEventListener('click', ()=> setEditMode(!isEditMode));
 
+    /***********************
+     * Delegation para ações dentro das listas
+     ***********************/
     function handleListClick(e){
       const btn = e.target.closest('[data-action]');
       if(!btn) return;
@@ -472,8 +701,21 @@
     pendentesList.addEventListener('click', handleListClick);
     historicoList.addEventListener('click', handleListClick);
 
+    /***********************
+     * Perfil (placeholder)
+     ***********************/
+    document.getElementById('profile-top').addEventListener('click', ()=>{
+      // placeholder: você pode abrir um painel ou modal aqui
+      showToast('Abrir perfil (placeholder).');
+    });
+
+    /***********************
+     * Inicialização
+     ***********************/
     function init(){
       loadFromStorage();
+      // garantir formato correto dos cents (números)
+      transactions = transactions.map(t => ({ ...t, cents: Number(t.cents) || 0 }));
       reRenderAll();
     }
     init();
