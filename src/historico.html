@@ -4,154 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Histórico — GoalWallet</title>
-  <style>
-    :root{
-      --bg-start:#052a63;
-      --bg-end:#0a3d91;
-      --surface:#ffffff;
-      --glass:rgba(255,255,255,0.04);
-      --muted:#7a8aa3;
-      --muted-2:#9aa9d0;
-      --success:#2ecc71;
-      --danger:#e74c3c;
-      --shadow:0 8px 24px rgba(4,10,26,0.35);
-      --shadow-soft:0 6px 18px rgba(2,12,40,0.18);
-      --max-width:960px;
-      --radius:18px;
-      --card-radius:12px;
-      --card-padding:12px;
-      --gap:12px;
-      --font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      --transition-fast:180ms;
-    }
-
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:var(--font-family);-webkit-font-smoothing:antialiased;color:var(--surface)}
-    body{
-      background: linear-gradient(180deg,var(--bg-start), var(--bg-end));
-      display:flex;align-items:center;justify-content:center;
-      padding:28px;
-      min-height:100vh;
-      line-height:1.3;
-    }
-
-    .app{
-      width:100%;
-      max-width:var(--max-width);
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      backdrop-filter: blur(8px) saturate(110%);
-      border-radius:var(--radius);
-      padding:20px;
-      box-shadow: var(--shadow);
-      position:relative;
-      min-height:640px;
-      overflow:hidden;
-    }
-
-    .header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}
-    .brand{display:flex;align-items:center;gap:12px;min-width:0}
-    .logo{width:56px;height:56px;border-radius:12px;background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow-soft);flex-shrink:0}
-    .brand h1{font-size:18px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
-    .subtitle{font-size:12px;margin-top:2px;color:var(--muted)}
-
-    .pill{background:transparent;padding:6px 10px;border-radius:10px;font-size:13px;color:var(--muted);border:none;cursor:pointer}
-    .pill[aria-pressed="true"]{ background: rgba(255,255,255,0.02); color:var(--surface); }
-
-    .section-title{font-size:15px;margin:6px 0 12px 0;color:var(--surface)}
-
-    .grid-2{display:block;gap:20px}
-    @media(min-width:760px){
-      .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
-    }
-
-    .card{
-      background:var(--glass);
-      border-radius:var(--card-radius);
-      padding:var(--card-padding);
-      box-shadow:0 6px 18px rgba(2,12,40,0.12);
-      display:flex;align-items:center;justify-content:space-between;gap:12px;
-      transition:transform var(--transition-fast) ease, box-shadow var(--transition-fast) ease;
-    }
-    .card:hover{ transform:translateY(-3px); box-shadow:var(--shadow); }
-
-    .small{font-size:13px;color:var(--surface)}
-    .subtle{font-size:12px;color:var(--muted)}
-    .amount{font-weight:700}
-    .amount.expense{color:var(--danger)}
-    .amount.income{color:var(--success)}
-
-    .list-wrapper{display:block;margin-top:8px}
-    .scheduled{
-      display:grid;
-      gap:10px;
-      max-height:320px;
-      overflow:auto;
-      padding-right:10px;
-      -webkit-overflow-scrolling:touch;
-    }
-
-    .scheduled { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
-    .scheduled::-webkit-scrollbar{ width:10px; height:10px; }
-    .scheduled::-webkit-scrollbar-track{
-      background: linear-gradient(180deg, rgba(255,255,255,0.008), rgba(255,255,255,0.02));
-      border-radius:12px;
-      margin:6px 0;
-    }
-    .scheduled::-webkit-scrollbar-thumb{
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.08));
-      border-radius:12px;
-      border:2px solid rgba(10,61,145,0.04);
-      min-height:28px;
-      transition:background .12s ease;
-    }
-    .scheduled::-webkit-scrollbar-thumb:hover{
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.12));
-    }
-
-    .actions{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
-    .btn{padding:10px 14px;border-radius:12px;border:none;cursor:pointer;font-weight:600;transition:transform var(--transition-fast) ease, filter var(--transition-fast) ease}
-    .btn.green{background:var(--success);color:#05321a}
-    .btn.red{background:var(--danger);color:#fff}
-
-    .tx-left{display:flex;flex-direction:column;gap:4px;min-width:0}
-    .tx-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-width:120px}
-
-    .tx-actions{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      justify-content:flex-end;
-      margin-top:8px;
-      flex-wrap:nowrap;
-    }
-    .icon-btn{
-      background:transparent;border:0;padding:6px 8px;border-radius:8px;cursor:pointer;font-size:15px;display:inline-flex;align-items:center;justify-content:center;min-width:36px;
-      color:var(--muted);
-    }
-    .icon-btn:hover{ background: rgba(10,61,145,0.06); color:var(--surface); }
-    .confirm-btn{ padding:8px 10px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.03);color:var(--surface); font-size:13px }
-
-    .status-pill{ font-size:13px;padding:6px 10px;border-radius:999px;display:inline-block;margin-top:8px;font-weight:700;border:1px solid rgba(255,255,255,0.06) }
-    .status-paid{ background: rgba(46,204,113,0.16); color:#063f26 }
-    .status-pending{ background: rgba(231,76,60,0.12); color:#4b1411 }
-
-    .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(3,8,20,0.6);opacity:0;pointer-events:none;transition:all .18s}
-    .modal.open{opacity:1;pointer-events:auto}
-    .sheet{
-      width:420px;max-width:92%;
-      background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.98));
-      color:#0b254d;border-radius:12px;padding:18px;box-shadow:0 12px 40px rgba(2,12,40,0.45);
-      transform:translateY(20px);opacity:0;transition:transform 240ms ease, opacity 240ms ease;
-    }
-    .modal.open .sheet{ transform:translateY(0); opacity:1; }
-
-    .field{display:flex;flex-direction:column;margin-bottom:10px}
-    .field label{font-size:13px;margin-bottom:6px;color:#0b254d}
-    .field input, .field select{padding:8px;border-radius:8px;border:1px solid #e6eefb;background:white;color:#0b254d}
-
-    #toast{position:fixed;right:18px;bottom:18px;background:#0b254d;color:white;padding:12px 16px;border-radius:10px;box-shadow:0 6px 18px rgba(2,12,40,.3);display:none}
-    .visually-hidden{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
-  </style>
+  <link rel="stylesheet" href="css/historico.css">
 </head>
 <body>
   <main class="app" role="main" aria-labelledby="main-title">
@@ -181,7 +34,6 @@
       <section aria-labelledby="pendentes">
         <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
           <h2 id="pendentes" class="section-title">Pendentes</h2>
-          <div class="actions-inline muted" aria-hidden="true"></div>
         </div>
 
         <div class="list-wrapper">
@@ -192,7 +44,6 @@
       <section aria-labelledby="historico">
         <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
           <h2 id="historico" class="section-title">Histórico</h2>
-          <div></div>
         </div>
 
         <div class="list-wrapper">
@@ -214,6 +65,7 @@
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
         <h3 id="modal-title">Nova transação</h3>
         <form id="tx-form" novalidate>
+
           <div class="field">
             <label for="t-title">Título</label>
             <input id="t-title" name="title" type="text" autocomplete="off" />
@@ -221,8 +73,7 @@
 
           <div class="field">
             <label for="t-value">Valor</label>
-            <input id="t-value" name="value" type="text" inputmode="decimal" placeholder="0,00" aria-describedby="val-help" autocomplete="off" />
-            <div id="val-help" class="muted" style="font-size:12px;margin-top:6px">Digite números; separador decimal: vírgula ou ponto.</div>
+            <input id="t-value" name="value" type="text" inputmode="decimal" placeholder="0,00" autocomplete="off" />
           </div>
 
           <div class="field">
@@ -239,10 +90,11 @@
             </select>
           </div>
 
-          <div class="field" aria-label="Tipo">
+          <!-- CAMPO TIPO — AGORA CONDICIONAL -->
+          <div class="field" id="field-type">
             <label>Tipo</label>
             <div style="display:flex;gap:8px">
-              <label><input type="radio" name="type" value="expense" checked /> Despesa</label>
+              <label><input type="radio" name="type" value="expense" /> Despesa</label>
               <label><input type="radio" name="type" value="income" /> Receita</label>
             </div>
           </div>
@@ -259,6 +111,7 @@
             <button class="btn" id="cancel" type="button">Cancelar</button>
             <button class="btn green" id="save" type="submit">Salvar</button>
           </div>
+
         </form>
       </div>
     </div>
@@ -280,445 +133,395 @@
     </div>
   </template>
 
-  <script>
-    /***********************
-     * Config & Storage
-     ***********************/
-    const STORAGE_KEY = 'goalwallet_transactions_v1';
-    // Dados iniciais (apenas exemplo — serão sobrescritos por localStorage se presentes)
-    let transactions = [
-      { id: '1', title: 'Assinatura Netflix', cents: 2990, date: '2025-10-10', recurring:true, type:'expense', status:'paid', account:'nubank' },
-      { id: '2', title: 'Aluguel', cents: 120000, date: '2025-11-05', recurring:true, type:'expense', status:'pending', account:'caixa' },
-      { id: '3', title: 'Plano Saúde', cents: 25000, date: '2025-10-20', recurring:true, type:'expense', status:'pending', account:'inter' },
-      { id: '4', title: 'Conta de luz', cents: 32000, date: '2025-10-08', recurring:true, type:'expense', status:'pending', account:'nubank' },
-    ];
+<script>
+/***********************
+ * Config & Storage
+ ***********************/
+const STORAGE_KEY = 'goalwallet_transactions_v1';
+let transactions = [
+  { id: '1', title: 'Assinatura Netflix', cents: 2990, date: '2025-10-10', recurring:true, type:'expense', status:'paid', account:'nubank' },
+  { id: '2', title: 'Aluguel', cents: 120000, date: '2025-11-05', recurring:true, type:'expense', status:'pending', account:'caixa' },
+  { id: '3', title: 'Plano Saúde', cents: 25000, date: '2025-10-20', recurring:true, type:'expense', status:'pending', account:'inter' },
+  { id: '4', title: 'Conta de luz', cents: 32000, date: '2025-10-08', recurring:true, type:'expense', status:'pending', account:'nubank' },
+];
 
-    function loadFromStorage(){
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if(raw){
-          const parsed = JSON.parse(raw);
-          if(Array.isArray(parsed)) transactions = parsed;
-        }
-      }catch(e){
-        console.warn('Falha ao ler localStorage', e);
+function loadFromStorage(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(Array.isArray(parsed)) transactions = parsed;
+    }
+  }catch(e){}
+}
+
+let saveTimer = null;
+function saveToStorage(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions)); }
+    catch(e){}
+  }, 220);
+}
+
+/***********************
+ * Helpers
+ ***********************/
+const formatBRL = (cents) => new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' }).format((Number(cents)||0)/100);
+
+function parseLocaleMoney(str){
+  if(!str) return NaN;
+  let cleaned = String(str).replace(/[^\d\.,-]/g,'');
+  if(cleaned.includes(',') && cleaned.includes('.')){
+    cleaned = cleaned.replace(/\./g,'').replace(',', '.');
+  } else if(cleaned.includes(',')){
+    cleaned = cleaned.replace(',', '.');
+  }
+  const f = parseFloat(cleaned);
+  return isNaN(f) ? NaN : Math.round(f*100);
+}
+
+function unformatForEditing(formatted){
+  const cents = parseLocaleMoney(formatted);
+  if(isNaN(cents)) return '';
+  return (cents/100).toFixed(2).replace('.', ',');
+}
+
+function getTotalPendingCents(){
+  return transactions
+    .filter(t => t.status === 'pending' && t.type === 'expense')
+    .reduce((s,t)=> s + (Number(t.cents)||0), 0);
+}
+
+/***********************
+ * Toast
+ ***********************/
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  t.style.opacity = '1';
+  clearTimeout(window._toastTimeout);
+  window._toastTimeout = setTimeout(()=>{
+    t.style.opacity = '0';
+    setTimeout(()=> t.style.display = 'none', 250);
+  }, 2000);
+}
+
+/***********************
+ * Template render
+ ***********************/
+const pendentesList = document.getElementById('pendentes-list');
+const historicoList = document.getElementById('historico-list');
+const tpl = document.getElementById('tx-card-tpl');
+
+function createCard(tx){
+  const node = tpl.content.firstElementChild.cloneNode(true);
+  node.dataset.id = tx.id;
+  node.querySelector('.tx-title').textContent = tx.title;
+
+  let dateLabel = '—';
+  if(tx.date){
+    const d = new Date(tx.date);
+    const opts = { day:'2-digit', month:'short' };
+    dateLabel = d.toLocaleDateString('pt-BR', opts);
+  }
+  node.querySelector('.tx-sub').textContent = 'Venc. ' + dateLabel;
+
+  const amt = node.querySelector('.tx-amt');
+  amt.className = 'amount tx-amt ' + (tx.type === 'expense' ? 'expense' : 'income');
+  amt.textContent = formatBRL(tx.cents);
+
+  const pill = node.querySelector('.tx-status');
+  pill.className = 'status-pill ' + (tx.status === 'paid' ? 'status-paid' : 'status-pending');
+  pill.textContent = tx.status === 'paid' ? 'Pago' : 'Pendente';
+
+  const actions = node.querySelector('.tx-actions');
+  actions.innerHTML = '';
+
+  if(tx.status === 'pending'){
+    const confirmBtn = document.createElement('button');
+    confirmBtn.type = 'button';
+    confirmBtn.className = 'confirm-btn';
+    confirmBtn.textContent = 'Confirmar pagamento';
+    confirmBtn.dataset.action = 'confirm';
+    actions.appendChild(confirmBtn);
+  }
+
+  const editBtn = document.createElement('button');
+  editBtn.className = 'icon-btn';
+  editBtn.type = 'button';
+  editBtn.innerHTML = '✎';
+  editBtn.title = 'Editar';
+  editBtn.dataset.action = 'edit';
+  actions.appendChild(editBtn);
+
+  const delBtn = document.createElement('button');
+  delBtn.className = 'icon-btn';
+  delBtn.type = 'button';
+  delBtn.innerHTML = '🗑';
+  delBtn.title = 'Excluir';
+  delBtn.dataset.action = 'delete';
+  actions.appendChild(delBtn);
+
+  return node;
+}
+
+let isEditMode = false;
+
+function renderList({container, filterFn}){
+  container.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  const filtered = transactions.filter(filterFn);
+
+  if(filtered.length === 0){
+    const empty = document.createElement('div');
+    empty.className = 'muted';
+    empty.textContent = container.id === 'pendentes-list'
+      ? 'Nenhuma transação pendente.'
+      : 'Nenhuma transação no histórico.';
+    frag.appendChild(empty);
+  } else {
+    filtered.forEach(tx => {
+      const card = createCard(tx);
+      if(!isEditMode){
+        card.querySelectorAll('[data-action="edit"], [data-action="delete"]')
+            .forEach(btn => btn.style.display = 'none');
       }
-    }
-
-    let saveTimer = null;
-    function saveToStorage(){
-      // pequeno debounce para evitar gravações imediatas em sequência
-      clearTimeout(saveTimer);
-      saveTimer = setTimeout(()=>{
-        try{
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
-        }catch(e){
-          console.warn('Falha ao salvar localStorage', e);
-        }
-      }, 220);
-    }
-
-    /***********************
-     * Helpers de Formato
-     ***********************/
-    const formatBRL = (cents) => new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' }).format((Number(cents)||0)/100);
-
-    // Aceita várias entradas: "1.234,56", "1234.56", "R$ 1.234,56", "1234", - "1.234"
-    function parseLocaleMoney(str){
-      if(str === null || str === undefined) return NaN;
-      if(typeof str === 'number') return Math.round(str*100);
-      let cleaned = String(str).trim();
-      if(cleaned === '') return NaN;
-      // remove símbolos de moeda e espaços
-      cleaned = cleaned.replace(/[^\d\.,-]/g,'').trim();
-      if(cleaned === '') return NaN;
-      const negative = cleaned.includes('-');
-      cleaned = cleaned.replace(/-/g,'');
-      const hasDot = cleaned.indexOf('.') !== -1;
-      const hasComma = cleaned.indexOf(',') !== -1;
-      if(hasDot && hasComma){
-        // ex: 1.234,56 -> remove pontos e trocar vírgula por ponto
-        const tmp = cleaned.replace(/\./g,'').replace(/,/g,'.');
-        const f = parseFloat(tmp);
-        return isNaN(f) ? NaN : Math.round((negative?-1:1)*f*100);
-      }
-      if(hasComma){
-        // ex: 1234,56 -> trocar vírgula por ponto
-        const tmp = cleaned.replace(/\./g,'').replace(/,/g,'.');
-        const f = parseFloat(tmp);
-        return isNaN(f) ? NaN : Math.round((negative?-1:1)*f*100);
-      }
-      // apenas ponto decimal ou nenhum separador
-      const f = parseFloat(cleaned);
-      return isNaN(f) ? NaN : Math.round((negative?-1:1)*f*100);
-    }
-
-    function unformatForEditing(formatted){
-      const cents = parseLocaleMoney(formatted);
-      if(isNaN(cents)) return '';
-      // retorno com vírgula para edição (ex: 1234,56)
-      return (cents/100).toFixed(2).replace('.', ',');
-    }
-
-    function getTotalPendingCents(){
-      return transactions.filter(t => t.status === 'pending' && t.type === 'expense').reduce((s,t) => s + (Number(t.cents)||0), 0);
-    }
-
-    /***********************
-     * UI: Toast
-     ***********************/
-    function showToast(msg){
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.style.display = 'block';
-      t.style.opacity = '1';
-      clearTimeout(window._toastTimeout);
-      window._toastTimeout = setTimeout(()=>{ t.style.opacity = '0'; setTimeout(()=> t.style.display = 'none', 250); }, 2200);
-    }
-
-    /***********************
-     * Templates & Render
-     ***********************/
-    const pendentesList = document.getElementById('pendentes-list');
-    const historicoList = document.getElementById('historico-list');
-    const tpl = document.getElementById('tx-card-tpl');
-
-    function createCard(tx){
-      const node = tpl.content.firstElementChild.cloneNode(true);
-      node.dataset.id = tx.id;
-      node.querySelector('.tx-title').textContent = tx.title;
-      const d = tx.date ? new Date(tx.date) : null;
-      // Mostra dia+mês; se ano diferente do atual, mostra ano também
-      let dateLabel = '—';
-      if(d && !isNaN(d.getTime())){
-        const opts = { day:'2-digit', month:'short' };
-        dateLabel = d.toLocaleDateString('pt-BR', opts);
-        const thisYear = new Date().getFullYear();
-        if(d.getFullYear() !== thisYear) dateLabel += ' ' + d.getFullYear();
-      }
-      node.querySelector('.tx-sub').textContent = 'Venc. ' + dateLabel + (tx.recurring? ' • Mensal':'');
-
-      const amt = node.querySelector('.tx-amt');
-      amt.className = 'amount tx-amt ' + (tx.type === 'expense' ? 'expense' : 'income');
-      amt.textContent = formatBRL(tx.cents);
-
-      const pill = node.querySelector('.tx-status');
-      pill.className = 'status-pill ' + (tx.status === 'paid' ? 'status-paid' : 'status-pending');
-      pill.textContent = tx.status === 'paid' ? 'Pago' : 'Pendente';
-
-      const actions = node.querySelector('.tx-actions');
-      actions.innerHTML = '';
-
-      if(tx.status === 'pending'){
-        const confirmBtn = document.createElement('button');
-        confirmBtn.type = 'button';
-        confirmBtn.className = 'confirm-btn';
-        confirmBtn.textContent = 'Confirmar pagamento';
-        confirmBtn.dataset.action = 'confirm';
-        actions.appendChild(confirmBtn);
-      }
-
-      const editBtn = document.createElement('button');
-      editBtn.className = 'icon-btn';
-      editBtn.type = 'button';
-      editBtn.innerHTML = '✎';
-      editBtn.title = 'Editar';
-      editBtn.dataset.action = 'edit';
-      actions.appendChild(editBtn);
-
-      const delBtn = document.createElement('button');
-      delBtn.className = 'icon-btn';
-      delBtn.type = 'button';
-      delBtn.innerHTML = '🗑';
-      delBtn.title = 'Excluir';
-      delBtn.dataset.action = 'delete';
-      actions.appendChild(delBtn);
-
-      return node;
-    }
-
-    let isEditMode = false;
-
-    function renderList({container, filterFn}){
-      container.innerHTML = '';
-      const frag = document.createDocumentFragment();
-      // ordenar por data crescente (mais próxima) — items sem data ficam no fim
-      const filtered = transactions.filter(filterFn).slice().sort((a,b)=>{
-        if(!a.date && !b.date) return 0;
-        if(!a.date) return 1;
-        if(!b.date) return -1;
-        return new Date(a.date) - new Date(b.date);
-      });
-      if(filtered.length === 0){
-        const empty = document.createElement('div');
-        empty.className = 'muted';
-        empty.textContent = container.id === 'pendentes-list' ? 'Nenhuma transação pendente.' : 'Nenhuma transação no histórico.';
-        frag.appendChild(empty);
-      } else {
-        filtered.forEach(tx => {
-          const card = createCard(tx);
-          // se não estiver em modo edição, esconde os botões de editar/excluir
-          if(!isEditMode){
-            const actions = card.querySelector('.tx-actions');
-            Array.from(actions.children).forEach(btn => {
-              if(btn.dataset.action === 'edit' || btn.dataset.action === 'delete'){
-                btn.style.display = 'none';
-              }
-            });
-          }
-          frag.appendChild(card);
-        });
-      }
-      container.appendChild(frag);
-    }
-
-    function reRenderAll(){
-      renderList({container: pendentesList, filterFn: t => t.status === 'pending'});
-      renderList({container: historicoList, filterFn: t => t.status === 'paid'});
-      document.getElementById('total').textContent = 'Total a vencer: ' + formatBRL(getTotalPendingCents());
-      saveToStorage();
-    }
-
-    /***********************
-     * Actions: confirm/delete/etc.
-     ***********************/
-    function confirmPayment(id){
-      const tx = transactions.find(t => t.id === id);
-      if(!tx) return;
-      if(tx.status === 'paid'){ showToast('Transação já está marcada como paga.'); return; }
-      tx.status = 'paid';
-      showToast('Pagamento confirmado.');
-      reRenderAll();
-    }
-
-    function deleteTx(id){
-      const tx = transactions.find(t => t.id === id);
-      if(!tx) return;
-      // confirmação simples — pode ser substituída por modal customizado
-      if(!confirm('Deseja excluir esta transação? Esta ação não pode ser desfeita.')) return;
-      transactions = transactions.filter(t => t.id !== id);
-      showToast('Transação excluída.');
-      reRenderAll();
-    }
-
-    /***********************
-     * Modal & Form
-     ***********************/
-    const modal = document.getElementById('modal');
-    const sheet = modal.querySelector('.sheet');
-    const addIncome = document.getElementById('add-income');
-    const addExpense = document.getElementById('add-expense');
-    const cancel = document.getElementById('cancel');
-    const form = document.getElementById('tx-form');
-    let lastFocused = null;
-    let editingId = null;
-
-    function openModal(type){
-      lastFocused = document.activeElement;
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden','false');
-      document.querySelector('main').setAttribute('aria-hidden','true');
-      document.body.style.overflow = 'hidden';
-      document.getElementById('modal-title').textContent = type === 'income' ? 'Nova receita' : 'Nova despesa';
-      Array.from(form.elements['type']).forEach(r=> r.checked = (r.value === type));
-      form.elements['title'].value = '';
-      form.elements['value'].value = '';
-      form.elements['date'].value = '';
-      form.elements['account'].value = 'nubank';
-      form.elements['status'].value = (type === 'expense') ? 'pending' : 'paid';
-      editingId = null;
-      setTimeout(()=> document.getElementById('t-title').focus(), 60);
-    }
-
-    function openEditModal(id){
-      const tx = transactions.find(t => t.id === id);
-      if(!tx) return;
-      lastFocused = document.activeElement;
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden','false');
-      document.querySelector('main').setAttribute('aria-hidden','true');
-      document.body.style.overflow = 'hidden';
-      document.getElementById('modal-title').textContent = tx.type === 'income' ? 'Editar receita' : 'Editar despesa';
-      form.elements['title'].value = tx.title;
-      // valor para edição: "1234,56" (sem R$)
-      form.elements['value'].value = unformatForEditing(tx.cents);
-      form.elements['date'].value = tx.date || '';
-      form.elements['account'].value = tx.account || 'nubank';
-      Array.from(form.elements['type']).forEach(r=> r.checked = (r.value === tx.type));
-      form.elements['status'].value = tx.status || 'pending';
-      editingId = tx.id;
-      setTimeout(()=> document.getElementById('t-title').focus(), 60);
-    }
-
-    function closeModal(){
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden','true');
-      document.querySelector('main').removeAttribute('aria-hidden');
-      document.body.style.overflow = '';
-      lastFocused?.focus();
-    }
-
-    addIncome.addEventListener('click', ()=> openModal('income'));
-    addExpense.addEventListener('click', ()=> openModal('expense'));
-    cancel.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
-    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
-
-    // Trap focus dentro do sheet
-    sheet.addEventListener('keydown', (e)=>{
-      if(e.key !== 'Tab') return;
-      const focusable = sheet.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])');
-      const focusableArr = Array.prototype.slice.call(focusable).filter(el => el.offsetParent !== null);
-      if(focusableArr.length === 0) return;
-      const first = focusableArr[0];
-      const last = focusableArr[focusableArr.length -1];
-      if(e.shiftKey){
-        if(document.activeElement === first){ e.preventDefault(); last.focus(); }
-      } else {
-        if(document.activeElement === last){ e.preventDefault(); first.focus(); }
-      }
+      frag.appendChild(card);
     });
+  }
 
-    /***********************
-     * Máscara simples para campo de valor
-     ***********************/
-    const tValue = document.getElementById('t-value');
-    function maskMoneyInputSimple(el){
-      el.addEventListener('input', ()=>{
-        const raw = el.value;
-        // permite apenas dígitos, vírgula, ponto e sinal negativo
-        const cleaned = raw.replace(/[^\d\.,-]/g,'');
-        const parts = cleaned.split(/[,\.]/);
-        if(parts.length > 2){
-          // se houver mais de um separador, junta os primeiros como parte inteira
-          const decimals = parts.slice(-1);
-          const ints = parts.slice(0, -1).join('');
-          el.value = ints + ',' + decimals.join('');
-        } else {
-          el.value = cleaned;
-        }
-      });
-      el.addEventListener('paste', (e)=>{
-        const txt = (e.clipboardData || window.clipboardData).getData('text');
-        if(!txt) return;
-        const cleaned = txt.replace(/[^0-9\.,-]/g,'');
-        if(cleaned === '') e.preventDefault();
-        else {
-          e.preventDefault();
-          const start = el.selectionStart || 0;
-          const end = el.selectionEnd || 0;
-          const before = el.value.slice(0,start);
-          const after = el.value.slice(end);
-          el.value = (before + cleaned + after).replace(/[^\d\.,-]/g,'');
-        }
-      });
-      el.addEventListener('focus', ()=>{
-        if(el.value.trim() === '') return;
-        // transforma R$ 1.234,56 -> 1234,56 para edição
-        const editable = unformatForEditing(el.value);
-        if(editable !== '') el.value = editable;
-      });
-      el.addEventListener('blur', ()=>{
-        const cents = parseLocaleMoney(el.value);
-        if(!isNaN(cents)) el.value = formatBRL(cents);
-        else el.value = '';
-      });
-    }
-    maskMoneyInputSimple(tValue);
+  container.appendChild(frag);
+}
 
-    /***********************
-     * Form submit (create/update)
-     ***********************/
-    form.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const title = form.elements['title'].value.trim();
-      const valueStr = form.elements['value'].value;
-      const dateVal = form.elements['date'].value;
-      const account = form.elements['account'].value;
-      const type = Array.from(form.elements['type']).find(r=>r.checked).value;
-      const status = form.elements['status'].value;
+function reRenderAll(){
+  renderList({ container: pendentesList, filterFn: t => t.status === 'pending' });
+  renderList({ container: historicoList, filterFn: t => t.status === 'paid' });
+  document.getElementById('total').textContent = 'Total a vencer: ' + formatBRL(getTotalPendingCents());
+  saveToStorage();
+}
 
-      if(!title){ showToast('Preencha um título válido.'); return; }
-      const cents = parseLocaleMoney(valueStr);
-      if(isNaN(cents) || cents <= 0){ showToast('Informe um valor válido maior que 0.'); return; }
+/***********************
+ * Actions
+ ***********************/
+function confirmPayment(id){
+  const tx = transactions.find(t => t.id === id);
+  if(!tx) return;
+  tx.status = 'paid';
+  showToast('Pagamento confirmado.');
+  reRenderAll();
+}
 
-      if(editingId){
-        const tx = transactions.find(t => t.id === editingId);
-        if(!tx){ showToast('Transação não encontrada.'); closeModal(); return; }
-        tx.title = title;
-        tx.cents = cents;
-        tx.date = dateVal || null;
-        tx.account = account;
-        tx.type = type;
-        tx.status = status || (type === 'expense' ? 'pending' : 'paid');
-        showToast('Transação atualizada.');
-      } else {
-        // id simples baseado em timestamp + random para reduzir colisões
-        const tx = {
-          id: String(Date.now()) + '-' + Math.floor(Math.random()*9000+1000),
-          title,
-          cents,
-          date: dateVal || null,
-          recurring:true,
-          type,
-          status: status || (type === 'expense' ? 'pending' : 'paid'),
-          account
-        };
-        transactions.unshift(tx);
-        showToast('Transação salva.');
-      }
+function deleteTx(id){
+  const tx = transactions.find(t => t.id === id);
+  if(!tx) return;
+  if(!confirm('Deseja excluir esta transação?')) return;
+  transactions = transactions.filter(t => t.id !== id);
+  showToast('Transação excluída.');
+  reRenderAll();
+}
 
-      reRenderAll();
-      closeModal();
-    });
+/***********************
+ * Modal
+ ***********************/
+const modal = document.getElementById('modal');
+const sheet = modal.querySelector('.sheet');
+const addIncome = document.getElementById('add-income');
+const addExpense = document.getElementById('add-expense');
+const cancel = document.getElementById('cancel');
+const form = document.getElementById('tx-form');
+const fieldType = document.getElementById('field-type');
 
-    /***********************
-     * Modo Edição (toggle)
-     ***********************/
-    const toggleEdit = document.getElementById('toggle-edit');
-    function setEditMode(on){
-      isEditMode = !!on;
-      toggleEdit.setAttribute('aria-pressed', String(isEditMode));
-      toggleEdit.textContent = isEditMode ? 'Concluir edição' : 'Editar';
-      reRenderAll();
-    }
-    toggleEdit.addEventListener('click', ()=> setEditMode(!isEditMode));
+let lastFocused = null;
+let editingId = null;
+let transactionType = "expense";
 
-    /***********************
-     * Delegation para ações dentro das listas
-     ***********************/
-    function handleListClick(e){
-      const btn = e.target.closest('[data-action]');
-      if(!btn) return;
-      const card = btn.closest('.card');
-      if(!card) return;
-      const id = card.dataset.id;
-      const action = btn.dataset.action;
-      if(action === 'confirm') confirmPayment(id);
-      else if(action === 'edit') openEditModal(id);
-      else if(action === 'delete') deleteTx(id);
-    }
-    pendentesList.addEventListener('click', handleListClick);
-    historicoList.addEventListener('click', handleListClick);
+// Ao abrir para criar
+function openModal(type){
+  transactionType = type;
+  editingId = null;
 
-    /***********************
-     * Perfil (placeholder)
-     ***********************/
-    document.getElementById('profile-top').addEventListener('click', ()=>{
-      // placeholder: você pode abrir um painel ou modal aqui
-      showToast('Abrir perfil (placeholder).');
-    });
+  fieldType.style.display = "none"; // campo tipo escondido
 
-    /***********************
-     * Inicialização
-     ***********************/
-    function init(){
-      loadFromStorage();
-      // garantir formato correto dos cents (números)
-      transactions = transactions.map(t => ({ ...t, cents: Number(t.cents) || 0 }));
-      reRenderAll();
-    }
-    init();
-  </script>
+  lastFocused = document.activeElement;
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+
+  document.getElementById('modal-title').textContent = 
+    type === 'income' ? 'Nova receita' : 'Nova despesa';
+
+  form.elements['title'].value = '';
+  form.elements['value'].value = '';
+  form.elements['date'].value = '';
+  form.elements['account'].value = 'nubank';
+  form.elements['status'].value = type === 'expense' ? 'pending' : 'paid';
+
+  setTimeout(()=> document.getElementById('t-title').focus(), 50);
+}
+
+// Ao editar
+function openEditModal(id){
+  const tx = transactions.find(t => t.id === id);
+  if(!tx) return;
+
+  editingId = id;
+  transactionType = tx.type;
+
+  fieldType.style.display = "block"; // campo tipo disponível
+
+  lastFocused = document.activeElement;
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+
+  document.getElementById('modal-title').textContent =
+    tx.type === 'income' ? 'Editar receita' : 'Editar despesa';
+
+  form.elements['title'].value = tx.title;
+  form.elements['value'].value = unformatForEditing(tx.cents);
+  form.elements['date'].value = tx.date || '';
+  form.elements['account'].value = tx.account;
+  form.elements['status'].value = tx.status;
+
+  // Preenche os radios
+  Array.from(form.elements['type']).forEach(r => {
+    r.checked = (r.value === tx.type);
+  });
+
+  setTimeout(()=> document.getElementById('t-title').focus(), 50);
+}
+
+function closeModal(){
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+  lastFocused?.focus();
+}
+
+addIncome.addEventListener('click', ()=> openModal('income'));
+addExpense.addEventListener('click', ()=> openModal('expense'));
+cancel.addEventListener('click', closeModal);
+
+modal.addEventListener('click', (e)=>{
+  if(e.target === modal) closeModal();
+});
+
+/***********************
+ * Mascara de dinheiro
+ ***********************/
+const tValue = document.getElementById('t-value');
+
+function maskMoneyInputSimple(el){
+  el.addEventListener('input', ()=>{
+    el.value = el.value.replace(/[^\d\.,]/g,'');
+  });
+}
+maskMoneyInputSimple(tValue);
+
+/***********************
+ * Form submit
+ ***********************/
+form.addEventListener('submit', (e)=>{
+  e.preventDefault();
+
+  const title = form.elements['title'].value.trim();
+  const valueStr = form.elements['value'].value;
+  const dateVal = form.elements['date'].value;
+  const account = form.elements['account'].value;
+  const status = form.elements['status'].value;
+
+  if(!title){ showToast('Título inválido'); return; }
+
+  const cents = parseLocaleMoney(valueStr);
+  if(isNaN(cents) || cents <= 0){
+    showToast('Valor inválido');
+    return;
+  }
+
+  let finalType = transactionType;
+
+  // Se estamos EDITANDO, o usuário pode trocar o tipo
+  if(editingId && fieldType.style.display !== "none"){
+    const selected = Array.from(form.elements['type']).find(r => r.checked);
+    if(selected) finalType = selected.value;
+  }
+
+  if(editingId){
+    const tx = transactions.find(t => t.id === editingId);
+    tx.title = title;
+    tx.cents = cents;
+    tx.date = dateVal || null;
+    tx.account = account;
+    tx.type = finalType;
+    tx.status = status;
+    showToast('Transação atualizada.');
+  } else {
+    const tx = {
+      id: Date.now() + "-" + Math.floor(Math.random()*9000+1000),
+      title,
+      cents,
+      date: dateVal || null,
+      recurring:true,
+      type: finalType,
+      status,
+      account
+    };
+    transactions.unshift(tx);
+    showToast('Transação salva.');
+  }
+
+  reRenderAll();
+  closeModal();
+});
+
+/***********************
+ * Edit Mode toggle
+ ***********************/
+const toggleEdit = document.getElementById('toggle-edit');
+
+toggleEdit.addEventListener('click', ()=>{
+  isEditMode = !isEditMode;
+  toggleEdit.setAttribute('aria-pressed', String(isEditMode));
+  toggleEdit.textContent = isEditMode ? 'Concluir edição' : 'Editar';
+  reRenderAll();
+});
+
+/***********************
+ * Delegação de cliques
+ ***********************/
+function handleListClick(e){
+  const btn = e.target.closest('[data-action]');
+  if(!btn) return;
+
+  const card = btn.closest('.card');
+  const id = card.dataset.id;
+
+  if(btn.dataset.action === 'confirm') confirmPayment(id);
+  if(btn.dataset.action === 'edit') openEditModal(id);
+  if(btn.dataset.action === 'delete') deleteTx(id);
+}
+
+pendentesList.addEventListener('click', handleListClick);
+historicoList.addEventListener('click', handleListClick);
+
+/***********************
+ * Perfil
+ ***********************/
+document.getElementById('profile-top').addEventListener('click', ()=>{
+  showToast("Abrir perfil (placeholder).");
+});
+
+/***********************
+ * Init
+ ***********************/
+function init(){
+  loadFromStorage();
+  transactions = transactions.map(t => ({ ...t, cents:Number(t.cents)||0 }));
+  reRenderAll();
+}
+init();
+</script>
 </body>
 </html>
