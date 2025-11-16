@@ -58,9 +58,15 @@
         <button class="btn green" id="add-income" aria-haspopup="dialog" type="button">Adicionar Receita</button>
         <button class="btn red" id="add-expense" aria-haspopup="dialog" type="button">Adicionar Despesa</button>
       </div>
-      <div class="total" id="total" aria-live="polite" style="margin-top:12px;color:var(--muted)">Total a vencer: R$ 0,00</div>
+
+      <!-- NOVO BLOCO DE SALDO -->
+      <div id="totals-wrapper">
+        <div class="total-line" id="saldo-consolidado">Saldo consolidado: R$ 0,00</div>
+        <div class="total-line" id="saldo-previsto">Saldo previsto: R$ 0,00</div>
+      </div>
     </section>
 
+    <!-- MODAL -->
     <div class="modal" id="modal" aria-hidden="true">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
         <h3 id="modal-title">Nova transação</h3>
@@ -90,7 +96,7 @@
             </select>
           </div>
 
-          <!-- CAMPO TIPO — AGORA CONDICIONAL -->
+          <!-- CAMPO TIPO — SOMENTE NO EDITAR -->
           <div class="field" id="field-type">
             <label>Tipo</label>
             <div style="display:flex;gap:8px">
@@ -187,15 +193,38 @@ function unformatForEditing(formatted){
   return (cents/100).toFixed(2).replace('.', ',');
 }
 
-function getTotalPendingCents(){
-  return transactions
-    .filter(t => t.status === 'pending' && t.type === 'expense')
-    .reduce((s,t)=> s + (Number(t.cents)||0), 0);
+/****************************************************
+ * NOVAS FUNÇÕES: SALDO CONSOLIDADO & PREVISTO
+ ****************************************************/
+function calcSaldoConsolidado(){
+  let receitas = 0;
+  let despesas = 0;
+
+  transactions.forEach(t => {
+    if(t.status === "paid"){
+      if(t.type === "income") receitas += t.cents;
+      else despesas += t.cents;
+    }
+  });
+
+  return receitas - despesas;
 }
 
-/***********************
+function calcSaldoPrevisto(){
+  let receitas = 0;
+  let despesas = 0;
+
+  transactions.forEach(t => {
+    if(t.type === "income") receitas += t.cents;
+    else despesas += t.cents;
+  });
+
+  return receitas - despesas;
+}
+
+/****************************************************
  * Toast
- ***********************/
+ ****************************************************/
 function showToast(msg){
   const t = document.getElementById('toast');
   t.textContent = msg;
@@ -208,9 +237,9 @@ function showToast(msg){
   }, 2000);
 }
 
-/***********************
+/****************************************************
  * Template render
- ***********************/
+ ****************************************************/
 const pendentesList = document.getElementById('pendentes-list');
 const historicoList = document.getElementById('historico-list');
 const tpl = document.getElementById('tx-card-tpl');
@@ -295,16 +324,24 @@ function renderList({container, filterFn}){
   container.appendChild(frag);
 }
 
+function updateTotals(){
+  document.getElementById('saldo-consolidado').textContent =
+    "Saldo consolidado: " + formatBRL(calcSaldoConsolidado());
+
+  document.getElementById('saldo-previsto').textContent =
+    "Saldo previsto: " + formatBRL(calcSaldoPrevisto());
+}
+
 function reRenderAll(){
   renderList({ container: pendentesList, filterFn: t => t.status === 'pending' });
   renderList({ container: historicoList, filterFn: t => t.status === 'paid' });
-  document.getElementById('total').textContent = 'Total a vencer: ' + formatBRL(getTotalPendingCents());
+  updateTotals();
   saveToStorage();
 }
 
-/***********************
+/****************************************************
  * Actions
- ***********************/
+ ****************************************************/
 function confirmPayment(id){
   const tx = transactions.find(t => t.id === id);
   if(!tx) return;
@@ -322,9 +359,9 @@ function deleteTx(id){
   reRenderAll();
 }
 
-/***********************
+/****************************************************
  * Modal
- ***********************/
+ ****************************************************/
 const modal = document.getElementById('modal');
 const sheet = modal.querySelector('.sheet');
 const addIncome = document.getElementById('add-income');
@@ -337,12 +374,12 @@ let lastFocused = null;
 let editingId = null;
 let transactionType = "expense";
 
-// Ao abrir para criar
+// Abrir modal para criar
 function openModal(type){
   transactionType = type;
   editingId = null;
 
-  fieldType.style.display = "none"; // campo tipo escondido
+  fieldType.style.display = "none"; 
 
   lastFocused = document.activeElement;
   modal.classList.add('open');
@@ -356,12 +393,12 @@ function openModal(type){
   form.elements['value'].value = '';
   form.elements['date'].value = '';
   form.elements['account'].value = 'nubank';
-  form.elements['status'].value = type === 'expense' ? 'pending' : 'paid';
+  form.elements['status'].value = type === 'income' ? 'paid' : 'pending';
 
   setTimeout(()=> document.getElementById('t-title').focus(), 50);
 }
 
-// Ao editar
+// Abrir modal para editar
 function openEditModal(id){
   const tx = transactions.find(t => t.id === id);
   if(!tx) return;
@@ -369,7 +406,7 @@ function openEditModal(id){
   editingId = id;
   transactionType = tx.type;
 
-  fieldType.style.display = "block"; // campo tipo disponível
+  fieldType.style.display = "block";
 
   lastFocused = document.activeElement;
   modal.classList.add('open');
@@ -385,7 +422,6 @@ function openEditModal(id){
   form.elements['account'].value = tx.account;
   form.elements['status'].value = tx.status;
 
-  // Preenche os radios
   Array.from(form.elements['type']).forEach(r => {
     r.checked = (r.value === tx.type);
   });
@@ -408,9 +444,9 @@ modal.addEventListener('click', (e)=>{
   if(e.target === modal) closeModal();
 });
 
-/***********************
+/****************************************************
  * Mascara de dinheiro
- ***********************/
+ ****************************************************/
 const tValue = document.getElementById('t-value');
 
 function maskMoneyInputSimple(el){
@@ -420,9 +456,9 @@ function maskMoneyInputSimple(el){
 }
 maskMoneyInputSimple(tValue);
 
-/***********************
+/****************************************************
  * Form submit
- ***********************/
+ ****************************************************/
 form.addEventListener('submit', (e)=>{
   e.preventDefault();
 
@@ -442,7 +478,6 @@ form.addEventListener('submit', (e)=>{
 
   let finalType = transactionType;
 
-  // Se estamos EDITANDO, o usuário pode trocar o tipo
   if(editingId && fieldType.style.display !== "none"){
     const selected = Array.from(form.elements['type']).find(r => r.checked);
     if(selected) finalType = selected.value;
@@ -476,9 +511,9 @@ form.addEventListener('submit', (e)=>{
   closeModal();
 });
 
-/***********************
+/****************************************************
  * Edit Mode toggle
- ***********************/
+ ****************************************************/
 const toggleEdit = document.getElementById('toggle-edit');
 
 toggleEdit.addEventListener('click', ()=>{
@@ -488,9 +523,9 @@ toggleEdit.addEventListener('click', ()=>{
   reRenderAll();
 });
 
-/***********************
+/****************************************************
  * Delegação de cliques
- ***********************/
+ ****************************************************/
 function handleListClick(e){
   const btn = e.target.closest('[data-action]');
   if(!btn) return;
@@ -506,16 +541,16 @@ function handleListClick(e){
 pendentesList.addEventListener('click', handleListClick);
 historicoList.addEventListener('click', handleListClick);
 
-/***********************
+/****************************************************
  * Perfil
- ***********************/
+ ****************************************************/
 document.getElementById('profile-top').addEventListener('click', ()=>{
   showToast("Abrir perfil (placeholder).");
 });
 
-/***********************
+/****************************************************
  * Init
- ***********************/
+ ****************************************************/
 function init(){
   loadFromStorage();
   transactions = transactions.map(t => ({ ...t, cents:Number(t.cents)||0 }));
