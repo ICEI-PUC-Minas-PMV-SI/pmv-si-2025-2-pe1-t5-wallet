@@ -109,7 +109,7 @@
             <label for="t-status">Status</label>
             <select id="t-status" name="status">
               <option value="pending">Pendente</option>
-              <option value="paid">Quitada</option>
+              <option value="paid">Realizada</option>
             </select>
           </div>
 
@@ -173,7 +173,9 @@ function saveToStorage(){
 /***********************
  * Helpers
  ***********************/
-const formatBRL = (cents) => new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' }).format((Number(cents)||0)/100);
+const formatBRL = (cents) =>
+  new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' })
+  .format((Number(cents)||0)/100);
 
 function parseLocaleMoney(str){
   if(!str) return NaN;
@@ -187,10 +189,9 @@ function parseLocaleMoney(str){
   return isNaN(f) ? NaN : Math.round(f*100);
 }
 
-function unformatForEditing(formatted){
-  const cents = parseLocaleMoney(formatted);
-  if(isNaN(cents)) return '';
-  return (cents/100).toFixed(2).replace('.', ',');
+/* NOVA FUNÇÃO — conversão correta para edição */
+function centsToInput(cents){
+  return (Number(cents) / 100).toFixed(2).replace('.', ',');
 }
 
 /****************************************************
@@ -363,7 +364,6 @@ function deleteTx(id){
  * Modal
  ****************************************************/
 const modal = document.getElementById('modal');
-const sheet = modal.querySelector('.sheet');
 const addIncome = document.getElementById('add-income');
 const addExpense = document.getElementById('add-expense');
 const cancel = document.getElementById('cancel');
@@ -379,7 +379,7 @@ function openModal(type){
   transactionType = type;
   editingId = null;
 
-  fieldType.style.display = "none"; 
+  fieldType.style.display = "none";
 
   lastFocused = document.activeElement;
   modal.classList.add('open');
@@ -417,7 +417,10 @@ function openEditModal(id){
     tx.type === 'income' ? 'Editar receita' : 'Editar despesa';
 
   form.elements['title'].value = tx.title;
-  form.elements['value'].value = unformatForEditing(tx.cents);
+
+  /* AQUI ESTÁ A CORREÇÃO CRÍTICA */
+  form.elements['value'].value = centsToInput(tx.cents);
+
   form.elements['date'].value = tx.date || '';
   form.elements['account'].value = tx.account;
   form.elements['status'].value = tx.status;
