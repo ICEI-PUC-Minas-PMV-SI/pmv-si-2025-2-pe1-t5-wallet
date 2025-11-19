@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contas Bancárias</title>
+  <link rel="stylesheet" href="../css/contas.css" />
+</head>
+<body>
+  <div class="app" role="main">
+    
+    <header>
+      <div class="brand" onclick="window.location.href='home.html'">
+        <img src="../img/logo.png" alt="Logo">
+        <div>
+          <div class="title">GoalWallet</div>
+          <div class="subtitle">Contas conectadas</div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h2 style="font-size:18px; margin:0;">Suas Contas</h2>
+      </div>
+
+      <section id="accountsList">
+         </section>
+
+      <div style="margin-top:24px;">
+        <button id="addAccountBtn" class="add-btn">
+          <span style="font-size:20px;">＋</span> Adicionar nova conta
+        </button>
+      </div>
+    </main>
+
+    <div id="modalBackdrop" class="modal-backdrop">
+      <div class="modal-content">
+        <h3 style="margin-top:0;">Adicionar conta</h3>
+        <form id="accountForm">
+          <div class="field">
+            <label class="label">Nome do banco</label>
+            <input id="bankName" class="input" type="text" placeholder="Ex: Nubank" required>
+          </div>
+
+          <div class="field">
+            <label class="label">Tipo</label>
+            <select id="accountType" class="select">
+              <option>Conta corrente</option>
+              <option>Poupança</option>
+              <option>Carteira</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label class="label">Data (mm/aa)</label>
+            <input id="accountDate" class="input" type="text" placeholder="01/25" required>
+          </div>
+
+          <div class="field">
+            <label class="label">Saldo Inicial</label>
+            <input id="accountValue" class="input" type="text" placeholder="0,00" required>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn ghost" id="cancelModal">Cancelar</button>
+            <button type="submit" class="btn primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="../script.js"></script>
+  <script>
+    if(!verificarLogin()) window.stop();
+
+    const usuarioId = sessionStorage.getItem(CHAVE_SESSAO);
+    const accountsList = document.getElementById('accountsList');
+    const modal = document.getElementById('modalBackdrop');
+    const form = document.getElementById('accountForm');
+
+    function pickGradient(str) {
+        const colors = ['linear-gradient(135deg,#7b2ff7,#a445f0)', 'linear-gradient(135deg,#ffd24c,#ffb84d)', 'linear-gradient(135deg,#2dd4bf,#14b8a6)'];
+        return colors[str.length % colors.length];
+    }
+
+    function carregarContas() {
+        const db = lerBanco();
+        const contas = db.contas.filter(c => c.usuarioId == usuarioId);
+        accountsList.innerHTML = '';
+
+        if(contas.length === 0) {
+            accountsList.innerHTML = '<div style="text-align:center; color:#9fb3d9; padding:20px;">Nenhuma conta cadastrada.</div>';
+            return;
+        }
+
+        contas.forEach(c => {
+            const card = document.createElement('article');
+            card.className = 'account-card'; // ISSO VAI PEGAR O ESTILO NOVO
+            const bg = pickGradient(c.nomeBanco);
+            
+            card.innerHTML = `
+                <div class="bank-avatar" style="background:${bg}">${c.nomeBanco.slice(0,2).toUpperCase()}</div>
+                <div class="account-info">
+                    <div class="bank-name">${c.nomeBanco}</div>
+                    <div class="account-meta">${c.tipo} • ${c.dataValidade}</div>
+                </div>
+                <div class="account-value ${c.saldo >= 0 ? 'positive' : 'negative'}">
+                    ${c.saldo.toLocaleString('pt-BR', {style:'currency', currency:'BRL'})}
+                </div>
+                <div class="card-actions">
+                    <button class="card-action-btn" onclick="deletarConta(${c.id})">🗑</button>
+                </div>
+            `;
+            accountsList.appendChild(card);
+        });
+    }
+
+    document.getElementById('addAccountBtn').onclick = () => modal.classList.add('active');
+    document.getElementById('cancelModal').onclick = () => modal.classList.remove('active');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nome = document.getElementById('bankName').value;
+        const tipo = document.getElementById('accountType').value;
+        const data = document.getElementById('accountDate').value;
+        const valor = parseFloat(document.getElementById('accountValue').value.replace(',','.'));
+
+        if(isNaN(valor)) return alert("Valor inválido");
+
+        const db = lerBanco();
+        db.contas.push({ id: Date.now(), usuarioId, nomeBanco: nome, tipo, dataValidade: data, saldo: valor });
+        salvarBanco(db);
+        
+        modal.classList.remove('active');
+        form.reset();
+        carregarContas();
+    });
+
+    window.deletarConta = function(id) {
+        if(confirm("Excluir conta?")) {
+            const db = lerBanco();
+            db.contas = db.contas.filter(c => c.id != id);
+            salvarBanco(db);
+            carregarContas();
+        }
+    };
+
+    carregarContas();
+  </script>
+</body>
+</html>

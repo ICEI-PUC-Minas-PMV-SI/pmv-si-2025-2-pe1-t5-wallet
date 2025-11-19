@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GoalWallet — Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+
+  <style>
+    /* --- ESTILOS DO MODAL (Padrão para todas as telas) --- */
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
+    .modal.open { display: flex; opacity: 1; }
+    .sheet { background: #0f2a5e; border: 1px solid #2a59b3; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border-radius: 16px; width: 90%; max-width: 400px; padding: 24px; transform: translateY(20px); transition: transform 0.2s; color: #eaf1ff; }
+    .modal.open .sheet { transform: translateY(0); }
+    .sheet h3 { margin-top: 0; margin-bottom: 16px; font-size: 18px; color: #fff; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 12px; color: #9fb3d9; margin-bottom: 6px; }
+    .field input, .field select { width: 100%; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #2a59b3; border-radius: 8px; color: white; font-family: inherit; outline: none; }
+    .field input:focus, .field select:focus { border-color: #58a6ff; }
+    .modal-actions { margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px; }
+    .btn { padding: 10px 16px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; font-size: 14px; }
+    .btn-cancel { background: transparent; color: #9fb3d9; border: 1px solid #2a59b3; }
+    .btn-save { background: #58a6ff; color: #08224f; }
+    .btn-save:hover { background: #3a8de0; }
+
+    /* --- ESTILOS ESPECÍFICOS DA HOME (Perfil e Filtro) --- */
+    .dashboard-header { position: relative; display: flex; justify-content: space-between; align-items: center; }
+    
+    .profile-btn { background: transparent; border: none; cursor: pointer; padding: 0; display: flex; align-items: center; justify-content: center; }
+    .avatar-circle { width: 40px; height: 40px; background: #58a6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #08224f; font-size: 18px; border: 2px solid #3a8de0; }
+
+    /* Menu Dropdown do Perfil */
+    .profile-menu { display: none; position: absolute; top: 60px; right: 0; background: #123a82; border: 1px solid #2a59b3; border-radius: 12px; padding: 16px; min-width: 200px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); z-index: 100; flex-direction: column; gap: 10px; }
+    .profile-menu.active { display: flex; }
+    .profile-menu h4 { margin: 0; color: white; font-size: 16px; }
+    .profile-menu p { margin: 0; color: #9fb3d9; font-size: 12px; margin-bottom: 10px; }
+    
+    /* Estilo do link "Ver mais" */
+    .menu-link-perfil {
+        display: block; 
+        padding: 6px 0;
+        font-size: 13px; 
+        color: var(--primary); 
+        text-align: center; 
+        margin-bottom: 8px;
+        border-radius: 4px;
+    }
+    .menu-link-perfil:hover {
+        background: rgba(88, 166, 255, 0.1);
+        text-decoration: none;
+    }
+    
+    .btn-logout { width: 100%; padding: 8px; border: 1px solid #ff5a5f; background: rgba(255,90,95,0.1); color: #ff9e9e; border-radius: 8px; cursor: pointer; font-size: 13px; }
+    .btn-logout:hover { background: #ff5a5f; color: white; }
+
+    /* Selector de Saldo */
+    .saldo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .saldo-header h3 { margin: 0; font-size: 14px; color: #9fb3d9; }
+    .select-conta { background: rgba(0,0,0,0.2); color: #9fb3d9; border: 1px solid #2a59b3; padding: 4px 8px; border-radius: 6px; font-size: 12px; outline: none; cursor: pointer; width: auto; }
+    .select-conta:focus { border-color: #58a6ff; color: white; }
+  </style>
+</head>
+
+<body>
+  <main class="container-dashboard">
+    <header class="dashboard-header">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <img src="../img/logo.png" alt="Logo" style="height:32px;">
+        <div>
+            <h2 id="nome-usuario" style="font-size:18px; margin:0;">Olá!</h2>
+            <p style="margin:0; font-size:12px; color:#9fb3d9;">Visão Geral</p>
+        </div>
+      </div>
+
+      <button class="profile-btn" onclick="toggleMenuPerfil()">
+        <div class="avatar-circle" id="avatar-iniciais">U</div>
+      </button>
+
+      <div class="profile-menu" id="menuPerfil">
+        <h4 id="menu-nome">Usuário</h4>
+        <p id="menu-email">email@exemplo.com</p>
+        
+        <a href="perfil.html" class="menu-link-perfil">Ver mais sobre o perfil</a> 
+        
+        <div style="border-top:1px solid rgba(255,255,255,0.1); margin:4px 0;"></div>
+        <button class="btn-logout" onclick="sair()">Sair da conta</button>
+      </div>
+    </header>
+
+    <section class="saldo-card">
+      <div class="saldo-header">
+          <h3>Saldo Disponível</h3>
+          <select class="select-conta" id="filtro-conta" onchange="atualizarSaldoVisual()">
+              <option value="total">Todas as contas</option>
+          </select>
+      </div>
+      
+      <p class="valor" id="saldo-display">R$ 0,00</p>
+      
+      <div class="botoes">
+        <button class="button small" onclick="abrirModalHome('entrada')">Adicionar Receita</button>
+        <button class="button small outline" onclick="abrirModalHome('saida')">Adicionar Despesa</button>
+      </div>
+    </section>
+    
+    <div style="display:flex; gap:10px;">
+        <button class="button small outline" onclick="window.location.href='contas.html'">Gerenciar Contas</button>
+        <button class="button small outline" onclick="window.location.href='transacoes.html'">Ver Histórico</button>
+    </div>
+
+    <section class="movimentos">
+      <h3>Últimas Movimentações</h3>
+      <ul id="lista-movimentos"></ul>
+    </section>
+
+    <section class="card" style="padding: 16px; height: 300px;">
+        <h3 style="margin-top: 0; font-size: 16px; color: var(--muted);">Fluxo de Receitas e Despesas</h3>
+        <div style="height: 230px;"><canvas id="costChart"></canvas></div>
+    </section>
+  </main>
+
+  <div class="modal" id="modalHome">
+    <div class="sheet">
+      <h3 id="modalTitle">Nova Transação</h3>
+      <form id="formHome">
+        <input type="hidden" id="t-type">
+        
+        <div class="field">
+            <label>Título</label>
+            <input id="t-title" type="text" placeholder="Ex: Salário, Mercado..." required>
+        </div>
+        
+        <div class="field">
+            <label>Valor (R$)</label>
+            <input id="t-value" type="text" placeholder="0,00" required>
+        </div>
+        
+        <div class="field">
+            <label>Data</label>
+            <input id="t-date" type="date" required>
+        </div>
+
+        <div class="field">
+            <label>Conta</label>
+            <select id="t-account" required></select>
+        </div>
+
+        <div class="modal-actions">
+           <button type="button" class="btn btn-cancel" onclick="fecharModalHome()">Cancelar</button>
+           <button type="submit" class="btn btn-save">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="../script.js"></script>
+  <script>
+    if(!verificarLogin()) window.stop();
+    
+    const usuarioId = sessionStorage.getItem(CHAVE_SESSAO);
+    let costChartInstance = null;
+    
+    // --- FUNÇÃO PARA RENDERIZAR O GRÁFICO (AGORA EM BARRAS) ---
+    function renderizarGrafico(db) {
+        const transacoes = db.transacoes.filter(t => t.usuarioId == usuarioId);
+        let totalEntrada = 0;
+        let totalSaida = 0;
+
+        transacoes.forEach(t => {
+            if (t.tipo === 'entrada') {
+                totalEntrada += t.valor;
+            } else {
+                totalSaida += t.valor;
+            }
+        });
+
+        if (costChartInstance) {
+            costChartInstance.destroy();
+        }
+
+        const ctx = document.getElementById('costChart').getContext('2d');
+        
+        costChartInstance = new Chart(ctx, {
+            type: 'bar', // Mudança para GRÁFICO DE BARRAS/COLUNAS
+            data: {
+                labels: ['Receitas', 'Despesas'],
+                datasets: [{
+                    label: 'Valores Totais',
+                    data: [totalEntrada, totalSaida],
+                    backgroundColor: [
+                        '#00d09c', // Verde para Receita
+                        '#ff5a5f'  // Vermelho para Despesa
+                    ],
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false // Não precisa de legenda se só tiver 1 dataset
+                    },
+                    title: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: '#9fb3d9' }, // Cor dos números do eixo Y
+                        grid: { color: 'rgba(255,255,255,0.1)' } // Linhas de grade
+                    },
+                    x: {
+                        ticks: { color: 'white' }, // Cor dos rótulos do eixo X
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+
+    // --- CARREGAR HOME (Função Principal) ---
+    function carregarHome() {
+        const db = lerBanco();
+        const usuario = db.usuarios.find(u => u.id == usuarioId);
+        
+        // 1. Preencher Header e Perfil
+        if (usuario) {
+            const nomePrimeiro = usuario.nome.split(' ')[0];
+            document.getElementById('nome-usuario').innerText = `Olá, ${nomePrimeiro}!`;
+            document.getElementById('avatar-iniciais').innerText = nomePrimeiro.charAt(0).toUpperCase();
+            document.getElementById('menu-nome').innerText = usuario.nome;
+            document.getElementById('menu-email').innerText = usuario.email;
+        }
+
+        // 2. Preencher Filtro de Contas (Dropdown do Saldo)
+        const selectFiltro = document.getElementById('filtro-conta');
+        const selecaoAtual = selectFiltro.value;
+        
+        selectFiltro.innerHTML = '<option value="total">Todas as contas</option>';
+        const minhasContas = db.contas.filter(c => c.usuarioId == usuarioId);
+        minhasContas.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.text = c.nomeBanco;
+            selectFiltro.add(opt);
+        });
+
+        if (selecaoAtual && (selecaoAtual === 'total' || minhasContas.find(c => c.id == selecaoAtual))) {
+            selectFiltro.value = selecaoAtual;
+        }
+
+        // 3. Calcular e Mostrar Saldo
+        atualizarSaldoVisual();
+
+        // 4. Renderizar Gráfico
+        renderizarGrafico(db);
+
+        // 5. Lista de Movimentações
+        carregarListaMovimentos(db);
+    }
+
+    // --- CALCULAR SALDO (Mantido) ---
+    function atualizarSaldoVisual() {
+        const filtro = document.getElementById('filtro-conta').value;
+        const db = lerBanco();
+        const contas = db.contas.filter(c => c.usuarioId == usuarioId);
+        let saldoExibido = 0;
+
+        if (filtro === 'total') {
+            contas.forEach(c => saldoExibido += c.saldo);
+        } else {
+            const contaSelecionada = contas.find(c => c.id == filtro);
+            if(contaSelecionada) saldoExibido = contaSelecionada.saldo;
+        }
+
+        const display = document.getElementById('saldo-display');
+        display.innerText = saldoExibido.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+    }
+
+    // --- LISTAR MOVIMENTAÇÕES (Mantido) ---
+    function carregarListaMovimentos(db) {
+        const lista = document.getElementById('lista-movimentos');
+        const transacoes = db.transacoes.filter(t => t.usuarioId == usuarioId);
+        lista.innerHTML = '';
+
+        if(transacoes.length === 0) {
+            lista.innerHTML = '<li style="color:#9fb3d9; font-size:13px; padding:10px 0;">Nenhuma movimentação recente.</li>';
+            return;
+        }
+
+        transacoes.slice(-3).reverse().forEach(t => {
+             const li = document.createElement('li');
+             li.style.display = 'flex';
+             li.style.justifyContent = 'space-between';
+             li.style.padding = '12px 0';
+             li.style.borderBottom = '1px solid rgba(255,255,255,0.05)';
+             
+             li.innerHTML = `
+                <span style="font-size:14px">${t.descricao}</span> 
+                <span class="${t.tipo === 'entrada' ? 'positivo' : 'negativo'}" style="font-weight:bold;">
+                    ${t.tipo === 'entrada' ? '+' : '-'} R$ ${t.valor.toFixed(2)}
+                </span>`;
+             lista.appendChild(li);
+        });
+    }
+
+    // --- MENU PERFIL (Mantido) ---
+    function toggleMenuPerfil() {
+        document.getElementById('menuPerfil').classList.toggle('active');
+    }
+    window.addEventListener('click', (e) => {
+        if (!e.target.closest('.profile-menu') && !e.target.closest('.profile-btn')) {
+            document.getElementById('menuPerfil').classList.remove('active');
+        }
+    });
+
+    // --- MODAL (Mantido) ---
+    const modal = document.getElementById('modalHome');
+    const form = document.getElementById('formHome');
+    const tituloModal = document.getElementById('modalTitle');
+    const inputTipo = document.getElementById('t-type');
+
+    function abrirModalHome(tipo) {
+        inputTipo.value = tipo;
+        tituloModal.innerText = tipo === 'entrada' ? 'Nova Receita' : 'Nova Despesa';
+        
+        const db = lerBanco();
+        const select = document.getElementById('t-account');
+        select.innerHTML = '';
+        const contas = db.contas.filter(c => c.usuarioId == usuarioId);
+        
+        if(contas.length === 0) {
+            alert("Você precisa cadastrar uma conta bancária primeiro!");
+            window.location.href = 'contas.html';
+            return;
+        }
+
+        contas.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.text = `${c.nomeBanco} (Disp: R$ ${c.saldo.toFixed(2)})`;
+            select.add(opt);
+        });
+
+        document.getElementById('t-date').valueAsDate = new Date();
+        modal.classList.add('open');
+    }
+
+    function fecharModalHome() {
+        modal.classList.remove('open');
+        form.reset();
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const tipo = inputTipo.value;
+        const titulo = document.getElementById('t-title').value;
+        const valorStr = document.getElementById('t-value').value.replace('R$','').trim().replace('.','').replace(',','.');
+        const valor = parseFloat(valorStr);
+        const data = document.getElementById('t-date').value;
+        const contaId = document.getElementById('t-account').value;
+
+        if(isNaN(valor) || valor <= 0) return alert("Valor inválido!");
+        if(!contaId) return alert("Selecione uma conta!");
+
+        const db = lerBanco();
+        
+        db.transacoes.push({
+            id: Date.now(),
+            usuarioId: usuarioId,
+            contaId: contaId,
+            tipo: tipo,
+            descricao: titulo,
+            valor: valor,
+            data: data,
+            status: 'paid'
+        });
+
+        const indexConta = db.contas.findIndex(c => c.id == contaId);
+        if(indexConta !== -1) {
+            if(tipo === 'entrada') db.contas[indexConta].saldo += valor;
+            else db.contas[indexConta].saldo -= valor;
+        }
+
+        salvarBanco(db);
+        fecharModalHome();
+        carregarHome(); 
+    });
+
+    window.onload = carregarHome;
+  </script>
+</body>
+</html>

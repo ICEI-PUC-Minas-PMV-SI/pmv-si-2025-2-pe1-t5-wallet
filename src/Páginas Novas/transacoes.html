@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Histórico</title>
+  <link rel="stylesheet" href="../css/historico.css" />
+</head>
+<body>
+  <main class="app" role="main">
+    <header class="header">
+      <div class="brand" onclick="window.location.href='home.html'" style="cursor:pointer">
+        <div class="logo"><img src="../img/logo.png" alt=""></div>
+        <div>
+          <h1 id="main-title">GoalWallet</h1>
+          <div class="subtitle">Histórico</div>
+        </div>
+      </div>
+      <button onclick="window.location.href='home.html'" style="background:none;border:none;color:white;font-size:20px;">🏠</button>
+    </header>
+
+    <div class="grid-2">
+      <section>
+        <h2 class="section-title">Pendentes</h2>
+        <div class="list-wrapper"><div id="pendentes-list" class="scheduled"></div></div>
+      </section>
+
+      <section>
+        <h2 class="section-title">Histórico (Pagos)</h2>
+        <div class="list-wrapper"><div id="historico-list" class="scheduled"></div></div>
+      </section>
+    </div>
+
+    <section style="margin-top:18px;">
+      <h2 class="section-title">Ações rápidas</h2>
+      <div class="actions">
+        <button class="btn green" onclick="abrirModal('income')">Adicionar Receita</button>
+        <button class="btn red" onclick="abrirModal('expense')">Adicionar Despesa</button>
+      </div>
+    </section>
+
+    <div class="modal" id="modal">
+      <div class="sheet">
+        <h3 id="modal-title">Nova transação</h3>
+        <form id="tx-form">
+          <div class="field">
+            <label>Título</label>
+            <input id="t-title" name="title" type="text" required />
+          </div>
+          <div class="field">
+            <label>Valor</label>
+            <input id="t-value" name="value" type="text" placeholder="0.00" required />
+          </div>
+          <div class="field">
+            <label>Data</label>
+            <input id="t-date" name="date" type="date" required />
+          </div>
+          <div class="field">
+            <label>Conta</label>
+            <select id="t-account" name="account" required></select>
+          </div>
+          <div class="field">
+             <label>Status</label>
+             <select id="t-status" name="status">
+                 <option value="paid">Pago / Recebido</option>
+                 <option value="pending">Pendente</option>
+             </select>
+          </div>
+          <input type="hidden" id="t-type">
+          
+          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+            <button class="btn" type="button" onclick="fecharModal()">Cancelar</button>
+            <button class="btn green" type="submit">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script src="../script.js"></script>
+  <script>
+    if(!verificarLogin()) window.stop();
+
+    const usuarioId = sessionStorage.getItem(CHAVE_SESSAO);
+    const pendentesList = document.getElementById('pendentes-list');
+    const historicoList = document.getElementById('historico-list');
+    const modal = document.getElementById('modal');
+    const form = document.getElementById('tx-form');
+
+    function carregarTransacoes() {
+        const db = lerBanco();
+        const txs = db.transacoes.filter(t => t.usuarioId == usuarioId);
+        
+        pendentesList.innerHTML = '';
+        historicoList.innerHTML = '';
+
+        if(txs.length === 0) {
+            historicoList.innerHTML = '<div style="color:#9fb3d9; padding:20px;">Sem histórico.</div>';
+        }
+
+        // Ordena por data (mais recente primeiro)
+        txs.sort((a,b) => new Date(b.data) - new Date(a.data));
+
+        txs.forEach(tx => {
+            const div = document.createElement('div');
+            div.className = 'card';
+            
+            // Formata data
+            const dataF = new Date(tx.data).toLocaleDateString('pt-BR');
+
+            div.innerHTML = `
+                <div class="tx-left">
+                    <div class="tx-title">${tx.descricao}</div>
+                    <div class="tx-sub">${dataF}</div>
+                </div>
+                <div class="tx-right">
+                    <div class="amount ${tx.tipo === 'entrada' ? 'income' : 'expense'}">R$ ${tx.valor.toFixed(2)}</div>
+                    <div class="status-pill ${tx.status === 'paid' ? 'status-paid' : 'status-pending'}">${tx.status === 'paid' ? 'Pago' : 'Pendente'}</div>
+                    ${tx.status === 'pending' ? `<button class="confirm-btn" onclick="pagar('${tx.id}')" title="Confirmar Pagamento">✔</button>` : ''}
+                    <button class="icon-btn" onclick="deletarTx('${tx.id}')" title="Excluir">🗑</button>
+                </div>
+            `;
+            
+            if(tx.status === 'pending') pendentesList.appendChild(div);
+            else historicoList.appendChild(div);
+        });
+    }
+
+    function carregarSelectContas() {
+        const db = lerBanco();
+        const contas = db.contas.filter(c => c.usuarioId == usuarioId);
+        const select = document.getElementById('t-account');
+        select.innerHTML = '';
+        
+        if(contas.length === 0) {
+             const opt = document.createElement('option');
+             opt.text = "Crie uma conta em 'Contas'";
+             select.add(opt);
+             return;
+        }
+
+        contas.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.text = c.nomeBanco;
+            select.add(opt);
+        });
+    }
+
+    function abrirModal(tipo) {
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.getElementById('t-type').value = tipo === 'income' ? 'entrada' : 'saida';
+        document.getElementById('modal-title').innerText = tipo === 'income' ? 'Nova Receita' : 'Nova Despesa';
+        document.getElementById('t-date').valueAsDate = new Date();
+        carregarSelectContas();
+    }
+
+    function fecharModal() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        form.reset();
+    }
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const titulo = document.getElementById('t-title').value;
+        const valor = parseFloat(document.getElementById('t-value').value.replace(',','.'));
+        const data = document.getElementById('t-date').value;
+        const contaId = document.getElementById('t-account').value;
+        const status = document.getElementById('t-status').value;
+        const tipo = document.getElementById('t-type').value; // entrada ou saida
+
+        if(isNaN(valor)) return alert("Valor inválido");
+        if(!contaId || isNaN(contaId)) return alert("Crie uma conta primeiro!");
+
+        const db = lerBanco();
+        db.transacoes.push({
+            id: Date.now(),
+            usuarioId: usuarioId,
+            contaId: contaId,
+            descricao: titulo,
+            valor: valor,
+            data: data,
+            tipo: tipo,
+            status: status
+        });
+        
+        // Se já estiver pago, atualiza saldo da conta
+        if(status === 'paid') {
+             const idx = db.contas.findIndex(c => c.id == contaId);
+             if(idx !== -1) {
+                 if(tipo === 'entrada') db.contas[idx].saldo += valor;
+                 else db.contas[idx].saldo -= valor;
+             }
+        }
+
+        salvarBanco(db);
+        fecharModal();
+        carregarTransacoes();
+    });
+
+    window.pagar = function(id) {
+        const db = lerBanco();
+        const txIdx = db.transacoes.findIndex(t => t.id == id);
+        if(txIdx === -1) return;
+        
+        // Muda status
+        db.transacoes[txIdx].status = 'paid';
+        
+        // Atualiza saldo
+        const tx = db.transacoes[txIdx];
+        const contaIdx = db.contas.findIndex(c => c.id == tx.contaId);
+        if(contaIdx !== -1) {
+             if(tx.tipo === 'entrada') db.contas[contaIdx].saldo += tx.valor;
+             else db.contas[contaIdx].saldo -= tx.valor;
+        }
+        
+        salvarBanco(db);
+        carregarTransacoes();
+    };
+
+    window.deletarTx = function(id) {
+        if(!confirm("Deletar transação?")) return;
+        const db = lerBanco();
+        db.transacoes = db.transacoes.filter(t => t.id != id);
+        salvarBanco(db);
+        carregarTransacoes();
+    };
+
+    carregarTransacoes();
+  </script>
+</body>
+</html>

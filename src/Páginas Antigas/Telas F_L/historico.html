@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Histórico — GoalWallet</title>
+  <link rel="stylesheet" href="css/historico.css">
+</head>
+<body>
+  <main class="app" role="main" aria-labelledby="main-title">
+    <header class="header">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+         <img src="img/logo.png" alt="" style="width:44px;height:44px;object-fit:contain">
+        </div>
+        <div>
+          <h1 id="main-title">GoalWallet</h1>
+          <div class="subtitle">Histórico de Transações</div>
+        </div>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:10px">
+        <button id="toggle-edit" class="pill" aria-pressed="false" type="button" title="Editar transações">Editar</button>
+        <button id="profile-top" class="icon-btn" aria-label="Acesso ao perfil" title="Perfil">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.6" aria-hidden="true">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"></path>
+            <path d="M4 20c0-3.31 2.69-6 6-6h4c3.31 0 6 2.69 6 6"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="grid-2" role="group" aria-label="Listas de transações">
+      <section aria-labelledby="pendentes">
+        <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <h2 id="pendentes" class="section-title">Pendentes</h2>
+        </div>
+
+        <div class="list-wrapper">
+          <div id="pendentes-list" class="scheduled" role="list" aria-label="Lista de pendentes"></div>
+        </div>
+      </section>
+
+      <section aria-labelledby="historico">
+        <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <h2 id="historico" class="section-title">Histórico</h2>
+        </div>
+
+        <div class="list-wrapper">
+          <div id="historico-list" class="scheduled" role="list" aria-label="Histórico de transações"></div>
+        </div>
+      </section>
+    </div>
+
+    <section style="margin-top:18px;" aria-labelledby="quick-actions">
+      <h2 id="quick-actions" class="section-title">Ações rápidas</h2>
+      <div class="actions">
+        <button class="btn green" id="add-income" aria-haspopup="dialog" type="button">Adicionar Receita</button>
+        <button class="btn red" id="add-expense" aria-haspopup="dialog" type="button">Adicionar Despesa</button>
+      </div>
+
+      <!-- NOVO BLOCO DE SALDO -->
+      <div id="totals-wrapper">
+        <div class="total-line" id="saldo-consolidado">Saldo consolidado: R$ 0,00</div>
+        <div class="total-line" id="saldo-previsto">Saldo previsto: R$ 0,00</div>
+      </div>
+    </section>
+
+    <!-- MODAL -->
+    <div class="modal" id="modal" aria-hidden="true">
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+        <h3 id="modal-title">Nova transação</h3>
+        <form id="tx-form" novalidate>
+
+          <div class="field">
+            <label for="t-title">Título</label>
+            <input id="t-title" name="title" type="text" autocomplete="off" />
+          </div>
+
+          <div class="field">
+            <label for="t-value">Valor</label>
+            <input id="t-value" name="value" type="text" inputmode="decimal" placeholder="0,00" autocomplete="off" />
+          </div>
+
+          <div class="field">
+            <label for="t-date">Data</label>
+            <input id="t-date" name="date" type="date" />
+          </div>
+
+          <div class="field">
+            <label for="t-account">Conta</label>
+            <select id="t-account" name="account">
+              <option value="nubank">Nubank - Conta</option>
+              <option value="inter">Inter - Conta</option>
+              <option value="caixa">Caixa - Conta</option>
+            </select>
+          </div>
+
+          <!-- CAMPO TIPO — SOMENTE NO EDITAR -->
+          <div class="field" id="field-type">
+            <label>Tipo</label>
+            <div style="display:flex;gap:8px">
+              <label><input type="radio" name="type" value="expense" /> Despesa</label>
+              <label><input type="radio" name="type" value="income" /> Receita</label>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="t-status">Status</label>
+            <select id="t-status" name="status">
+              <option value="pending">Pendente</option>
+              <option value="paid">Realizada</option>
+            </select>
+          </div>
+
+          <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+            <button class="btn" id="cancel" type="button">Cancelar</button>
+            <button class="btn green" id="save" type="submit">Salvar</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <template id="tx-card-tpl">
+    <div class="card" role="listitem" data-id="">
+      <div class="tx-left">
+        <div class="small tx-title"></div>
+        <div class="subtle tx-sub"></div>
+      </div>
+      <div class="tx-right">
+        <div class="amount tx-amt"></div>
+        <div class="status-pill tx-status"></div>
+        <div class="tx-actions"></div>
+      </div>
+    </div>
+  </template>
+
+<script>
+/***********************
+ * Config & Storage
+ ***********************/
+const STORAGE_KEY = 'goalwallet_transactions_v1';
+let transactions = [
+  { id: '1', title: 'Assinatura Netflix', cents: 2990, date: '2025-10-10', recurring:true, type:'expense', status:'paid', account:'nubank' },
+  { id: '2', title: 'Aluguel', cents: 120000, date: '2025-11-05', recurring:true, type:'expense', status:'pending', account:'caixa' },
+  { id: '3', title: 'Plano Saúde', cents: 25000, date: '2025-10-20', recurring:true, type:'expense', status:'pending', account:'inter' },
+  { id: '4', title: 'Conta de luz', cents: 32000, date: '2025-10-08', recurring:true, type:'expense', status:'pending', account:'nubank' },
+];
+
+function loadFromStorage(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const parsed = JSON.parse(raw);
+      if(Array.isArray(parsed)) transactions = parsed;
+    }
+  }catch(e){}
+}
+
+let saveTimer = null;
+function saveToStorage(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions)); }
+    catch(e){}
+  }, 220);
+}
+
+/***********************
+ * Helpers
+ ***********************/
+const formatBRL = (cents) =>
+  new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' })
+  .format((Number(cents)||0)/100);
+
+function parseLocaleMoney(str){
+  if(!str) return NaN;
+  let cleaned = String(str).replace(/[^\d\.,-]/g,'');
+  if(cleaned.includes(',') && cleaned.includes('.')){
+    cleaned = cleaned.replace(/\./g,'').replace(',', '.');
+  } else if(cleaned.includes(',')){
+    cleaned = cleaned.replace(',', '.');
+  }
+  const f = parseFloat(cleaned);
+  return isNaN(f) ? NaN : Math.round(f*100);
+}
+
+/* NOVA FUNÇÃO — conversão correta para edição */
+function centsToInput(cents){
+  return (Number(cents) / 100).toFixed(2).replace('.', ',');
+}
+
+/****************************************************
+ * NOVAS FUNÇÕES: SALDO CONSOLIDADO & PREVISTO
+ ****************************************************/
+function calcSaldoConsolidado(){
+  let receitas = 0;
+  let despesas = 0;
+
+  transactions.forEach(t => {
+    if(t.status === "paid"){
+      if(t.type === "income") receitas += t.cents;
+      else despesas += t.cents;
+    }
+  });
+
+  return receitas - despesas;
+}
+
+function calcSaldoPrevisto(){
+  let receitas = 0;
+  let despesas = 0;
+
+  transactions.forEach(t => {
+    if(t.type === "income") receitas += t.cents;
+    else despesas += t.cents;
+  });
+
+  return receitas - despesas;
+}
+
+/****************************************************
+ * Toast
+ ****************************************************/
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  t.style.opacity = '1';
+  clearTimeout(window._toastTimeout);
+  window._toastTimeout = setTimeout(()=>{
+    t.style.opacity = '0';
+    setTimeout(()=> t.style.display = 'none', 250);
+  }, 2000);
+}
+
+/****************************************************
+ * Template render
+ ****************************************************/
+const pendentesList = document.getElementById('pendentes-list');
+const historicoList = document.getElementById('historico-list');
+const tpl = document.getElementById('tx-card-tpl');
+
+function createCard(tx){
+  const node = tpl.content.firstElementChild.cloneNode(true);
+  node.dataset.id = tx.id;
+  node.querySelector('.tx-title').textContent = tx.title;
+
+  let dateLabel = '—';
+  if(tx.date){
+    const d = new Date(tx.date);
+    const opts = { day:'2-digit', month:'short' };
+    dateLabel = d.toLocaleDateString('pt-BR', opts);
+  }
+  node.querySelector('.tx-sub').textContent = 'Venc. ' + dateLabel;
+
+  const amt = node.querySelector('.tx-amt');
+  amt.className = 'amount tx-amt ' + (tx.type === 'expense' ? 'expense' : 'income');
+  amt.textContent = formatBRL(tx.cents);
+
+  const pill = node.querySelector('.tx-status');
+  pill.className = 'status-pill ' + (tx.status === 'paid' ? 'status-paid' : 'status-pending');
+  pill.textContent = tx.status === 'paid' ? 'Pago' : 'Pendente';
+
+  const actions = node.querySelector('.tx-actions');
+  actions.innerHTML = '';
+
+  if(tx.status === 'pending'){
+    const confirmBtn = document.createElement('button');
+    confirmBtn.type = 'button';
+    confirmBtn.className = 'confirm-btn';
+    confirmBtn.textContent = 'Confirmar pagamento';
+    confirmBtn.dataset.action = 'confirm';
+    actions.appendChild(confirmBtn);
+  }
+
+  const editBtn = document.createElement('button');
+  editBtn.className = 'icon-btn';
+  editBtn.type = 'button';
+  editBtn.innerHTML = '✎';
+  editBtn.title = 'Editar';
+  editBtn.dataset.action = 'edit';
+  actions.appendChild(editBtn);
+
+  const delBtn = document.createElement('button');
+  delBtn.className = 'icon-btn';
+  delBtn.type = 'button';
+  delBtn.innerHTML = '🗑';
+  delBtn.title = 'Excluir';
+  delBtn.dataset.action = 'delete';
+  actions.appendChild(delBtn);
+
+  return node;
+}
+
+let isEditMode = false;
+
+function renderList({container, filterFn}){
+  container.innerHTML = '';
+  const frag = document.createDocumentFragment();
+  const filtered = transactions.filter(filterFn);
+
+  if(filtered.length === 0){
+    const empty = document.createElement('div');
+    empty.className = 'muted';
+    empty.textContent = container.id === 'pendentes-list'
+      ? 'Nenhuma transação pendente.'
+      : 'Nenhuma transação no histórico.';
+    frag.appendChild(empty);
+  } else {
+    filtered.forEach(tx => {
+      const card = createCard(tx);
+      if(!isEditMode){
+        card.querySelectorAll('[data-action="edit"], [data-action="delete"]')
+            .forEach(btn => btn.style.display = 'none');
+      }
+      frag.appendChild(card);
+    });
+  }
+
+  container.appendChild(frag);
+}
+
+function updateTotals(){
+  document.getElementById('saldo-consolidado').textContent =
+    "Saldo consolidado: " + formatBRL(calcSaldoConsolidado());
+
+  document.getElementById('saldo-previsto').textContent =
+    "Saldo previsto: " + formatBRL(calcSaldoPrevisto());
+}
+
+function reRenderAll(){
+  renderList({ container: pendentesList, filterFn: t => t.status === 'pending' });
+  renderList({ container: historicoList, filterFn: t => t.status === 'paid' });
+  updateTotals();
+  saveToStorage();
+}
+
+/****************************************************
+ * Actions
+ ****************************************************/
+function confirmPayment(id){
+  const tx = transactions.find(t => t.id === id);
+  if(!tx) return;
+  tx.status = 'paid';
+  showToast('Pagamento confirmado.');
+  reRenderAll();
+}
+
+function deleteTx(id){
+  const tx = transactions.find(t => t.id === id);
+  if(!tx) return;
+  if(!confirm('Deseja excluir esta transação?')) return;
+  transactions = transactions.filter(t => t.id !== id);
+  showToast('Transação excluída.');
+  reRenderAll();
+}
+
+/****************************************************
+ * Modal
+ ****************************************************/
+const modal = document.getElementById('modal');
+const addIncome = document.getElementById('add-income');
+const addExpense = document.getElementById('add-expense');
+const cancel = document.getElementById('cancel');
+const form = document.getElementById('tx-form');
+const fieldType = document.getElementById('field-type');
+
+let lastFocused = null;
+let editingId = null;
+let transactionType = "expense";
+
+// Abrir modal para criar
+function openModal(type){
+  transactionType = type;
+  editingId = null;
+
+  fieldType.style.display = "none";
+
+  lastFocused = document.activeElement;
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+
+  document.getElementById('modal-title').textContent = 
+    type === 'income' ? 'Nova receita' : 'Nova despesa';
+
+  form.elements['title'].value = '';
+  form.elements['value'].value = '';
+  form.elements['date'].value = '';
+  form.elements['account'].value = 'nubank';
+  form.elements['status'].value = type === 'income' ? 'paid' : 'pending';
+
+  setTimeout(()=> document.getElementById('t-title').focus(), 50);
+}
+
+// Abrir modal para editar
+function openEditModal(id){
+  const tx = transactions.find(t => t.id === id);
+  if(!tx) return;
+
+  editingId = id;
+  transactionType = tx.type;
+
+  fieldType.style.display = "block";
+
+  lastFocused = document.activeElement;
+  modal.classList.add('open');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+
+  document.getElementById('modal-title').textContent =
+    tx.type === 'income' ? 'Editar receita' : 'Editar despesa';
+
+  form.elements['title'].value = tx.title;
+
+  /* AQUI ESTÁ A CORREÇÃO CRÍTICA */
+  form.elements['value'].value = centsToInput(tx.cents);
+
+  form.elements['date'].value = tx.date || '';
+  form.elements['account'].value = tx.account;
+  form.elements['status'].value = tx.status;
+
+  Array.from(form.elements['type']).forEach(r => {
+    r.checked = (r.value === tx.type);
+  });
+
+  setTimeout(()=> document.getElementById('t-title').focus(), 50);
+}
+
+function closeModal(){
+  modal.classList.remove('open');
+  modal.setAttribute('aria-hidden','true');
+  document.body.style.overflow = '';
+  lastFocused?.focus();
+}
+
+addIncome.addEventListener('click', ()=> openModal('income'));
+addExpense.addEventListener('click', ()=> openModal('expense'));
+cancel.addEventListener('click', closeModal);
+
+modal.addEventListener('click', (e)=>{
+  if(e.target === modal) closeModal();
+});
+
+/****************************************************
+ * Mascara de dinheiro
+ ****************************************************/
+const tValue = document.getElementById('t-value');
+
+function maskMoneyInputSimple(el){
+  el.addEventListener('input', ()=>{
+    el.value = el.value.replace(/[^\d\.,]/g,'');
+  });
+}
+maskMoneyInputSimple(tValue);
+
+/****************************************************
+ * Form submit
+ ****************************************************/
+form.addEventListener('submit', (e)=>{
+  e.preventDefault();
+
+  const title = form.elements['title'].value.trim();
+  const valueStr = form.elements['value'].value;
+  const dateVal = form.elements['date'].value;
+  const account = form.elements['account'].value;
+  const status = form.elements['status'].value;
+
+  if(!title){ showToast('Título inválido'); return; }
+
+  const cents = parseLocaleMoney(valueStr);
+  if(isNaN(cents) || cents <= 0){
+    showToast('Valor inválido');
+    return;
+  }
+
+  let finalType = transactionType;
+
+  if(editingId && fieldType.style.display !== "none"){
+    const selected = Array.from(form.elements['type']).find(r => r.checked);
+    if(selected) finalType = selected.value;
+  }
+
+  if(editingId){
+    const tx = transactions.find(t => t.id === editingId);
+    tx.title = title;
+    tx.cents = cents;
+    tx.date = dateVal || null;
+    tx.account = account;
+    tx.type = finalType;
+    tx.status = status;
+    showToast('Transação atualizada.');
+  } else {
+    const tx = {
+      id: Date.now() + "-" + Math.floor(Math.random()*9000+1000),
+      title,
+      cents,
+      date: dateVal || null,
+      recurring:true,
+      type: finalType,
+      status,
+      account
+    };
+    transactions.unshift(tx);
+    showToast('Transação salva.');
+  }
+
+  reRenderAll();
+  closeModal();
+});
+
+/****************************************************
+ * Edit Mode toggle
+ ****************************************************/
+const toggleEdit = document.getElementById('toggle-edit');
+
+toggleEdit.addEventListener('click', ()=>{
+  isEditMode = !isEditMode;
+  toggleEdit.setAttribute('aria-pressed', String(isEditMode));
+  toggleEdit.textContent = isEditMode ? 'Concluir edição' : 'Editar';
+  reRenderAll();
+});
+
+/****************************************************
+ * Delegação de cliques
+ ****************************************************/
+function handleListClick(e){
+  const btn = e.target.closest('[data-action]');
+  if(!btn) return;
+
+  const card = btn.closest('.card');
+  const id = card.dataset.id;
+
+  if(btn.dataset.action === 'confirm') confirmPayment(id);
+  if(btn.dataset.action === 'edit') openEditModal(id);
+  if(btn.dataset.action === 'delete') deleteTx(id);
+}
+
+pendentesList.addEventListener('click', handleListClick);
+historicoList.addEventListener('click', handleListClick);
+
+/****************************************************
+ * Perfil
+ ****************************************************/
+document.getElementById('profile-top').addEventListener('click', ()=>{
+  showToast("Abrir perfil (placeholder).");
+});
+
+/****************************************************
+ * Init
+ ****************************************************/
+function init(){
+  loadFromStorage();
+  transactions = transactions.map(t => ({ ...t, cents:Number(t.cents)||0 }));
+  reRenderAll();
+}
+init();
+</script>
+</body>
+</html>
