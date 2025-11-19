@@ -61,7 +61,7 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      margin-bottom: 100px; 
+      margin-bottom: 100px; /* espaço para o botão fixo */
     }
 
     .choice {
@@ -127,6 +127,7 @@
       max-width: 90%;
     }
 
+    /* Botão de salvar */
     .save-btn {
       position: fixed;
       bottom: 24px;
@@ -149,6 +150,7 @@
       background: #e4e6e4;
     }
 
+    /* Mensagem de sucesso */
     .success-msg {
       position: fixed;
       bottom: 90px;
@@ -221,8 +223,9 @@
   <div class="success-msg" id="successMsg">✅ Idioma salvo com sucesso!</div>
 
   <script>
-    let selectedValue = "pt"; 
+    let selectedValue = "pt"; // padrão
 
+    // seleção de idioma
     document.querySelectorAll('.choice').forEach(choice => {
       choice.addEventListener('click', () => {
         document.querySelectorAll('.choice').forEach(c => {
@@ -243,6 +246,7 @@
       });
     });
 
+    // botão salvar
     const saveBtn = document.getElementById('saveBtn');
     const successMsg = document.getElementById('successMsg');
 
@@ -250,6 +254,7 @@
       // simulação de salvar idioma
       successMsg.classList.add('show');
 
+      // esconde depois de 2 segundos
       setTimeout(() => {
         successMsg.classList.remove('show');
       }, 2000);
@@ -258,3 +263,4 @@
 
 </body>
 </html>
+

@@ -4,7 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Menu de Configurações</title>
+  
+  <!-- Link para Font Awesome (Ícones da Navbar) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
   <style>
+    /* Estilos da Página */
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -15,6 +20,8 @@
       padding: 24px;
       display: flex;
       flex-direction: column;
+      /* Espaço para a navbar fixa */
+      padding-bottom: 96px; 
     }
 
     .header {
@@ -24,6 +31,7 @@
       margin-bottom: 32px;
     }
 
+    /* Alterado de div para link/botão para navegação */
     .back {
       width: 44px;
       height: 44px;
@@ -33,6 +41,8 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      text-decoration: none;
+      flex-shrink: 0;
     }
 
     .back svg {
@@ -94,14 +104,82 @@
       fill: #c62828;
       opacity: 0.9;
     }
+    
+    /* ======== ESTILOS DA NAVBAR INFERIOR ======== */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #0d4a86; 
+      padding: 10px 0 20px; 
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.25);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      max-width: 420px;
+      padding: 0 12px;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      color: #8bbce1; 
+      transition: color 0.2s ease;
+      text-decoration: none;
+      min-width: 40px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .nav-item.active { 
+      color: #fff; 
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 20px; 
+      margin-bottom: 4px;
+    }
+    
+    /* Botão Central (Adicionar Transação) */
+    .nav-link.add {
+        background-color: #fff; 
+        color: #053867;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        transform: translateY(-10px); 
+        display: flex;
+        text-decoration: none;
+    }
+    
+    .nav-link.add .nav-icon {
+        font-size: 24px;
+        margin-bottom: 0;
+        font-weight: bold;
+    }
   </style>
 </head>
 <body>
 
   <div class="header">
-    <div class="back">
-     <a href="javascript:history.back()"> <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></a>
-    </div>
+    <!-- ALTERADO: Redireciona para dashboard.html -->
+    <a href="dashboard.html" class="back" aria-label="Voltar para Dashboard">
+      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </a>
     <div class="title">Configurações</div>
   </div>
 
@@ -110,7 +188,11 @@
       <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </a>
 
-    <a href="historico.html" class="menu-item">Pagamentos 
+    <a href="notificacoes.html" class="menu-item">Notificações 
+      <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+
+    <a href="pagamento.html" class="menu-item">Pagamentos 
       <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </a>
 
@@ -126,13 +208,50 @@
       <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </a>
 
-    <a href="#" class="menu-item">Sobre 
+    <a href="sobre.html" class="menu-item">Sobre 
       <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </a>
 
-    <a href="#" class="menu-item logout">Sair da conta 
+    <!-- ALTERADO: Redireciona para login.html -->
+    <a href="login.html" class="menu-item logout">Sair da conta 
       <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </a>
+  </nav>
+
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR (NAV BAR) -->
+  <nav class="nav-bar">
+    <div class="nav-content">
+      
+      <!-- 1. HOME/DASHBOARD -->
+      <a href="dashboard.html" class="nav-item">
+          <i class="fas fa-home nav-icon"></i>
+          <span>Home</span>
+      </a>
+
+      <!-- 2. CONTAS/METAS -->
+      <a href="contas.html" class="nav-item">
+          <i class="fas fa-bullseye nav-icon"></i>
+          <span>Contas</span>
+      </a>
+
+      <!-- 3. ADICIONAR (BOTÃO CENTRAL/FLUTUANTE) -->
+      <a href="pagamento.html" class="nav-link add" aria-label="Adicionar Nova Transação">
+          <i class="fas fa-plus nav-icon"></i>
+      </a>
+
+      <!-- 4. HISTÓRICO/PAGAMENTOS -->
+      <a href="historico.html" class="nav-item">
+          <i class="fas fa-list-alt nav-icon"></i>
+          <span>Histórico</span>
+      </a>
+
+      <!-- 5. PERFIL/CONFIGURAÇÕES (ATIVO) -->
+      <a href="usuario.html" class="nav-item active">
+          <i class="fas fa-user nav-icon"></i>
+          <span>Perfil</span>
+      </a>
+
+    </div>
   </nav>
 
 </body>

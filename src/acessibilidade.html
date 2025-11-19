@@ -19,6 +19,7 @@
     position: relative;
   }
 
+  /* Cabeçalho */
   .header {
     display: flex;
     align-items: center;
@@ -59,6 +60,7 @@
     margin-bottom: 16px;
   }
 
+  /* Container */
   .card {
     background: rgba(255,255,255,0.1);
     border-radius: 16px;
@@ -81,6 +83,7 @@
     color: rgba(255,255,255,0.92);
   }
 
+  /* Toggle */
   .toggle {
     display: flex;
     align-items: center;
@@ -133,6 +136,7 @@
     transform: translateX(20px);
   }
 
+  /* Range (tamanho de fonte) */
   .range-box {
     background: #fff;
     border-radius: 12px;
@@ -155,6 +159,7 @@
     accent-color: #2ab96a;
   }
 
+  /* Leitor de tela */
   .reader {
     background: #fff;
     color: #06324e;
@@ -166,6 +171,7 @@
     font-weight: 600;
   }
 
+  /* Botão inferior */
   .apply-btn {
     position: fixed;
     bottom: 24px;
@@ -188,6 +194,7 @@
   .apply-btn:active { transform: translateX(-50%) scale(0.98); }
   .apply-btn:hover { background: #f2f2f2; }
 
+  /* Mensagem de sucesso */
   .success-msg {
     position: fixed;
     bottom: 90px;
@@ -228,6 +235,7 @@
   <div class="subtitle">Opções de acessibilidade</div>
 
   <div class="card">
+    <!-- Alto contraste -->
     <div class="section">
       <div class="label">Modo de alto contraste</div>
       <div class="toggle">
@@ -239,6 +247,7 @@
       </div>
     </div>
 
+    <!-- Tamanho da fonte -->
     <div class="section">
       <div class="label">Tamanho da fonte</div>
       <div class="range-box">
@@ -251,6 +260,7 @@
       </div>
     </div>
 
+    <!-- Leitor de tela -->
     <div class="section">
       <div class="label">Leitor de tela (VoiceOver / TalkBack)</div>
       <div class="reader" id="readerToggle">
@@ -290,3 +300,4 @@
   </script>
 </body>
 </html>
+

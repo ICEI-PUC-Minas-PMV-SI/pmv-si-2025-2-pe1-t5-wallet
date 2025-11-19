@@ -2,27 +2,472 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Contas Bancárias</title>
-  <meta name="description" content="Painel de contas bancárias - GoalWallet (demo responsivo)" />
-  <link rel="stylesheet" href="css/contas.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contas Bancárias - GoalWallet</title>
+  
+  <!-- Link para Font Awesome (Ícones da Navbar) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* RESET */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(180deg, #053867 0%, #0b4a86 55%, #0f5aa7 100%);
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      /* Padding inferior para a navbar fixa */
+      padding-bottom: 96px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* HEADER APP */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .brand .title {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .brand .subtitle {
+      font-size: 0.75rem;
+      opacity: 0.8;
+      margin-top: 2px;
+    }
+
+    .profile {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .profile svg {
+      width: 24px;
+      height: 24px;
+      fill: #fff;
+      opacity: 0.9;
+    }
+
+    /* SEÇÃO PRINCIPAL (SCROLL) */
+    main {
+      flex-grow: 1;
+      overflow-y: visible; /* Deixa o scroll por conta da viewport */
+      padding-bottom: 20px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .section-head h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .edit-toggle {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .edit-toggle:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* CARDS DE CONTA */
+    .account-card {
+      background: #fff;
+      color: #000;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+    
+    .account-card:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Modo de Edição */
+    .account-card[data-edit="true"] {
+      transform: translateX(-80px); /* Move o cartão para a esquerda */
+    }
+
+    .bank-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .account-info {
+      flex-grow: 1;
+      padding: 0 12px;
+    }
+
+    .bank-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .account-meta {
+      font-size: 0.8rem;
+      color: #666;
+      margin-top: 2px;
+    }
+
+    .account-value {
+      font-weight: 700;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .positive {
+      color: #1dbf50;
+    }
+
+    .negative {
+      color: #ff5b5b;
+    }
+
+    /* AÇÕES DO CARD (BOTOES DE EDITAR/EXCLUIR) */
+    .card-actions {
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 80px;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      transform: translateX(100%);
+      transition: transform 0.2s;
+      gap: 2px;
+    }
+
+    .account-card[data-edit="true"] .card-actions {
+      transform: translateX(0);
+    }
+
+    .card-action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      height: 100%;
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .card-action-btn:hover {
+      opacity: 1;
+    }
+
+    [data-action="delete"] {
+      background-color: #ff5b5b;
+      color: #fff;
+    }
+    
+    [data-action="edit"] {
+      background-color: #4a90e2;
+      color: #fff;
+    }
+
+    /* BOTÃO DE ADICIONAR */
+    .actions {
+      margin-top: 15px;
+    }
+
+    .add-btn {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.2s;
+    }
+
+    .add-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .plus {
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .hint {
+      font-size: 0.85rem;
+      opacity: 0.7;
+      text-align: center;
+      margin-top: 20px;
+      padding: 0 10px;
+    }
+
+    /* MODAL */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    .modal-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      background: #0d4a86;
+      border-radius: 16px;
+      padding: 25px;
+      width: 90%;
+      max-width: 360px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      transform: translateY(-50px);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .modal-backdrop.active .modal {
+      transform: translateY(0);
+    }
+
+    .modal h3 {
+      font-size: 1.25rem;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+
+    .modal label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 5px;
+      margin-top: 10px;
+      opacity: 0.9;
+    }
+
+    .input, .select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+    
+    .input::placeholder {
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .input:focus, .select:focus {
+        border-color: #fff;
+        outline: none;
+    }
+
+    .select option {
+      background: #0d4a86;
+      color: #fff;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .btn {
+      padding: 10px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn.primary {
+      background: #1dbf50;
+      color: #fff;
+      border: none;
+      flex-grow: 1;
+    }
+
+    .btn.ghost {
+      background: none;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      flex-grow: 1;
+    }
+    
+    /* ======== ESTILOS DA NAVBAR INFERIOR ======== */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #0d4a86; /* Cor de fundo da nav bar */
+      padding: 10px 0 20px; 
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.25);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      max-width: 420px;
+      padding: 0 12px;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      color: #8bbce1; /* Cor padrão dos ícones */
+      transition: color 0.2s ease;
+      text-decoration: none;
+      min-width: 40px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .nav-item.active { 
+      color: #fff; 
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 20px; 
+      margin-bottom: 4px;
+    }
+    
+    /* Botão Central (Adicionar Transação) */
+    .nav-link.add {
+        background-color: #fff; 
+        color: #053867;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        transform: translateY(-10px); 
+        display: flex;
+        text-decoration: none;
+    }
+    
+    .nav-link.add .nav-icon {
+        font-size: 24px;
+        margin-bottom: 0;
+        font-weight: bold;
+    }
+    .nav-link.add span {
+        display: none; 
+    }
+
+  </style>
 </head>
+
 <body>
+
   <div class="app" role="main" aria-labelledby="page-title">
     <header>
       <div class="brand" aria-hidden="false">
-       <a href="home.html"> <img src="img/logo.png" alt=""></a>
+        <!-- Substituindo o placeholder da logo pela imagem de usuário redonda, como padrão do dashboard anterior -->
+        <img src="Blue and White Modern Simple E-Wallet Logo 1(1).png" alt="Foto do usuário" style="border-radius: 50%; width: 40px; height: 40px; object-fit: cover;">
         <div>
           <div class="title">GoalWallet</div>
           <div class="subtitle">Contas conectadas</div>
         </div>
       </div>
 
-      <button class="profile" aria-label="Abrir perfil" title="Perfil">
-        <a href="configuracoes.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z" fill="white" opacity="0.95"/>
+      <button class="profile" aria-label="Abrir perfil" title="Perfil" onclick="window.location.href='usuario.html'">
+        <png width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z" fill="white" opacity="0.95"/>
           <path d="M4 20c0-3.313 2.687-6 6-6h4c3.313 0 6 2.687 6 6v1H4v-1z" fill="white" opacity="0.08"/>
-        </svg></a>
+        </svg>
       </button>
     </header>
 
@@ -118,9 +563,49 @@
       </div>
     </div>
   </div>
+  
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR (NAV BAR) -->
+  <nav class="nav-bar">
+    <div class="nav-content">
+      
+      <!-- 1. HOME/DASHBOARD (ATIVO) -->
+      <a href="dashboard.html" class="nav-item active">
+          <i class="fas fa-home nav-icon"></i>
+          <span>Home</span>
+      </a>
+
+      <!-- 2. METAS/ORÇAMENTO -->
+      <a href="contas.html" class="nav-item">
+          <i class="fas fa-bullseye nav-icon"></i>
+          <span>Contas</span>
+      </a>
+
+      <!-- 3. ADICIONAR (BOTÃO CENTRAL/FLUTUANTE) -->
+      <a href="pagamento.html" class="nav-link add" aria-label="Adicionar Nova Transação">
+          <i class="fas fa-plus nav-icon"></i>
+      </a>
+
+      <!-- 4. HISTÓRICO/PAGAMENTOS -->
+      <a href="historico.html" class="nav-item">
+          <i class="fas fa-list-alt nav-icon"></i>
+          <span>Histórico</span>
+      </a>
+
+      <!-- 5. PERFIL/CONFIGURAÇÕES -->
+      <a href="usuario.html" class="nav-item">
+          <i class="fas fa-user nav-icon"></i>
+          <span>Perfil</span>
+      </a>
+
+    </div>
+  </nav>
+
   <script>
 
-    (function(){
+    window.onload = function() {
+      // O código JS foi encapsulado aqui para garantir que o DOM esteja totalmente carregado
+      // e para seguir o padrão de arquivos HTML autossuficientes.
+
       const editToggle = document.getElementById('editToggle');
       const accountsList = document.getElementById('accountsList');
       const addAccountBtn = document.getElementById('addAccountBtn');
@@ -144,10 +629,11 @@
         const card = btn.closest('.account-card');
         const bankName = card.querySelector('.bank-name').textContent;
 
+        // Use um modal customizado em vez de alert/confirm (melhor UX em apps)
         if (action === 'delete') {
-          const confirmed = confirm('Remover ' + bankName + '?');
-          if (!confirmed) return;
-          card.remove();
+            if (confirm('Tem certeza que deseja remover a conta ' + bankName + '?')) {
+                card.remove();
+            }
         } else if (action === 'edit') {
           openModalForEdit(card);
         }
@@ -180,6 +666,8 @@
         let value = parseFloat(accountValueRaw) || 0;
         const formatted = formatCurrency(value);
         const editingId = modalBackdrop.dataset.editingId;
+        
+        // Lógica de edição
         if (editingId) {
           const card = document.querySelector('.account-card[data-id="'+editingId+'"]');
           if (card) {
@@ -190,7 +678,9 @@
             valueEl.classList.toggle('positive', value >= 0);
             valueEl.classList.toggle('negative', value < 0);
           }
-        } else {
+        } 
+        // Lógica de adição
+        else {
           const newId = String(Date.now());
           const avatarColor = pickGradientFor(bankName);
           const wrapper = document.createElement('article');
@@ -219,6 +709,7 @@
       function openModal(){
         modalBackdrop.classList.add('active');
         modalBackdrop.setAttribute('aria-hidden','false');
+        document.getElementById('modalTitle').textContent = 'Adicionar nova conta';
         accountForm.reset();
         delete modalBackdrop.dataset.editingId;
         setTimeout(()=>document.getElementById('bankName').focus(), 120);
@@ -232,14 +723,17 @@
         const id = card.dataset.id;
         const name = card.querySelector('.bank-name').textContent;
         const meta = card.querySelector('.account-meta').textContent.split('•').map(s=>s.trim());
-        const value = card.querySelector('.account-value').textContent.replace(/[^\d,.\-R$ ]/g,'').trim();
+        
+        // Remove R$ e formatação para obter o valor bruto
+        let valueText = card.querySelector('.account-value').textContent.replace(/[^\d,\-]/g, '').replace(',', '.');
+        
         openModal();
         modalBackdrop.dataset.editingId = id;
         document.getElementById('modalTitle').textContent = 'Editar conta';
         document.getElementById('bankName').value = name;
         document.getElementById('accountType').value = meta[0] || '';
         document.getElementById('accountDate').value = meta[1] || '';
-        document.getElementById('accountValue').value = value.replace('R$','').replace(/\./g,'').replace(',','.');
+        document.getElementById('accountValue').value = valueText;
       }
 
       function formatCurrency(num){
@@ -280,11 +774,11 @@
         }
       });
 
+      // Inicializa o estado dos cartões
       document.querySelectorAll('.account-card').forEach(card => {
         card.setAttribute('data-edit','false');
       });
-
-    })();
+    }; // Fim do window.onload
   </script>
 </body>
 </html>

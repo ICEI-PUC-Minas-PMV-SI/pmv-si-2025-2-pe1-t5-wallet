@@ -1,39 +1,271 @@
-<!doctype html>
-<html lang="pt-br">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GoalWallet — Entrar</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Login</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background: linear-gradient(180deg, #053867 0%, #0b4a86 60%, #0f5aa7 100%);
+      min-height: 100vh;
+      padding: 28px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .back {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .back svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+      opacity: 0.95;
+      transform: translateX(-2px);
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 26px;
+      line-height: 1.4;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group input {
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.4);
+      background: transparent;
+      padding: 10px 4px;
+      font-size: 15px;
+      color: #fff;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-bottom: 1px solid #fff;
+    }
+
+    .forgot {
+      text-align: right;
+      margin-top: 6px;
+      font-size: 13px;
+      opacity: 0.9;
+      cursor: pointer;
+    }
+
+    .forgot:hover {
+      text-decoration: underline;
+    }
+
+    .btn {
+      width: 100%;
+      background: #eef4fb;
+      color: #06324e;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      margin-top: 28px;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(1, 9, 20, 0.12);
+      transition: .15s;
+    }
+
+    .btn:hover {
+      filter: brightness(0.95);
+      transform: translateY(-1px);
+    }
+
+    .or {
+      text-align: center;
+      margin: 26px 0 16px;
+      opacity: 0.85;
+      font-size: 14px;
+    }
+
+    .icons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .icons img {
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      background: #fff;
+      padding: 6px;
+      border-radius: 50%;
+    }
+
+    .signup {
+      text-align: center;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .signup span {
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .signup span:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      margin-top: auto;
+      display: flex;
+      justify-content: center;
+      opacity: 0.8;
+      font-size: 14px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .footer svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+    }
+
+    .error {
+      color: #ffbdbd;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+  </style>
+
 </head>
 <body>
-  <main class="container-center">
-    <section class="card" role="region" aria-labelledby="titulo">
-      <div class="logo">
-        <img src="img/logo.png" alt="Logo Goal Wallet" />
-        <h1 id="titulo">Goal Wallet</h1>
-      </div>
 
-      <h2 style="margin:0 0 18px 0; font-size:20px;">Entrar</h2>
+  <div class="header">
+    <!-- O botão Voltar agora leva para index.html -->
+    <div class="back" onclick="window.location.href='index.html'">
+      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </div>
+    <span>Voltar</span>
+  </div>
 
-      <form action="#" method="post" novalidate>
-        <div class="field">
-          <label class="label" for="email">E-mail</label>
-          <input class="input" id="email" name="email" type="email" placeholder="seuemail@exemplo.com" required />
-        </div>
+  <h2>Preencha os campos abaixo<br>para melhor experiência.</h2>
 
-        <div class="field">
-          <label class="label" for="senha">Senha</label>
-          <input class="input" id="senha" name="senha" type="password" placeholder="••••••••" required />
-        </div>
+  <form onsubmit="login(event)">
+    
+    <div class="form-group">
+      <input type="email" id="email" placeholder="Digite seu e-mail" required />
+      <div id="erroEmail" class="error"></div>
+    </div>
 
-        <button class="button" type="submit">Entrar</button>
-      </form>
+    <div class="form-group">
+      <input type="password" id="senha" placeholder="Digite sua senha" required />
+      <div id="erroSenha" class="error"></div>
+    </div>
 
-      <p class="text-center" style="margin-top:14px; font-size:14px;">
-        Não tem conta? <a class="link" href="cadastro.html">Cadastre-se</a>
-      </p>
-    </section>
-  </main>
+    <div class="forgot">Esqueceu a senha?</div>
+
+    <button class="btn" type="submit">entrar</button>
+
+  </form>
+
+  <div class="or">ou cadastre-se com</div>
+
+  <div class="icons">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/IOS_Google_icon.png" alt="Entrar com Google">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c2/F_icon.svg" alt="Entrar com Facebook">
+  </div>
+
+  <div class="signup">
+    Não possui uma conta? <span onclick="window.location.href='cadastro.html'">Cadastre-se agora!</span>
+  </div>
+
+  <div class="footer">
+    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 9.9-5L12 2zm0 8.7L3 6.1V17l9 5 9-5V6.1l-9 4.6z"/></svg>
+    GoalWallet
+  </div>
+
+<script>
+
+  function login(event) {
+    event.preventDefault();
+
+    let email = document.getElementById("email").value.trim();
+    let senha = document.getElementById("senha").value.trim();
+
+    let erro = false;
+
+    document.getElementById("erroEmail").innerText = "";
+    document.getElementById("erroSenha").innerText = "";
+
+    // Validação básica
+    if (!email.includes("@")) {
+      document.getElementById("erroEmail").innerText = "E-mail inválido.";
+      erro = true;
+    }
+
+    if (senha.length < 6) {
+      document.getElementById("erroSenha").innerText = "Senha deve ter pelo menos 6 caracteres.";
+      erro = true;
+    }
+
+    if (erro) return;
+
+    // Lógica de autenticação com localStorage (Apenas para demonstração)
+    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+    // Tenta encontrar o usuário com e-mail E senha corretos
+    let usuarioEncontrado = usuarios.find(u => u.email === email && u.senha === senha);
+    
+    if (!usuarioEncontrado) {
+      
+      // Verifica se o email existe (ignora a senha para essa checagem)
+      let emailExistente = usuarios.some(u => u.email === email);
+
+      if (emailExistente) {
+        // Email existe, mas a senha está errada
+        document.getElementById("erroSenha").innerText = "Senha incorreta.";
+      } else {
+        // Usuário não cadastrado (email não encontrado)
+        document.getElementById("erroEmail").innerText = "Usuário não cadastrado.";
+      }
+      return;
+    }
+
+    // Login bem-sucedido
+    // Alert removido para melhor UX
+    window.location.href = "dashboard.html"; // Redireciona para o dashboard
+  }
+
+</script>
+
 </body>
 </html>

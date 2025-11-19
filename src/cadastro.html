@@ -1,53 +1,232 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>GoalWallet - Criar Conta</title>
-        <link rel="stylesheet" href="css/style.css" />
-    </head>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Criar Conta</title>
 
-    <body>
-        <main class="container-center">
-            <section class="card" role="region" aria-labelledby="titulo">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-                <div class="logo">
-                    <img src="img/logo.png" alt="Logo Goal Wallet" />
-                    <h1 id="titulo">Goal Wallet</h1> 
-                </div>
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background: linear-gradient(180deg, #053867 0%, #0b4a86 60%, #0f5aa7 100%);
+      min-height: 100vh;
+      padding: 28px;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+    }
 
-                <h2 style="margin:0 0 18px 0; font-size: 20px;">Crie sua conta </h2>
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
 
-                <form action="#" method="post" novalidate>
-                    <div class="field">
-                        <label class="label" for="nome">Nome Completo</label>
-                        <input class="input" id="nome" name="nome" type="text" placeholder="Digite seu Nome Completo" required />
-                    </div>
+    .back {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
 
-                     <div class="field">
-          <label class="label" for="email">E-mail</label>
-          <input class="input" id="email" name="email" type="email" placeholder="seuemail@exemplo.com" required />
-        </div>
+    .back svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+      opacity: 0.95;
+      transform: translateX(-2px);
+    }
 
-        <div class="field">
-          <label class="label" for="cpf">CPF</label>
-          <input class="input" id="cpf" name="cpf" type="text" placeholder="000.000.000-00" required />
-        </div>
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 26px;
+      line-height: 1.4;
+    }
 
-        <div class="field">
-          <label class="label" for="senha">Senha</label>
-          <input class="input" id="senha" name="senha" type="password" placeholder="Crie uma senha" required />
-        </div>
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 18px;
+    }
 
-        <button class="button" type="submit">Criar Conta</button>
-      </form>
+    .form-group label {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 4px;
+    }
 
-      <p class="text-center" style="margin-top:14px; font-size:14px;">
-        Já possui uma conta? <a class="link" href="index.html">Entrar</a>
-      </p>
-    </section>
-  </main>
+    .form-group input {
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.4);
+      background: transparent;
+      padding: 10px 4px;
+      font-size: 15px;
+      color: #fff;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-bottom: 1px solid #fff;
+    }
+
+    .btn {
+      width: 100%;
+      background: #eef4fb;
+      color: #06324e;
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      margin-top: 20px;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(1, 9, 20, 0.12);
+      transition: .15s;
+    }
+
+    .btn:hover {
+      filter: brightness(0.95);
+      transform: translateY(-1px);
+    }
+
+    .footer {
+      margin-top: auto;
+      display: flex;
+      justify-content: center;
+      opacity: 0.8;
+      font-size: 14px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .footer svg {
+      width: 18px;
+      height: 18px;
+      fill: #fff;
+    }
+
+    /* ALERTAS */
+    .error {
+      color: #ffbdbd;
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="back" onclick="history.back()">
+      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+    </div>
+  </div>
+
+  <h2>Preencha os campos abaixo <br>para melhor experiência.</h2>
+
+  <form onsubmit="cadastrar(event)">
+
+    <div class="form-group">
+      <label>Nome Completo</label>
+      <input type="text" id="nome" required />
+      <div id="erroNome" class="error"></div>
+    </div>
+
+    <div class="form-group">
+      <label>E-mail</label>
+      <input type="email" id="email" required />
+      <div id="erroEmail" class="error"></div>
+    </div>
+
+    <div class="form-group">
+      <label>CPF</label>
+      <input type="text" id="cpf" maxlength="11" required />
+      <div id="erroCPF" class="error"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Senha</label>
+      <input type="password" id="senha" minlength="6" required />
+      <div id="erroSenha" class="error"></div>
+    </div>
+
+    <button type="submit" class="btn">criar conta</button>
+  </form>
+
+  <div class="footer">
+    <png width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    GoalWallet
+  </div>
+
+<script>
+  function validarEmail(email) {
+    return /\S+@\S+\.\S+/.test(email);
+  }
+
+  function validarCPF(cpf) {
+    return /^\d{11}$/.test(cpf);
+  }
+
+  function cadastrar(event) {
+    event.preventDefault();
+
+    let nome = document.getElementById("nome").value.trim();
+    let email = document.getElementById("email").value.trim();
+    let cpf = document.getElementById("cpf").value.trim();
+    let senha = document.getElementById("senha").value.trim();
+
+    let erro = false;
+
+    // ZERAR ALERTAS
+    document.querySelectorAll(".error").forEach(el => el.innerText = "");
+
+    if (nome.length < 3) {
+      document.getElementById("erroNome").innerText = "Nome inválido.";
+      erro = true;
+    }
+
+    if (!validarEmail(email)) {
+      document.getElementById("erroEmail").innerText = "E-mail inválido.";
+      erro = true;
+    }
+
+    if (!validarCPF(cpf)) {
+      document.getElementById("erroCPF").innerText = "CPF deve ter 11 números.";
+      erro = true;
+    }
+
+    if (senha.length < 6) {
+      document.getElementById("erroSenha").innerText = "A senha deve ter no mínimo 6 caracteres.";
+      erro = true;
+    }
+
+    if (erro) return;
+
+    let novoUsuario = {
+      id: Date.now(),
+      nome: nome,
+      email: email,
+      cpf: cpf,
+      senha: senha
+    };
+
+    let usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    usuarios.push(novoUsuario);
+
+    localStorage.setItem("usuarios", JSON.stringify(usuarios));
+
+    alert("Conta criada com sucesso!");
+    window.location.href = "login.html";
+  }
+</script>
+
 </body>
 </html>
-
-                 

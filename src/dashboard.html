@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GoalWallet — Dashboard</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <style>
+    /* RESET */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      background: linear-gradient(180deg, #053867 0%, #0b4a86 55%, #0f5aa7 100%);
+      color: #fff;
+      min-height: 100vh;
+      padding: 24px;
+      /* Espaço no final para que o conteúdo não fique escondido atrás da barra fixa */
+      padding-bottom: 96px; 
+      display: flex;
+      justify-content: center;
+    }
+
+    /* CONTAINER PRINCIPAL */
+    .container-dashboard {
+      width: 100%;
+      max-width: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* HEADER */
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo-header {
+      width: 42px;
+      height: 42px; /* Adicionado para garantir o formato quadrado */
+      border-radius: 50%; /* Torna a imagem redonda */
+      object-fit: cover; /* Garante que a imagem preencha o círculo */
+    }
+
+    .titulo-ola {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .subtitulo-ola {
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+    /* CARD SALDO */
+    .saldo-card {
+      background: rgba(255, 255, 255, 0.10);
+      padding: 20px;
+      border-radius: 16px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+    }
+
+    .label-saldo {
+      opacity: 0.9;
+    }
+
+    .valor-saldo {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 12px 0 18px;
+    }
+
+    /* BOTÕES */
+    .btn-primary,
+    .btn-secondary,
+    .btn-add {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      transition: 0.15s ease;
+      /* Ajuste para que links pareçam botões */
+      text-decoration: none; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center;
+    }
+
+    .btn-primary {
+      background: #fff;
+      color: #053867;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.85;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      color: #fff;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .small {
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    .botoes-saldo {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .btn-add {
+      margin-top: 8px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .btn-add:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* MOVIMENTAÇÕES */
+    .movimentos {
+      margin-top: 10px;
+    }
+
+    .titulo-mov {
+      margin-bottom: 12px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .lista-mov {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .lista-mov li {
+      display: flex;
+      justify-content: space-between;
+      font-size: 15px;
+    }
+
+    .positivo {
+      color: #7CFF7C;
+      font-weight: 600;
+    }
+
+    .negativo {
+      color: #FF7C7C;
+      font-weight: 600;
+    }
+
+    /* GRÁFICO */
+    .grafico {
+      margin-top: 20px;
+    }
+
+    .titulo-grafico {
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    .barras {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      height: 160px;
+    }
+
+    .barra {
+      width: 24px;
+      background: rgba(255, 255, 255, 0.45);
+      border-radius: 10px;
+    }
+
+    /* BARRA DE NAVEGAÇÃO INFERIOR */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      /* Cor de fundo da sua nav bar */
+      background-color: #0d4a86; 
+      padding: 10px 0 20px; /* Padding ajustado para o visual mobile */
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.25);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      max-width: 420px;
+      padding: 0 12px;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      color: #8bbce1; /* Cor padrão dos ícones */
+      transition: color 0.2s ease;
+      text-decoration: none;
+      min-width: 40px;
+      font-size: 12px; /* Adicionado tamanho da fonte para o texto */
+      font-weight: 500;
+    }
+
+    .nav-item.active {
+      color: #fff; /* Cor do ícone Ativo */
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 20px; /* Tamanho dos ícones FA */
+      margin-bottom: 4px;
+    }
+    
+    /* Botão Central (Adicionar Transação) */
+    .nav-link.add {
+        background-color: #fff; 
+        color: #053867;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        transform: translateY(-10px); /* Levemente elevado */
+        /* Sobrescreve estilos de .nav-item */
+        display: flex;
+        text-decoration: none;
+    }
+    
+    .nav-link.add .nav-icon {
+        font-size: 24px;
+        margin-bottom: 0;
+        font-weight: bold;
+    }
+    .nav-link.add span {
+        display: none; /* Esconde o texto no botão central */
+    }
+    
+  </style>
+</head>
+
+<body>
+
+  <main class="container-dashboard">
+
+    <header class="dashboard-header">
+      <div>
+        <h2 class="titulo-ola">Olá, Fernanda!</h2>
+        <p class="subtitulo-ola">Que bom ter você de volta!</p>
+      </div>
+      <img src="fernanda.png" alt="Logo GoalWallet" class="logo-header" />
+    </header>
+
+    <section class="saldo-card">
+      <h3 class="label-saldo">Saldo Total</h3>
+      <p class="valor-saldo">R$ 4.950,00</p>
+
+      <div class="botoes-saldo">
+        <!-- ALTERADO: Registrar Entrada agora é um link para adreceitas.html -->
+        <a href="adreceita.html" class="btn-primary small">Registrar Entrada</a>
+      
+        <!-- ALTERADO: Registrar Saída agora é um link para addespesas.html -->
+        <a href="addespesas.html" class="btn-secondary small">Registrar Saída</a>
+      </div>
+
+      <button class="btn-add">+ Adicionar Carteira</button>
+    </section>
+
+    <section class="movimentos">
+      <h3 class="titulo-mov">Movimentações Recentes</h3>
+
+      <ul class="lista-mov">
+        <li><span>Pix recebido</span> <span class="positivo">+ R$ 150,00</span></li>
+        <li><span>Supermercado</span> <span class="negativo">- R$ 98,00</span></li>
+        <li><span>Assinatura Netflix</span> <span class="negativo">- R$ 39,90</span></li>
+      </ul>
+    </section>
+
+    <section class="grafico">
+      <h3 class="titulo-grafico">Gráfico de Gastos</h3>
+      <div class="barras">
+        <div class="barra" style="height: 70%"></div>
+        <div class="barra" style="height: 40%"></div>
+        <div class="barra" style="height: 90%"></div>
+        <div class="barra" style="height: 30%"></div>
+        <div class="barra" style="height: 60%"></div>
+        <div class="barra" style="height: 80%"></div>
+        <div class="barra" style="height: 50%"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="nav-bar">
+    <div class="nav-content">
+      
+      <a href="dashboard.html" class="nav-item active">
+          <i class="fas fa-home nav-icon"></i>
+          <span>Home</span>
+      </a>
+
+      <a href="contas.html" class="nav-item">
+          <i class="fas fa-bullseye nav-icon"></i>
+          <span>Contas</span>
+      </a>
+
+      <a href="pagamento.html" class="nav-link add" aria-label="Adicionar Nova Transação">
+          <i class="fas fa-plus nav-icon"></i>
+      </a>
+
+      <a href="historico.html" class="nav-item">
+          <i class="fas fa-list-alt nav-icon"></i>
+          <span>Histórico</span>
+      </a>
+
+      <a href="usuario.html" class="nav-item">
+          <i class="fas fa-user nav-icon"></i>
+          <span>Perfil</span>
+      </a>
+
+    </div>
+  </nav>
+
+</body>
+</html>

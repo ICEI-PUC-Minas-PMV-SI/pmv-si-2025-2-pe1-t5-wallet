@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Adicionar Receita — GoalWallet</title>
+
+  <!-- Link para Font Awesome (Ícones da Navbar) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    /* --------- BASE DE PÁGINA (PADRÃO) --------- */
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Inter", sans-serif; }
+
+    body {
+      min-height: 100vh;
+      width: 100%;
+      background: linear-gradient(to bottom, #002a62, #0055c3);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      /* ADICIONADO: Espaço no final para a navbar fixa */
+      padding-bottom: 96px; 
+    }
+
+    .container {
+      width: 90%;
+      max-width: 480px;
+      padding-top: 20px;
+      padding-bottom: 40px;
+    }
+
+    /* --------- HEADER (VOLTAR) --------- */
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    header .back {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none; /* Garante que o link não tenha sublinhado */
+    }
+
+    header .back svg { width: 20px; fill: #fff; }
+
+    h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    /* --------- FORMULÁRIO --------- */
+    .input-group {
+      margin-bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      background: #fff;
+      color: #000;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+    }
+
+    /* Cor de fundo para opções no select */
+    select option {
+        background: #002a62; 
+        color: #fff;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px;
+      min-height: 90px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+      background: #fff;
+      color: #000;
+      resize: none;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.18);
+    }
+
+    /* Botão */
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: #1dbf50; /* Cor verde para receita */
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    }
+
+    /* ======== ESTILOS DA NAVBAR INFERIOR ======== */
+    .nav-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: #0d4a86; 
+      padding: 10px 0 20px; 
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.25);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+    }
+
+    .nav-content {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      max-width: 420px;
+      padding: 0 12px;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      color: #8bbce1; 
+      transition: color 0.2s ease;
+      text-decoration: none;
+      min-width: 40px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .nav-item.active { 
+      color: #fff; 
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 20px; 
+      margin-bottom: 4px;
+    }
+    
+    /* Botão Central (Adicionar Transação - ATIVO) */
+    .nav-link.add {
+        background-color: #fff; 
+        color: #053867;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        transform: translateY(-10px); 
+        display: flex;
+        text-decoration: none;
+        
+        /* O botão central é o item ativo nesta página */
+        color: #053867;
+    }
+    
+    .nav-link.add .nav-icon {
+        font-size: 24px;
+        margin-bottom: 0;
+        font-weight: bold;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <header>
+      <a href="pagamento.html" class="back" aria-label="Voltar para Pagamentos">
+        <svg viewBox="0 0 24 24"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </a>
+      <h2>Adicionar Receita</h2>
+    </header>
+
+    <form>
+      <div class="input-group">
+        <label>Descrição</label>
+        <input type="text" placeholder="Ex: Salário, Pix recebido...">
+      </div>
+
+      <div class="input-group">
+        <label>Valor</label>
+        <input type="number" placeholder="R$ 0,00" step="0.01">
+      </div>
+
+      <div class="input-group">
+        <label>Data</label>
+        <input type="date">
+      </div>
+
+      <div class="input-group">
+        <label>Categoria</label>
+        <select>
+          <option>Salário</option>
+          <option>Investimentos</option>
+          <option>Freelancer</option>
+          <option>Outros</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Observações</label>
+        <textarea placeholder="Adicionar detalhes..."></textarea>
+      </div>
+
+      <button class="btn">Salvar Receita</button>
+    </form>
+
+  </div>
+  
+  <!-- BARRA DE NAVEGAÇÃO INFERIOR (NAV BAR) -->
+  <nav class="nav-bar">
+    <div class="nav-content">
+      
+      <!-- 1. HOME/DASHBOARD -->
+      <a href="dashboard.html" class="nav-item">
+          <i class="fas fa-home nav-icon"></i>
+          <span>Home</span>
+      </a>
+
+      <!-- 2. CONTAS/METAS -->
+      <a href="contas.html" class="nav-item">
+          <i class="fas fa-bullseye nav-icon"></i>
+          <span>Contas</span>
+      </a>
+
+      <!-- 3. ADICIONAR (BOTÃO CENTRAL/FLUTUANTE) - ATIVO -->
+      <a href="pagamento.html" class="nav-link add active" aria-label="Adicionar Nova Transação">
+          <i class="fas fa-plus nav-icon"></i>
+      </a>
+
+      <!-- 4. HISTÓRICO/PAGAMENTOS -->
+      <a href="historico.html" class="nav-item">
+          <i class="fas fa-list-alt nav-icon"></i>
+          <span>Histórico</span>
+      </a>
+
+      <!-- 5. PERFIL/CONFIGURAÇÕES -->
+      <a href="usuario.html" class="nav-item">
+          <i class="fas fa-user nav-icon"></i>
+          <span>Perfil</span>
+      </a>
+
+    </div>
+  </nav>
+
+</body>
+</html>
