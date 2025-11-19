@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GoalWallet — Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+  <main class="container-dashboard">
+    <header class="dashboard-header">
+      <div>
+        <h2 id="nome-usuario">Carregando...</h2>
+        <p>Que bom ter você de volta 👋</p>
+        <a href="#" onclick="sair()" style="color: #9fb3d9; font-size: 12px; text-decoration: none;">(Sair da conta)</a>
+      </div>
+      <img src="img/logo.png" alt="Logo Goal Wallet" />
+    </header>
+
+    <section class="saldo-card">
+      <h3>Saldo Total</h3>
+      <p class="valor" id="saldo-total">R$ 0,00</p>
+
+      <div class="botoes">
+        <button class="button small" onclick="novaTransacao('entrada')">Registrar Entrada</button>
+        <button class="button small outline" onclick="novaTransacao('saida')">Registrar Saída</button>
+      </div>
+    </section>
+
+    <section class="movimentos">
+      <h3>Movimentações Recentes</h3>
+      <ul id="lista-movimentos">
+        </ul>
+    </section>
+
+    <section class="grafico">
+      <h3>Gráfico de Gastos</h3>
+      <div class="barras">
+        <div class="barra" style="height: 70%;"></div>
+        <div class="barra" style="height: 40%;"></div>
+        <div class="barra" style="height: 90%;"></div>
+        <div class="barra" style="height: 30%;"></div>
+        <div class="barra" style="height: 60%;"></div>
+        <div class="barra" style="height: 80%;"></div>
+        <div class="barra" style="height: 50%;"></div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+      // Carrega os dados assim que a página abre
+      window.onload = carregarDadosHome;
+  </script>
+</body>
+</html>
