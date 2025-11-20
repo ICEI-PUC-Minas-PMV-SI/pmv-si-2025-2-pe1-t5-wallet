@@ -37,6 +37,12 @@
         <div class="field">
           <label class="label" for="senha">Senha</label>
           <input class="input" id="senha" name="senha" type="password" placeholder="Crie uma senha" required />
+          <div id="senha-strength" style="margin-top: 8px; display: none;">
+            <div style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden;">
+              <div id="senha-strength-bar" style="height: 100%; width: 0%; transition: all 0.3s ease;"></div>
+            </div>
+            <div id="senha-strength-label" style="font-size: 12px; margin-top: 4px;"></div>
+          </div>
         </div>
 
         <button class="button" type="submit">Criar Conta</button>
@@ -47,7 +53,189 @@
       </p>
     </section>
   </main>
+
+  <!-- Scripts -->
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/route-guard.js"></script>
+  <script>
+    console.log('=== CADASTRO.HTML DEBUG ===');
+    console.log('1. Script carregado');
+    console.log('2. Utils disponível?', typeof Utils !== 'undefined');
+    console.log('3. Auth disponível?', typeof Auth !== 'undefined');
+    console.log('4. RouteGuard disponível?', typeof RouteGuard !== 'undefined');
+    
+    // Redireciona se já estiver logado
+    try {
+      console.log('5. Chamando RouteGuard.redirectIfAuthenticated()...');
+      RouteGuard.redirectIfAuthenticated();
+      console.log('6. RouteGuard executado com sucesso');
+    } catch(e) {
+      console.error('ERRO no RouteGuard:', e);
+    }
+
+    // Elementos do formulário
+    const form = document.querySelector('form');
+    const nomeInput = document.getElementById('nome');
+    const emailInput = document.getElementById('email');
+    const cpfInput = document.getElementById('cpf');
+    const senhaInput = document.getElementById('senha');
+    const senhaStrengthDiv = document.getElementById('senha-strength');
+    const senhaStrengthBar = document.getElementById('senha-strength-bar');
+    const senhaStrengthLabel = document.getElementById('senha-strength-label');
+
+    console.log('7. Form encontrado?', form !== null);
+    console.log('8. Inputs encontrados?', {
+      nome: nomeInput !== null,
+      email: emailInput !== null,
+      cpf: cpfInput !== null,
+      senha: senhaInput !== null
+    });
+
+    // Máscara de CPF
+    cpfInput.addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      
+      if (value.length <= 11) {
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+      }
+      
+      e.target.value = value;
+    });
+
+    // Validação de CPF ao sair do campo
+    cpfInput.addEventListener('blur', function() {
+      const cpf = this.value;
+      if (cpf) {
+        const isValid = Utils.validateCPF(cpf);
+        Utils.showFieldFeedback(this, isValid, isValid ? '' : 'CPF inválido');
+      }
+    });
+
+    // Validação de email ao sair do campo
+    emailInput.addEventListener('blur', function() {
+      const email = this.value.trim();
+      if (email) {
+        const isValid = Utils.validateEmail(email);
+        Utils.showFieldFeedback(this, isValid, isValid ? '' : 'Email inválido');
+      }
+    });
+
+    // Validação de nome
+    nomeInput.addEventListener('blur', function() {
+      const nome = this.value.trim();
+      if (nome) {
+        const isValid = nome.length >= 3;
+        Utils.showFieldFeedback(this, isValid, isValid ? '' : 'Nome deve ter pelo menos 3 caracteres');
+      }
+    });
+
+    // Indicador de força de senha
+    senhaInput.addEventListener('input', function() {
+      const senha = this.value;
+      
+      if (senha.length > 0) {
+        senhaStrengthDiv.style.display = 'block';
+        const strength = Utils.getSenhaStrength(senha);
+        
+        senhaStrengthBar.style.width = ((strength.strength + 1) * 20) + '%';
+        senhaStrengthBar.style.background = strength.color;
+        senhaStrengthLabel.textContent = strength.label;
+        senhaStrengthLabel.style.color = strength.color;
+      } else {
+        senhaStrengthDiv.style.display = 'none';
+      }
+    });
+
+    // Validação de senha ao sair do campo
+    senhaInput.addEventListener('blur', function() {
+      const senha = this.value;
+      if (senha) {
+        const isValid = Utils.validateSenha(senha);
+        Utils.showFieldFeedback(this, isValid, isValid ? '' : 'Senha deve ter pelo menos 6 caracteres');
+      }
+    });
+
+    // Listener do formulário
+    form.addEventListener('submit', function(e) {
+      console.log('9. === SUBMIT CLICADO ===');
+      e.preventDefault();
+      console.log('10. PreventDefault executado');
+
+      // Obtém valores
+      const nome = nomeInput.value.trim();
+      const email = emailInput.value.trim();
+      const cpf = cpfInput.value;
+      const senha = senhaInput.value;
+
+      console.log('11. Valores capturados:', { nome, email, cpf, senha: '***' });
+
+      // Validações básicas
+      if (!nome || !email || !cpf || !senha) {
+        Utils.showToast('Preencha todos os campos', 'error');
+        return;
+      }
+
+      if (nome.length < 3) {
+        Utils.showToast('Nome deve ter pelo menos 3 caracteres', 'error');
+        nomeInput.focus();
+        return;
+      }
+
+      if (!Utils.validateEmail(email)) {
+        Utils.showToast('Email inválido', 'error');
+        emailInput.focus();
+        return;
+      }
+
+      if (!Utils.validateCPF(cpf)) {
+        Utils.showToast('CPF inválido', 'error');
+        cpfInput.focus();
+        return;
+      }
+
+      if (!Utils.validateSenha(senha)) {
+        Utils.showToast('Senha deve ter pelo menos 6 caracteres', 'error');
+        senhaInput.focus();
+        return;
+      }
+
+      // Tenta registrar usuário
+      console.log('12. Chamando Auth.registrar()...');
+      
+      // Mostra loading
+      Utils.showLoading('Criando sua conta...');
+      
+      // Simula delay para mostrar loading
+      setTimeout(() => {
+        const result = Auth.registrar({
+          nome,
+          email,
+          cpf,
+          senha
+        });
+        console.log('13. Resultado:', result);
+
+        Utils.hideLoading();
+
+        if (result.success) {
+          console.log('14. Sucesso! Redirecionando...');
+          Utils.showToast(result.message, 'success');
+          
+          // Redireciona para login após 1 segundo
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1000);
+        } else {
+          console.log('15. Erro:', result.message);
+          Utils.showToast(result.message, 'error');
+        }
+      }, 500);
+    });
+    
+    console.log('16. Event listener adicionado ao form');
+  </script>
 </body>
 </html>
-
-                 

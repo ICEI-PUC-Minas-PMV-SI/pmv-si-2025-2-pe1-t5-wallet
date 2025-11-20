@@ -5,6 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>GoalWallet — Dashboard</title>
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(3, 8, 20, 0.75);
+      z-index: 1000;
+      padding: 20px;
+    }
+    .modal-content {
+      background: linear-gradient(180deg, var(--card), var(--card-2));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      max-height: 90vh;
+      overflow-y: auto;
+      width: 100%;
+    }
+  </style>
 </head>
 
 <body>
@@ -12,46 +34,649 @@
     <!-- Header -->
     <header class="dashboard-header">
       <div>
-        <h2>Olá, Fernanda!</h2>
+        <h2 id="welcome-message">Olá, Usuário!</h2>
         <p>Que bom ter você de volta 👋</p>
       </div>
-      <img src="img/logo.png" alt="Logo Goal Wallet" />
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <button id="btn-logout" class="button small outline" style="font-size: 12px; padding: 8px 12px;">
+          Sair
+        </button>
+        <img src="img/logo.png" alt="Logo Goal Wallet" style="width: 48px; height: 48px;" />
+      </div>
     </header>
 
     <!-- Card de saldo -->
     <section class="saldo-card">
       <h3>Saldo Total</h3>
-      <p class="valor">R$ 4.950,00</p>
+      <p class="valor" id="saldo-total">R$ 0,00</p>
 
       <div class="botoes">
-        <button class="button small">Registrar Entrada</button>
-        <button class="button small outline">Registrar Saída</button>
+        <a href="historico.html" class="button small" style="text-decoration: none; text-align: center;">Registrar Entrada</a>
+        <a href="historico.html" class="button small outline" style="text-decoration: none; text-align: center;">Registrar Saída</a>
       </div>
     </section>
 
-    <!-- Movimentações -->
+    <!-- Resumo de Contas -->
     <section class="movimentos">
-      <h3>Movimentações Recentes</h3>
-      <ul>
-        <li><span>Pix recebido</span> <span class="positivo">+ R$ 150,00</span></li>
-        <li><span>Supermercado</span> <span class="negativo">- R$ 98,00</span></li>
-        <li><span>Assinatura Netflix</span> <span class="negativo">- R$ 39,90</span></li>
+      <h3>Suas Contas</h3>
+      <ul id="contas-lista">
+        <li style="text-align: center; color: var(--muted); padding: 20px;">Carregando...</li>
       </ul>
+      <div style="margin-top: 12px;">
+        <a href="contas.html" class="button small outline" style="text-decoration: none; text-align: center; display: block;">
+          Ver todas as contas
+        </a>
+      </div>
     </section>
 
     <!-- Gráfico estático -->
     <section class="grafico">
-      <h3>Gráfico de Gastos</h3>
-      <div class="barras">
-        <div class="barra" style="height: 70%;"></div>
-        <div class="barra" style="height: 40%;"></div>
-        <div class="barra" style="height: 90%;"></div>
-        <div class="barra" style="height: 30%;"></div>
-        <div class="barra" style="height: 60%;"></div>
-        <div class="barra" style="height: 80%;"></div>
-        <div class="barra" style="height: 50%;"></div>
+      <h3>Visão Geral</h3>
+      <div id="stats-info" style="color: var(--muted); font-size: 14px; line-height: 1.6;">
+        <p>📊 <span id="total-contas">0</span> contas cadastradas</p>
+        <p>✅ <span id="contas-positivas">0</span> com saldo positivo</p>
+        <p>⚠️ <span id="contas-negativas">0</span> com saldo negativo</p>
+      </div>
+      
+      <div id="transaction-stats" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+        <h4 style="font-size: 14px; color: var(--muted); margin-bottom: 8px;">Transações (Este mês)</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;">
+          <div>
+            <div style="color: rgba(143,255,165,0.8);">Receitas</div>
+            <div id="receitas-mes" style="font-size: 16px; font-weight: 600; color: #8fffa5;">R$ 0,00</div>
+            <div id="qtd-receitas" style="font-size: 11px; color: var(--muted);">0 transações</div>
+          </div>
+          <div>
+            <div style="color: rgba(255,158,158,0.8);">Despesas</div>
+            <div id="despesas-mes" style="font-size: 16px; font-weight: 600; color: #ff9e9e;">R$ 0,00</div>
+            <div id="qtd-despesas" style="font-size: 11px; color: var(--muted);">0 transações</div>
+          </div>
+        </div>
+        <div style="margin-top: 12px; padding: 8px; background: rgba(255,255,255,0.05); border-radius: 6px;">
+          <div style="font-size: 11px; color: var(--muted);">Saldo do Período</div>
+          <div id="saldo-periodo" style="font-size: 18px; font-weight: 700;">R$ 0,00</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gráficos e Relatórios -->
+    <section style="margin-top: 24px;">
+      <h3 style="margin: 0 0 12px 0; font-size: 16px; color: var(--muted);">📈 Relatórios</h3>
+      
+      <!-- Despesas por Categoria -->
+      <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+        <h4 style="font-size: 14px; margin: 0 0 12px 0; color: var(--muted);">Despesas por Categoria (Este mês)</h4>
+        <div id="chart-categorias" style="min-height: 120px;">
+          <!-- Gráfico carregado dinamicamente -->
+        </div>
+      </div>
+      
+      <!-- Evolução Mensal -->
+      <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 16px;">
+        <h4 style="font-size: 14px; margin: 0 0 12px 0; color: var(--muted);">Evolução (Últimos 6 meses)</h4>
+        <div id="chart-evolucao" style="min-height: 150px;">
+          <!-- Gráfico carregado dinamicamente -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Metas Financeiras -->
+    <section id="metas-section" class="movimentos">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <h3 style="margin-top: 0;">🎯 Metas Ativas</h3>
+        <button id="btn-add-meta" class="button small" style="padding: 6px 12px; font-size: 12px;">
+          + Nova Meta
+        </button>
+      </div>
+      <div id="metas-lista" style="display: flex; flex-direction: column; gap: 12px;">
+        <!-- Metas carregadas dinamicamente -->
+      </div>
+    </section>
+
+    <!-- Menu de Navegação -->
+    <section style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+      <h3 style="margin: 0; font-size: 16px; color: var(--muted);">Menu</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <a href="contas.html" class="button small" style="text-align: center; text-decoration: none;">
+          💳 Contas
+        </a>
+        <a href="historico.html" class="button small outline" style="text-align: center; text-decoration: none;">
+          📊 Histórico
+        </a>
+        <a href="configuracoes.html" class="button small outline" style="text-align: center; text-decoration: none;">
+          ⚙️ Configurações
+        </a>
+        <a href="suporte.html" class="button small outline" style="text-align: center; text-decoration: none;">
+          💬 Suporte
+        </a>
       </div>
     </section>
   </main>
+
+  <!-- Modal de Meta -->
+  <div id="modal-meta" class="modal">
+    <div class="modal-content" style="max-width: 500px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="margin: 0; font-size: 20px;">Nova Meta Financeira</h2>
+        <button id="close-modal-meta" style="background: none; border: none; font-size: 24px; cursor: pointer; color: var(--muted);">&times;</button>
+      </div>
+      
+      <form id="form-meta">
+        <div style="margin-bottom: 16px;">
+          <label for="meta-titulo" style="display: block; margin-bottom: 6px; font-size: 14px;">Título</label>
+          <input type="text" id="meta-titulo" required 
+                 style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-size: 14px;"
+                 placeholder="Ex: Viagem de férias">
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label for="meta-descricao" style="display: block; margin-bottom: 6px; font-size: 14px;">Descrição (opcional)</label>
+          <textarea id="meta-descricao" rows="2"
+                    style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-size: 14px; resize: vertical;"
+                    placeholder="Descreva sua meta..."></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+          <div>
+            <label for="meta-valor" style="display: block; margin-bottom: 6px; font-size: 14px;">Valor Meta</label>
+            <input type="number" id="meta-valor" required step="0.01" min="0.01"
+                   style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-size: 14px;"
+                   placeholder="0.00">
+          </div>
+          <div>
+            <label for="meta-tipo" style="display: block; margin-bottom: 6px; font-size: 14px;">Tipo</label>
+            <select id="meta-tipo" required
+                    style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-size: 14px;">
+              <option value="economia">💰 Economia</option>
+              <option value="reducao">📉 Redução Despesa</option>
+              <option value="investimento">📈 Investimento</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label for="meta-data-fim" style="display: block; margin-bottom: 6px; font-size: 14px;">Data Limite</label>
+          <input type="date" id="meta-data-fim" required
+                 style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: #fff; font-size: 14px;">
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label for="meta-cor" style="display: block; margin-bottom: 6px; font-size: 14px;">Cor</label>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <label style="cursor: pointer;">
+              <input type="radio" name="meta-cor" value="#8fffa5" checked style="display: none;">
+              <span style="display: inline-block; width: 32px; height: 32px; border-radius: 50%; background: #8fffa5; border: 2px solid transparent;"></span>
+            </label>
+            <label style="cursor: pointer;">
+              <input type="radio" name="meta-cor" value="#a5c9ff" style="display: none;">
+              <span style="display: inline-block; width: 32px; height: 32px; border-radius: 50%; background: #a5c9ff; border: 2px solid transparent;"></span>
+            </label>
+            <label style="cursor: pointer;">
+              <input type="radio" name="meta-cor" value="#ffd98e" style="display: none;">
+              <span style="display: inline-block; width: 32px; height: 32px; border-radius: 50%; background: #ffd98e; border: 2px solid transparent;"></span>
+            </label>
+            <label style="cursor: pointer;">
+              <input type="radio" name="meta-cor" value="#ff9e9e" style="display: none;">
+              <span style="display: inline-block; width: 32px; height: 32px; border-radius: 50%; background: #ff9e9e; border: 2px solid transparent;"></span>
+            </label>
+            <label style="cursor: pointer;">
+              <input type="radio" name="meta-cor" value="#d4a5ff" style="display: none;">
+              <span style="display: inline-block; width: 32px; height: 32px; border-radius: 50%; background: #d4a5ff; border: 2px solid transparent;"></span>
+            </label>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="submit" class="button" style="flex: 1;">Criar Meta</button>
+          <button type="button" id="cancel-meta" class="button outline" style="flex: 1;">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/route-guard.js"></script>
+  <script src="js/accounts.js"></script>
+  <script src="js/transactions.js"></script>
+  <script src="js/categories.js"></script>
+  <script src="js/goals.js"></script>
+  <script>
+    // Protege a página - só permite acesso se autenticado
+    RouteGuard.protect();
+    
+    // Inicializa sistema de categorias
+    Categories.init();
+
+    // Carrega dados do usuário
+    const user = Auth.getCurrentUser();
+    
+    if (user) {
+      // Exibe nome do usuário
+      const welcomeMessage = document.getElementById('welcome-message');
+      const firstName = user.nome.split(' ')[0];
+      welcomeMessage.textContent = `Olá, ${firstName}!`;
+    }
+
+    // Botão de logout
+    const btnLogout = document.getElementById('btn-logout');
+    btnLogout.addEventListener('click', function() {
+      Utils.showConfirm(
+        'Deseja realmente sair da sua conta?',
+        'Sair',
+        'Cancelar'
+      ).then((confirmed) => {
+        if (confirmed) {
+          Auth.logout();
+        }
+      });
+    });
+
+    // Carrega e exibe dados de contas
+    function loadDashboardData() {
+      // Carrega contas do usuário
+      const accounts = Accounts.getByUser();
+      const stats = Accounts.getEstatisticas();
+      
+      // Atualiza saldo total
+      const saldoTotal = document.getElementById('saldo-total');
+      saldoTotal.textContent = Accounts.formatarSaldo(stats.saldoTotal);
+      saldoTotal.style.color = stats.saldoTotal >= 0 ? '#8fffa5' : '#ff9e9e';
+      
+      // Atualiza lista de contas
+      const contasLista = document.getElementById('contas-lista');
+      contasLista.innerHTML = '';
+      
+      if (accounts.length === 0) {
+        contasLista.innerHTML = '<li style="text-align: center; color: var(--muted); padding: 20px;">Nenhuma conta cadastrada.<br><a href="contas.html" style="color: var(--primary);">Adicione sua primeira conta</a></li>';
+      } else {
+        // Mostra até 3 contas
+        const contasParaMostrar = accounts.slice(0, 3);
+        contasParaMostrar.forEach(account => {
+          const li = document.createElement('li');
+          const saldoFormatado = Accounts.formatarSaldo(account.saldo);
+          const saldoClass = account.saldo >= 0 ? 'positivo' : 'negativo';
+          
+          li.innerHTML = `
+            <span>${Utils.sanitizeString(account.nome)}</span>
+            <span class="${saldoClass}">${saldoFormatado}</span>
+          `;
+          contasLista.appendChild(li);
+        });
+        
+        if (accounts.length > 3) {
+          const li = document.createElement('li');
+          li.style.textAlign = 'center';
+          li.style.color = 'var(--muted)';
+          li.style.fontSize = '13px';
+          li.innerHTML = `<a href="contas.html" style="color: var(--primary);">+ ${accounts.length - 3} conta(s)</a>`;
+          contasLista.appendChild(li);
+        }
+      }
+      
+      // Atualiza estatísticas
+      document.getElementById('total-contas').textContent = stats.totalContas;
+      document.getElementById('contas-positivas').textContent = stats.contaPositiva;
+      document.getElementById('contas-negativas').textContent = stats.contaNegativa;
+
+      // Carrega estatísticas de transações do mês atual
+      loadTransactionStats();
+    }
+
+    // Carrega estatísticas de transações
+    function loadTransactionStats() {
+      const hoje = new Date();
+      const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+      const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+
+      const filtros = {
+        dataInicio: primeiroDiaMes.toISOString().split('T')[0],
+        dataFim: ultimoDiaMes.toISOString().split('T')[0]
+      };
+
+      const stats = Transactions.getEstatisticas(filtros);
+
+      // Atualiza receitas
+      document.getElementById('receitas-mes').textContent = 
+        Transactions.formatarValor(stats.totalReceitas);
+      document.getElementById('qtd-receitas').textContent = 
+        `${stats.quantidadeReceitas} transação${stats.quantidadeReceitas !== 1 ? 'ões' : ''}`;
+
+      // Atualiza despesas
+      document.getElementById('despesas-mes').textContent = 
+        Transactions.formatarValor(stats.totalDespesas);
+      document.getElementById('qtd-despesas').textContent = 
+        `${stats.quantidadeDespesas} transação${stats.quantidadeDespesas !== 1 ? 'ões' : ''}`;
+
+      // Atualiza saldo do período
+      const saldoPeriodoEl = document.getElementById('saldo-periodo');
+      saldoPeriodoEl.textContent = Transactions.formatarValor(stats.saldo, true);
+      saldoPeriodoEl.style.color = stats.saldo >= 0 ? '#8fffa5' : '#ff9e9e';
+      
+      // Carrega gráficos
+      loadChartCategorias();
+      loadChartEvolucao();
+    }
+
+    // Carrega dados ao iniciar
+    loadDashboardData();
+
+    // Recarrega dados se a página voltar a ter foco (ex: depois de adicionar conta)
+    window.addEventListener('focus', loadDashboardData);
+
+    // ==================== GRÁFICOS ====================
+    
+    // Gráfico de despesas por categoria (barras horizontais)
+    function loadChartCategorias() {
+      const hoje = new Date();
+      const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+      const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+
+      const filtros = {
+        dataInicio: primeiroDiaMes.toISOString().split('T')[0],
+        dataFim: ultimoDiaMes.toISOString().split('T')[0],
+        tipo: 'despesa'
+      };
+
+      const porCategoria = Transactions.getPorCategoria(filtros);
+      const chartContainer = document.getElementById('chart-categorias');
+      
+      if (porCategoria.length === 0) {
+        chartContainer.innerHTML = '<div style="text-align: center; color: var(--muted); padding: 20px; font-size: 13px;">Nenhuma despesa registrada este mês</div>';
+        return;
+      }
+      
+      // Ordena por valor (maior primeiro) e pega top 5
+      const top5 = porCategoria
+        .sort((a, b) => b.total - a.total)
+        .slice(0, 5);
+      
+      const maxValor = Math.max(...top5.map(c => c.total));
+      
+      chartContainer.innerHTML = '';
+      
+      top5.forEach(cat => {
+        const categoria = Categories.getAll().find(c => c.id === cat.categoriaId) || { nome: 'Sem categoria', cor: '#888' };
+        const percentual = (cat.total / maxValor) * 100;
+        
+        const row = document.createElement('div');
+        row.style.cssText = 'margin-bottom: 12px;';
+        row.innerHTML = `
+          <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
+            <span style="color: ${categoria.cor};">${categoria.icone || '📁'} ${Utils.sanitizeString(categoria.nome)}</span>
+            <span style="font-weight: 600;">${Transactions.formatarValor(cat.total)}</span>
+          </div>
+          <div style="background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+            <div style="
+              background: ${categoria.cor};
+              height: 100%;
+              width: ${percentual}%;
+              transition: width 0.5s ease;
+            "></div>
+          </div>
+        `;
+        
+        chartContainer.appendChild(row);
+      });
+    }
+    
+    // Gráfico de evolução mensal (últimos 6 meses)
+    function loadChartEvolucao() {
+      const hoje = new Date();
+      const meses = [];
+      
+      // Gera últimos 6 meses
+      for (let i = 5; i >= 0; i--) {
+        const data = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
+        meses.push({
+          mes: data.getMonth(),
+          ano: data.getFullYear(),
+          nome: data.toLocaleDateString('pt-BR', { month: 'short' })
+        });
+      }
+      
+      // Calcula receitas e despesas por mês
+      const dados = meses.map(m => {
+        const primeiroDia = new Date(m.ano, m.mes, 1);
+        const ultimoDia = new Date(m.ano, m.mes + 1, 0);
+        
+        const stats = Transactions.getEstatisticas({
+          dataInicio: primeiroDia.toISOString().split('T')[0],
+          dataFim: ultimoDia.toISOString().split('T')[0]
+        });
+        
+        return {
+          nome: m.nome,
+          receitas: stats.totalReceitas,
+          despesas: stats.totalDespesas,
+          saldo: stats.saldo
+        };
+      });
+      
+      const maxValor = Math.max(
+        ...dados.map(d => Math.max(d.receitas, d.despesas))
+      );
+      
+      const chartContainer = document.getElementById('chart-evolucao');
+      chartContainer.innerHTML = '';
+      
+      if (maxValor === 0) {
+        chartContainer.innerHTML = '<div style="text-align: center; color: var(--muted); padding: 20px; font-size: 13px;">Nenhuma transação nos últimos 6 meses</div>';
+        return;
+      }
+      
+      // Container dos gráficos
+      const chartDiv = document.createElement('div');
+      chartDiv.style.cssText = 'display: flex; align-items: flex-end; justify-content: space-around; height: 120px; margin-bottom: 12px;';
+      
+      dados.forEach(d => {
+        const alturaReceita = (d.receitas / maxValor) * 100;
+        const alturaDespesa = (d.despesas / maxValor) * 100;
+        
+        const barGroup = document.createElement('div');
+        barGroup.style.cssText = 'display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1;';
+        
+        barGroup.innerHTML = `
+          <div style="display: flex; gap: 2px; align-items: flex-end; height: 100px;">
+            <div style="
+              background: linear-gradient(to top, #8fffa5, rgba(143,255,165,0.5));
+              width: 12px;
+              height: ${alturaReceita}%;
+              border-radius: 3px 3px 0 0;
+              transition: height 0.5s ease;
+            " title="Receitas: ${Transactions.formatarValor(d.receitas)}"></div>
+            <div style="
+              background: linear-gradient(to top, #ff9e9e, rgba(255,158,158,0.5));
+              width: 12px;
+              height: ${alturaDespesa}%;
+              border-radius: 3px 3px 0 0;
+              transition: height 0.5s ease;
+            " title="Despesas: ${Transactions.formatarValor(d.despesas)}"></div>
+          </div>
+          <div style="font-size: 11px; color: var(--muted); text-transform: capitalize;">
+            ${d.nome}
+          </div>
+        `;
+        
+        chartDiv.appendChild(barGroup);
+      });
+      
+      chartContainer.appendChild(chartDiv);
+      
+      // Legenda
+      const legenda = document.createElement('div');
+      legenda.style.cssText = 'display: flex; justify-content: center; gap: 16px; font-size: 11px;';
+      legenda.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 4px;">
+          <div style="width: 12px; height: 12px; background: #8fffa5; border-radius: 2px;"></div>
+          <span style="color: var(--muted);">Receitas</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 4px;">
+          <div style="width: 12px; height: 12px; background: #ff9e9e; border-radius: 2px;"></div>
+          <span style="color: var(--muted);">Despesas</span>
+        </div>
+      `;
+      
+      chartContainer.appendChild(legenda);
+    }
+
+    // ==================== METAS ====================
+    
+    // Carrega e exibe metas
+    function loadMetas() {
+      const metas = Goals.getByUser();
+      const metasAtivas = metas.filter(m => m.status === 'ativa');
+      
+      const metasSection = document.getElementById('metas-section');
+      const metasLista = document.getElementById('metas-lista');
+      
+      // Sempre mostra a seção
+      metasSection.style.display = 'block';
+      metasLista.innerHTML = '';
+      
+      if (metasAtivas.length === 0) {
+        metasLista.innerHTML = `
+          <div style="text-align: center; padding: 30px 20px; color: var(--muted); font-size: 14px;">
+            <div style="font-size: 48px; margin-bottom: 12px;">🎯</div>
+            <div>Você ainda não tem metas financeiras</div>
+            <div style="font-size: 13px; margin-top: 8px;">Clique em "+ Nova Meta" para começar</div>
+          </div>
+        `;
+        return;
+      }
+      
+      // Mostra até 3 metas ativas
+      metasAtivas.slice(0, 3).forEach(meta => {
+        const progresso = Goals.getProgresso(meta.id);
+        const diasRestantes = Goals.getDiasRestantes(meta.id);
+        
+        const metaCard = document.createElement('div');
+        metaCard.style.cssText = `
+          background: rgba(255,255,255,0.05);
+          border-radius: 8px;
+          padding: 12px;
+          border-left: 4px solid ${meta.cor};
+        `;
+        
+        metaCard.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+            <div>
+              <div style="font-size: 14px; font-weight: 600; margin-bottom: 2px;">${Utils.sanitizeString(meta.titulo)}</div>
+              <div style="font-size: 12px; color: var(--muted);">
+                ${diasRestantes > 0 ? `${diasRestantes} dias restantes` : 'Meta expirada'}
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <div style="font-size: 11px; color: var(--muted);">Meta</div>
+              <div style="font-size: 14px; font-weight: 600; color: ${meta.cor};">
+                ${Goals.formatarValor(meta.valorMeta)}
+              </div>
+            </div>
+          </div>
+          
+          <div style="margin-bottom: 6px;">
+            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+              <span style="color: var(--muted);">Progresso</span>
+              <span style="font-weight: 600; color: ${meta.cor};">${progresso}%</span>
+            </div>
+            <div style="background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden;">
+              <div style="
+                background: ${meta.cor};
+                height: 100%;
+                width: ${Math.min(progresso, 100)}%;
+                transition: width 0.3s ease;
+              "></div>
+            </div>
+          </div>
+          
+          <div style="font-size: 12px; color: var(--muted);">
+            ${Goals.formatarValor(meta.valorAtual)} de ${Goals.formatarValor(meta.valorMeta)}
+          </div>
+        `;
+        
+        metasLista.appendChild(metaCard);
+        
+        // Celebração se meta concluída
+        if (progresso >= 100 && meta.status === 'ativa') {
+          setTimeout(() => {
+            Utils.showToast(`🎉 Parabéns! Meta "${meta.titulo}" concluída!`, 'success');
+            Goals.atualizar(meta.id, { status: 'concluida' });
+            loadMetas();
+          }, 500);
+        }
+      });
+    }
+    
+    // Modal de meta
+    const modalMeta = document.getElementById('modal-meta');
+    const btnAddMeta = document.getElementById('btn-add-meta');
+    const closeModalMeta = document.getElementById('close-modal-meta');
+    const cancelMeta = document.getElementById('cancel-meta');
+    const formMeta = document.getElementById('form-meta');
+    
+    btnAddMeta.addEventListener('click', () => {
+      modalMeta.style.display = 'flex';
+      formMeta.reset();
+      
+      // Define data mínima como hoje
+      const hoje = new Date().toISOString().split('T')[0];
+      document.getElementById('meta-data-fim').min = hoje;
+    });
+    
+    closeModalMeta.addEventListener('click', () => {
+      modalMeta.style.display = 'none';
+    });
+    
+    cancelMeta.addEventListener('click', () => {
+      modalMeta.style.display = 'none';
+    });
+    
+    // Efeito visual nos radio buttons de cor
+    document.querySelectorAll('input[name="meta-cor"]').forEach(radio => {
+      radio.addEventListener('change', function() {
+        document.querySelectorAll('input[name="meta-cor"]').forEach(r => {
+          const span = r.nextElementSibling;
+          span.style.border = r.checked ? '2px solid #fff' : '2px solid transparent';
+        });
+      });
+    });
+    
+    // Marca o primeiro como selecionado visualmente
+    document.querySelector('input[name="meta-cor"]:checked').nextElementSibling.style.border = '2px solid #fff';
+    
+    // Submit do formulário
+    formMeta.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const titulo = document.getElementById('meta-titulo').value.trim();
+      const descricao = document.getElementById('meta-descricao').value.trim();
+      const valorMeta = parseFloat(document.getElementById('meta-valor').value);
+      const tipo = document.getElementById('meta-tipo').value;
+      const dataFim = document.getElementById('meta-data-fim').value;
+      const cor = document.querySelector('input[name="meta-cor"]:checked').value;
+      
+      try {
+        Goals.criar({
+          titulo,
+          descricao,
+          valorMeta,
+          tipo,
+          dataFim,
+          cor
+        });
+        
+        Utils.showToast('Meta criada com sucesso!', 'success');
+        modalMeta.style.display = 'none';
+        loadMetas();
+        
+      } catch (error) {
+        Utils.showToast(error.message, 'error');
+      }
+    });
+    
+    // Carrega metas ao iniciar
+    loadMetas();
+  </script>
 </body>
 </html>

@@ -33,51 +33,7 @@
       </section>
 
       <section class="accounts-list" id="accountsList" aria-label="Lista de contas">
-        <article class="account-card" data-id="1" role="group" aria-label="Nubank - Conta corrente - R$4.350,00">
-          <div class="bank-avatar" style="background: linear-gradient(135deg,#7b2ff7,#a445f0)">N</div>
-          <div class="account-info">
-            <div class="bank-name">Nubank</div>
-            <div class="account-meta">Conta corrente • 01/23</div>
-          </div>
-          <div class="account-value positive">R$ 4.350,00</div>
-
-          <div class="card-actions" aria-hidden="true">
-            <button class="card-action-btn" title="Editar conta" data-action="edit" aria-label="Editar Nubank">
-              ✎
-            </button>
-            <button class="card-action-btn" title="Remover conta" data-action="delete" aria-label="Remover Nubank">
-              🗑
-            </button>
-          </div>
-        </article>
-
-        <article class="account-card" data-id="2" role="group" aria-label="Banco do Brasil - Poupança - R$820,50">
-          <div class="bank-avatar" style="background: linear-gradient(135deg,#FFD24C,#FFB84D); color:#163155">BB</div>
-          <div class="account-info">
-            <div class="bank-name">Banco do Brasil</div>
-            <div class="account-meta">Poupança • 03/21</div>
-          </div>
-          <div class="account-value negative">R$ 820,50</div>
-
-          <div class="card-actions" aria-hidden="true">
-            <button class="card-action-btn" title="Editar conta" data-action="edit" aria-label="Editar Banco do Brasil">✎</button>
-            <button class="card-action-btn" title="Remover conta" data-action="delete" aria-label="Remover Banco do Brasil">🗑</button>
-          </div>
-        </article>
-
-        <article class="account-card" data-id="3" role="group" aria-label="Inter - Conta digital - R$1.200,00">
-          <div class="bank-avatar" style="background: linear-gradient(135deg,#6b3e00,#c0782a)">I</div>
-          <div class="account-info">
-            <div class="bank-name">Inter</div>
-            <div class="account-meta">Conta digital • 07/19</div>
-          </div>
-          <div class="account-value positive">R$ 1.200,00</div>
-
-          <div class="card-actions" aria-hidden="true">
-            <button class="card-action-btn" title="Editar conta" data-action="edit" aria-label="Editar Inter">✎</button>
-            <button class="card-action-btn" title="Remover conta" data-action="delete" aria-label="Remover Inter">🗑</button>
-          </div>
-        </article>
+        <!-- Contas serão carregadas dinamicamente via JavaScript -->
       </section>
 
       <div class="actions" aria-hidden="false">
@@ -118,7 +74,16 @@
       </div>
     </div>
   </div>
+
+  <!-- Sistema de Autenticação e Contas -->
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/route-guard.js"></script>
+  <script src="js/accounts.js"></script>
+  
   <script>
+    // Protege a página
+    RouteGuard.protect();
 
     (function(){
       const editToggle = document.getElementById('editToggle');
@@ -129,9 +94,56 @@
       const accountForm = document.getElementById('accountForm');
 
       let editMode = false;
+      
+      // Carrega contas do usuário
+      function loadAccounts() {
+        const accounts = Accounts.getByUser();
+        accountsList.innerHTML = '';
+        
+        if (accounts.length === 0) {
+          accountsList.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.6);padding:40px 20px;">Nenhuma conta cadastrada ainda.<br>Clique em "Adicionar nova conta" para começar.</p>';
+          return;
+        }
+        
+        accounts.forEach(account => {
+          const card = createAccountCard(account);
+          accountsList.appendChild(card);
+        });
+      }
+      
+      // Cria card de conta
+      function createAccountCard(account) {
+        const wrapper = document.createElement('article');
+        wrapper.className = 'account-card';
+        wrapper.setAttribute('data-id', account.id);
+        wrapper.setAttribute('data-edit', editMode ? 'true' : 'false');
+        wrapper.setAttribute('role','group');
+        
+        const saldoFormatado = Accounts.formatarSaldo(account.saldo);
+        const iniciais = Accounts.gerarIniciais(account.nome);
+        const saldoClass = account.saldo >= 0 ? 'positive' : 'negative';
+        
+        wrapper.innerHTML = `
+          <div class="bank-avatar" style="background:${account.cor}">${iniciais}</div>
+          <div class="account-info">
+            <div class="bank-name">${Utils.sanitizeString(account.nome)}</div>
+            <div class="account-meta">${Utils.sanitizeString(account.tipo)}${account.data ? ' • ' + account.data : ''}</div>
+          </div>
+          <div class="account-value ${saldoClass}">${saldoFormatado}</div>
+          <div class="card-actions" aria-hidden="true">
+            <button class="card-action-btn" title="Editar conta" data-action="edit" aria-label="Editar ${Utils.sanitizeString(account.nome)}">✎</button>
+            <button class="card-action-btn" title="Remover conta" data-action="delete" aria-label="Remover ${Utils.sanitizeString(account.nome)}">🗑</button>
+          </div>
+        `;
+        
+        return wrapper;
+      }
+
+      // Toggle para modo de edição
       editToggle.addEventListener('click', () => {
         editMode = !editMode;
         editToggle.setAttribute('aria-pressed', String(editMode));
+        editToggle.textContent = editMode ? 'Concluir' : 'Editar';
         document.querySelectorAll('.account-card').forEach(card => {
           card.setAttribute('data-edit', editMode ? 'true' : 'false');
         });
@@ -142,14 +154,27 @@
         if (!btn) return;
         const action = btn.dataset.action;
         const card = btn.closest('.account-card');
+        const accountId = card.dataset.id;
         const bankName = card.querySelector('.bank-name').textContent;
 
         if (action === 'delete') {
-          const confirmed = confirm('Remover ' + bankName + '?');
-          if (!confirmed) return;
-          card.remove();
+          Utils.showConfirm(
+            `Tem certeza que deseja remover a conta "${bankName}"? Esta ação não pode ser desfeita.`,
+            'Remover',
+            'Cancelar'
+          ).then((confirmed) => {
+            if (!confirmed) return;
+            
+            const result = Accounts.excluir(accountId);
+            if (result.success) {
+              Utils.showToast(result.message, 'success');
+              loadAccounts();
+            } else {
+              Utils.showToast(result.message, 'error');
+            }
+          });
         } else if (action === 'edit') {
-          openModalForEdit(card);
+          openModalForEdit(accountId);
         }
       });
 
@@ -178,42 +203,42 @@
         let accountValueRaw = data.get('accountValue').replace(/[^\d,.\-]/g, '');
         accountValueRaw = accountValueRaw.replace(',', '.');
         let value = parseFloat(accountValueRaw) || 0;
-        const formatted = formatCurrency(value);
+        
         const editingId = modalBackdrop.dataset.editingId;
+        
         if (editingId) {
-          const card = document.querySelector('.account-card[data-id="'+editingId+'"]');
-          if (card) {
-            card.querySelector('.bank-name').textContent = bankName;
-            card.querySelector('.account-meta').textContent = accountType + ' • ' + accountDate;
-            const valueEl = card.querySelector('.account-value');
-            valueEl.textContent = formatted;
-            valueEl.classList.toggle('positive', value >= 0);
-            valueEl.classList.toggle('negative', value < 0);
+          // Editar conta existente
+          const result = Accounts.atualizar(editingId, {
+            nome: bankName,
+            tipo: accountType,
+            data: accountDate,
+            saldo: value
+          });
+          
+          if (result.success) {
+            Utils.showToast(result.message, 'success');
+            loadAccounts();
+            closeModal();
+          } else {
+            Utils.showToast(result.message, 'error');
           }
         } else {
-          const newId = String(Date.now());
-          const avatarColor = pickGradientFor(bankName);
-          const wrapper = document.createElement('article');
-          wrapper.className = 'account-card';
-          wrapper.setAttribute('data-id', newId);
-          wrapper.setAttribute('role','group');
-          wrapper.setAttribute('aria-label', bankName + ' - ' + accountType + ' - ' + formatted);
-          wrapper.innerHTML = `
-            <div class="bank-avatar" style="background:${avatarColor}">${initials(bankName)}</div>
-            <div class="account-info">
-              <div class="bank-name">${escapeHtml(bankName)}</div>
-              <div class="account-meta">${escapeHtml(accountType)} • ${escapeHtml(accountDate)}</div>
-            </div>
-            <div class="account-value ${value >= 0 ? 'positive' : 'negative'}">${formatted}</div>
-            <div class="card-actions" aria-hidden="true">
-              <button class="card-action-btn" title="Editar conta" data-action="edit" aria-label="Editar ${escapeHtml(bankName)}">✎</button>
-              <button class="card-action-btn" title="Remover conta" data-action="delete" aria-label="Remover ${escapeHtml(bankName)}">🗑</button>
-            </div>
-          `;
-          accountsList.appendChild(wrapper);
-          wrapper.setAttribute('data-edit', editMode ? 'true' : 'false');
+          // Criar nova conta
+          const result = Accounts.criar({
+            nome: bankName,
+            tipo: accountType,
+            data: accountDate,
+            saldo: value
+          });
+          
+          if (result.success) {
+            Utils.showToast(result.message, 'success');
+            loadAccounts();
+            closeModal();
+          } else {
+            Utils.showToast(result.message, 'error');
+          }
         }
-        closeModal();
       });
 
       function openModal(){
@@ -228,18 +253,17 @@
         modalBackdrop.setAttribute('aria-hidden','true');
         delete modalBackdrop.dataset.editingId;
       }
-      function openModalForEdit(card){
-        const id = card.dataset.id;
-        const name = card.querySelector('.bank-name').textContent;
-        const meta = card.querySelector('.account-meta').textContent.split('•').map(s=>s.trim());
-        const value = card.querySelector('.account-value').textContent.replace(/[^\d,.\-R$ ]/g,'').trim();
+      function openModalForEdit(accountId){
+        const account = Accounts.getById(accountId);
+        if (!account) return;
+        
         openModal();
-        modalBackdrop.dataset.editingId = id;
+        modalBackdrop.dataset.editingId = accountId;
         document.getElementById('modalTitle').textContent = 'Editar conta';
-        document.getElementById('bankName').value = name;
-        document.getElementById('accountType').value = meta[0] || '';
-        document.getElementById('accountDate').value = meta[1] || '';
-        document.getElementById('accountValue').value = value.replace('R$','').replace(/\./g,'').replace(',','.');
+        document.getElementById('bankName').value = account.nome;
+        document.getElementById('accountType').value = account.tipo;
+        document.getElementById('accountDate').value = account.data || '';
+        document.getElementById('accountValue').value = account.saldo.toFixed(2).replace('.', ',');
       }
 
       function formatCurrency(num){
@@ -280,9 +304,8 @@
         }
       });
 
-      document.querySelectorAll('.account-card').forEach(card => {
-        card.setAttribute('data-edit','false');
-      });
+      // Carrega contas ao iniciar
+      loadAccounts();
 
     })();
   </script>

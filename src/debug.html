@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Debug</title>
+</head>
+<body>
+    <h1>Teste de Carregamento de Scripts</h1>
+    <div id="status">Carregando...</div>
+    
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/route-guard.js"></script>
+    
+    <script>
+        const statusDiv = document.getElementById('status');
+        let messages = [];
+        
+        // Verifica se os objetos foram carregados
+        if (typeof Utils !== 'undefined') {
+            messages.push('✅ Utils carregado');
+        } else {
+            messages.push('❌ Utils NÃO carregado');
+        }
+        
+        if (typeof Auth !== 'undefined') {
+            messages.push('✅ Auth carregado');
+        } else {
+            messages.push('❌ Auth NÃO carregado');
+        }
+        
+        if (typeof RouteGuard !== 'undefined') {
+            messages.push('✅ RouteGuard carregado');
+        } else {
+            messages.push('❌ RouteGuard NÃO carregado');
+        }
+        
+        statusDiv.innerHTML = messages.join('<br>');
+        
+        // Testa uma função básica
+        try {
+            const testEmail = Utils.validateEmail('teste@email.com');
+            messages.push('✅ Utils.validateEmail funciona: ' + testEmail);
+        } catch(e) {
+            messages.push('❌ Erro ao chamar Utils.validateEmail: ' + e.message);
+        }
+        
+        statusDiv.innerHTML = messages.join('<br>');
+        
+        console.log('=== DEBUG ===');
+        console.log('Utils:', typeof Utils);
+        console.log('Auth:', typeof Auth);
+        console.log('RouteGuard:', typeof RouteGuard);
+    </script>
+</body>
+</html>

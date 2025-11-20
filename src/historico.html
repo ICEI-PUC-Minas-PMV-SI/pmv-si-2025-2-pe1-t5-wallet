@@ -5,6 +5,84 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Histórico — GoalWallet</title>
   <link rel="stylesheet" href="css/historico.css">
+  <style>
+    /* Modal de Categorias - Estilos específicos */
+    #modal-categories {
+      z-index: 9999;
+      padding: 20px;
+    }
+    
+    #modal-categories .sheet {
+      background: linear-gradient(180deg, #123a82, #0f3a7a) !important;
+      border: 1px solid #2a59b3 !important;
+      color: #fff !important;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5) !important;
+      max-width: 600px !important;
+      width: 100% !important;
+    }
+    
+    #modal-categories h3,
+    #modal-categories h4 {
+      color: #fff !important;
+    }
+    
+    #modal-categories .field label {
+      color: #eaf1ff !important;
+      font-weight: 500;
+    }
+    
+    #modal-categories .input {
+      background: rgba(255,255,255,0.08) !important;
+      border: 1px solid rgba(255,255,255,0.15) !important;
+      color: #fff !important;
+      font-size: 14px;
+    }
+    
+    #modal-categories .input::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+    
+    #modal-categories .input:focus {
+      background: rgba(255,255,255,0.12) !important;
+      border-color: #58a6ff !important;
+      outline: none;
+    }
+    
+    /* Botões de tab */
+    #tab-receitas,
+    #tab-despesas {
+      color: #fff !important;
+      font-weight: 600 !important;
+    }
+    
+    #tab-receitas.btn:not(.outline) {
+      background: #58a6ff !important;
+      color: #08224f !important;
+    }
+    
+    #tab-despesas.btn:not(.outline) {
+      background: #58a6ff !important;
+      color: #08224f !important;
+    }
+    
+    /* Botão Adicionar */
+    #form-new-category button[type="submit"] {
+      background: #58a6ff !important;
+      color: #08224f !important;
+      font-weight: 600 !important;
+    }
+    
+    /* Botão Fechar */
+    #close-categories {
+      color: #fff !important;
+      border-color: rgba(255,255,255,0.3) !important;
+    }
+    
+    #close-categories:hover {
+      background: rgba(255,255,255,0.1) !important;
+      border-color: rgba(255,255,255,0.5) !important;
+    }
+  </style>
 </head>
 <body>
   <main class="app" role="main" aria-labelledby="main-title">
@@ -29,6 +107,42 @@
         </button>
       </div>
     </header>
+
+    <!-- Filtros -->
+    <section style="margin-bottom: 20px;">
+      <button id="toggle-filters" class="btn outline small" style="width: 100%;">
+        🔍 Filtros Avançados
+      </button>
+      <div id="filters-panel" style="display: none; margin-top: 12px; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 12px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
+          <div class="field">
+            <label style="font-size: 12px; color: rgba(255,255,255,0.8);">Data Início</label>
+            <input type="date" id="filter-date-start" class="input" style="font-size: 13px;" />
+          </div>
+          <div class="field">
+            <label style="font-size: 12px; color: rgba(255,255,255,0.8);">Data Fim</label>
+            <input type="date" id="filter-date-end" class="input" style="font-size: 13px;" />
+          </div>
+          <div class="field">
+            <label style="font-size: 12px; color: rgba(255,255,255,0.8);">Categoria</label>
+            <select id="filter-category" class="input" style="font-size: 13px;">
+              <option value="">Todas</option>
+            </select>
+          </div>
+          <div class="field">
+            <label style="font-size: 12px; color: rgba(255,255,255,0.8);">Conta</label>
+            <select id="filter-account" class="input" style="font-size: 13px;">
+              <option value="">Todas</option>
+            </select>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 12px; justify-content: flex-end;">
+          <button id="btn-clear-filters" class="btn small outline">Limpar</button>
+          <button id="btn-apply-filters" class="btn small">Aplicar</button>
+          <button id="btn-export" class="btn small" style="background: #8fffa5; color: #000;">📥 Exportar</button>
+        </div>
+      </div>
+    </section>
 
     <div class="grid-2" role="group" aria-label="Listas de transações">
       <section aria-labelledby="pendentes">
@@ -90,9 +204,14 @@
           <div class="field">
             <label for="t-account">Conta</label>
             <select id="t-account" name="account">
-              <option value="nubank">Nubank - Conta</option>
-              <option value="inter">Inter - Conta</option>
-              <option value="caixa">Caixa - Conta</option>
+              <option value="">Selecione uma conta</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="t-category">Categoria</label>
+            <select id="t-category" name="category">
+              <option value="">Selecione uma categoria</option>
             </select>
           </div>
 
@@ -105,461 +224,749 @@
             </div>
           </div>
 
-          <div class="field">
-            <label for="t-status">Status</label>
-            <select id="t-status" name="status">
-              <option value="pending">Pendente</option>
-              <option value="paid">Realizada</option>
-            </select>
-          </div>
-
           <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
             <button class="btn" id="cancel" type="button">Cancelar</button>
             <button class="btn green" id="save" type="submit">Salvar</button>
           </div>
 
         </form>
+        
+        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1);">
+          <button id="btn-manage-categories" class="btn" type="button" style="width: 100%; font-size: 13px;">
+            ⚙️ Gerenciar Categorias
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de Categorias -->
+    <div class="modal" id="modal-categories" aria-hidden="true" style="display: none;">
+      <div class="sheet" role="dialog" aria-modal="true" style="max-width: 550px; padding: 24px; background: linear-gradient(180deg, var(--card), var(--card-2)); border: 1px solid var(--border);">
+        <h3 style="margin-top: 0; font-size: 20px; color: #fff; font-weight: 600;">⚙️ Gerenciar Categorias</h3>
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+          <button id="tab-receitas" class="btn small" style="flex: 1; font-size: 14px; padding: 10px;">💰 Receitas</button>
+          <button id="tab-despesas" class="btn small outline" style="flex: 1; font-size: 14px; padding: 10px;">💸 Despesas</button>
+        </div>
+
+        <div id="categories-list" style="max-height: 320px; overflow-y: auto; margin-bottom: 20px; padding: 8px; background: rgba(0,0,0,0.15); border-radius: 8px;">
+          <!-- Categorias serão inseridas aqui -->
+        </div>
+
+        <div style="border-top: 2px solid rgba(255,255,255,0.15); padding-top: 16px; margin-top: 16px;">
+          <h4 style="font-size: 15px; margin: 0 0 12px 0; color: rgba(255,255,255,0.9); font-weight: 600;">➕ Nova Categoria</h4>
+          <form id="form-new-category" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: end;">
+            <div class="field" style="flex: 1; min-width: 150px; margin: 0;">
+              <label style="display: block; font-size: 12px; margin-bottom: 4px; color: rgba(255,255,255,0.8);">Nome</label>
+              <input id="new-cat-name" type="text" placeholder="Ex: Alimentação" class="input" style="width: 100%; font-size: 14px;" />
+            </div>
+            <div class="field" style="margin: 0;">
+              <label style="display: block; font-size: 12px; margin-bottom: 4px; color: rgba(255,255,255,0.8);">Ícone</label>
+              <input id="new-cat-icon" type="text" placeholder="🎯" maxlength="2" class="input" style="width: 70px; text-align: center; font-size: 16px;" />
+            </div>
+            <div class="field" style="margin: 0;">
+              <label style="display: block; font-size: 12px; margin-bottom: 4px; color: rgba(255,255,255,0.8);">Cor</label>
+              <input id="new-cat-color" type="color" value="#58a6ff" class="input" style="width: 70px; padding: 6px; height: 42px;" />
+            </div>
+            <button type="submit" class="btn small" style="font-size: 14px; padding: 10px 16px;">Adicionar</button>
+          </form>
+        </div>
+
+        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end;">
+          <button id="close-categories" class="btn outline" style="font-size: 14px; padding: 10px 20px;">Fechar</button>
+        </div>
       </div>
     </div>
   </main>
 
   <div id="toast" role="status" aria-live="polite"></div>
 
-  <template id="tx-card-tpl">
-    <div class="card" role="listitem" data-id="">
-      <div class="tx-left">
-        <div class="small tx-title"></div>
-        <div class="subtle tx-sub"></div>
-      </div>
-      <div class="tx-right">
-        <div class="amount tx-amt"></div>
-        <div class="status-pill tx-status"></div>
-        <div class="tx-actions"></div>
-      </div>
-    </div>
-  </template>
+  <!-- Sistema -->
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/route-guard.js"></script>
+  <script src="js/accounts.js"></script>
+  <script src="js/categories.js"></script>
+  <script src="js/transactions.js"></script>
+  <script>
+    // Protege a página
+    RouteGuard.protect();
+    // Protege a página
+    RouteGuard.protect();
 
-<script>
-/***********************
- * Config & Storage
- ***********************/
-const STORAGE_KEY = 'goalwallet_transactions_v1';
-let transactions = [
-  { id: '1', title: 'Assinatura Netflix', cents: 2990, date: '2025-10-10', recurring:true, type:'expense', status:'paid', account:'nubank' },
-  { id: '2', title: 'Aluguel', cents: 120000, date: '2025-11-05', recurring:true, type:'expense', status:'pending', account:'caixa' },
-  { id: '3', title: 'Plano Saúde', cents: 25000, date: '2025-10-20', recurring:true, type:'expense', status:'pending', account:'inter' },
-  { id: '4', title: 'Conta de luz', cents: 32000, date: '2025-10-08', recurring:true, type:'expense', status:'pending', account:'nubank' },
-];
+    // === ELEMENTOS DOM ===
+    const pendentesList = document.getElementById('pendentes-list');
+    const historicoList = document.getElementById('historico-list');
+    const toggleEdit = document.getElementById('toggle-edit');
+    const addIncomeBtn = document.getElementById('add-income');
+    const addExpenseBtn = document.getElementById('add-expense');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const txForm = document.getElementById('tx-form');
+    const cancelBtn = document.getElementById('cancel');
+    const fieldType = document.getElementById('field-type');
+    const accountSelect = document.getElementById('t-account');
+    const categorySelect = document.getElementById('t-category');
 
-function loadFromStorage(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw){
-      const parsed = JSON.parse(raw);
-      if(Array.isArray(parsed)) transactions = parsed;
-    }
-  }catch(e){}
-}
+    // Modal de categorias
+    const modalCategories = document.getElementById('modal-categories');
+    const btnManageCategories = document.getElementById('btn-manage-categories');
+    const closeCategoriesBtn = document.getElementById('close-categories');
+    const tabReceitas = document.getElementById('tab-receitas');
+    const tabDespesas = document.getElementById('tab-despesas');
+    const categoriesList = document.getElementById('categories-list');
+    const formNewCategory = document.getElementById('form-new-category');
 
-let saveTimer = null;
-function saveToStorage(){
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(()=>{
-    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions)); }
-    catch(e){}
-  }, 220);
-}
+    let isEditMode = false;
+    let editingId = null;
+    let currentType = 'despesa';
+    let categoryTabType = 'receita';
+    let activeFilters = {};
 
-/***********************
- * Helpers
- ***********************/
-const formatBRL = (cents) =>
-  new Intl.NumberFormat('pt-BR', { style:'currency', currency:'BRL' })
-  .format((Number(cents)||0)/100);
+    // === INICIALIZAR ===
+    Categories.init();
 
-function parseLocaleMoney(str){
-  if(!str) return NaN;
-  let cleaned = String(str).replace(/[^\d\.,-]/g,'');
-  if(cleaned.includes(',') && cleaned.includes('.')){
-    cleaned = cleaned.replace(/\./g,'').replace(',', '.');
-  } else if(cleaned.includes(',')){
-    cleaned = cleaned.replace(',', '.');
-  }
-  const f = parseFloat(cleaned);
-  return isNaN(f) ? NaN : Math.round(f*100);
-}
+    // === ELEMENTOS DE FILTRO ===
+    const toggleFiltersBtn = document.getElementById('toggle-filters');
+    const filtersPanel = document.getElementById('filters-panel');
+    const filterDateStart = document.getElementById('filter-date-start');
+    const filterDateEnd = document.getElementById('filter-date-end');
+    const filterCategory = document.getElementById('filter-category');
+    const filterAccount = document.getElementById('filter-account');
+    const btnApplyFilters = document.getElementById('btn-apply-filters');
+    const btnClearFilters = document.getElementById('btn-clear-filters');
+    const btnExport = document.getElementById('btn-export');
 
-/* NOVA FUNÇÃO — conversão correta para edição */
-function centsToInput(cents){
-  return (Number(cents) / 100).toFixed(2).replace('.', ',');
-}
-
-/****************************************************
- * NOVAS FUNÇÕES: SALDO CONSOLIDADO & PREVISTO
- ****************************************************/
-function calcSaldoConsolidado(){
-  let receitas = 0;
-  let despesas = 0;
-
-  transactions.forEach(t => {
-    if(t.status === "paid"){
-      if(t.type === "income") receitas += t.cents;
-      else despesas += t.cents;
-    }
-  });
-
-  return receitas - despesas;
-}
-
-function calcSaldoPrevisto(){
-  let receitas = 0;
-  let despesas = 0;
-
-  transactions.forEach(t => {
-    if(t.type === "income") receitas += t.cents;
-    else despesas += t.cents;
-  });
-
-  return receitas - despesas;
-}
-
-/****************************************************
- * Toast
- ****************************************************/
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.style.display = 'block';
-  t.style.opacity = '1';
-  clearTimeout(window._toastTimeout);
-  window._toastTimeout = setTimeout(()=>{
-    t.style.opacity = '0';
-    setTimeout(()=> t.style.display = 'none', 250);
-  }, 2000);
-}
-
-/****************************************************
- * Template render
- ****************************************************/
-const pendentesList = document.getElementById('pendentes-list');
-const historicoList = document.getElementById('historico-list');
-const tpl = document.getElementById('tx-card-tpl');
-
-function createCard(tx){
-  const node = tpl.content.firstElementChild.cloneNode(true);
-  node.dataset.id = tx.id;
-  node.querySelector('.tx-title').textContent = tx.title;
-
-  let dateLabel = '—';
-  if(tx.date){
-    const d = new Date(tx.date);
-    const opts = { day:'2-digit', month:'short' };
-    dateLabel = d.toLocaleDateString('pt-BR', opts);
-  }
-  node.querySelector('.tx-sub').textContent = 'Venc. ' + dateLabel;
-
-  const amt = node.querySelector('.tx-amt');
-  amt.className = 'amount tx-amt ' + (tx.type === 'expense' ? 'expense' : 'income');
-  amt.textContent = formatBRL(tx.cents);
-
-  const pill = node.querySelector('.tx-status');
-  pill.className = 'status-pill ' + (tx.status === 'paid' ? 'status-paid' : 'status-pending');
-  pill.textContent = tx.status === 'paid' ? 'Pago' : 'Pendente';
-
-  const actions = node.querySelector('.tx-actions');
-  actions.innerHTML = '';
-
-  if(tx.status === 'pending'){
-    const confirmBtn = document.createElement('button');
-    confirmBtn.type = 'button';
-    confirmBtn.className = 'confirm-btn';
-    confirmBtn.textContent = 'Confirmar pagamento';
-    confirmBtn.dataset.action = 'confirm';
-    actions.appendChild(confirmBtn);
-  }
-
-  const editBtn = document.createElement('button');
-  editBtn.className = 'icon-btn';
-  editBtn.type = 'button';
-  editBtn.innerHTML = '✎';
-  editBtn.title = 'Editar';
-  editBtn.dataset.action = 'edit';
-  actions.appendChild(editBtn);
-
-  const delBtn = document.createElement('button');
-  delBtn.className = 'icon-btn';
-  delBtn.type = 'button';
-  delBtn.innerHTML = '🗑';
-  delBtn.title = 'Excluir';
-  delBtn.dataset.action = 'delete';
-  actions.appendChild(delBtn);
-
-  return node;
-}
-
-let isEditMode = false;
-
-function renderList({container, filterFn}){
-  container.innerHTML = '';
-  const frag = document.createDocumentFragment();
-  const filtered = transactions.filter(filterFn);
-
-  if(filtered.length === 0){
-    const empty = document.createElement('div');
-    empty.className = 'muted';
-    empty.textContent = container.id === 'pendentes-list'
-      ? 'Nenhuma transação pendente.'
-      : 'Nenhuma transação no histórico.';
-    frag.appendChild(empty);
-  } else {
-    filtered.forEach(tx => {
-      const card = createCard(tx);
-      if(!isEditMode){
-        card.querySelectorAll('[data-action="edit"], [data-action="delete"]')
-            .forEach(btn => btn.style.display = 'none');
-      }
-      frag.appendChild(card);
+    // === TOGGLE FILTROS ===
+    toggleFiltersBtn.addEventListener('click', () => {
+      const isVisible = filtersPanel.style.display !== 'none';
+      filtersPanel.style.display = isVisible ? 'none' : 'block';
+      toggleFiltersBtn.textContent = isVisible ? '🔍 Filtros Avançados' : '✕ Fechar Filtros';
     });
-  }
 
-  container.appendChild(frag);
-}
+    // === CARREGAR CONTAS NO SELECT ===
+    function loadAccountsSelect() {
+      const accounts = Accounts.getByUser();
+      accountSelect.innerHTML = '';
 
-function updateTotals(){
-  document.getElementById('saldo-consolidado').textContent =
-    "Saldo consolidado: " + formatBRL(calcSaldoConsolidado());
+      if (accounts.length === 0) {
+        accountSelect.innerHTML = '<option value="">Nenhuma conta cadastrada</option>';
+        return;
+      }
 
-  document.getElementById('saldo-previsto').textContent =
-    "Saldo previsto: " + formatBRL(calcSaldoPrevisto());
-}
+      accounts.forEach(acc => {
+        const option = document.createElement('option');
+        option.value = acc.id;
+        option.textContent = `${acc.nome} - ${acc.tipo}`;
+        accountSelect.appendChild(option);
+      });
+    }
 
-function reRenderAll(){
-  renderList({ container: pendentesList, filterFn: t => t.status === 'pending' });
-  renderList({ container: historicoList, filterFn: t => t.status === 'paid' });
-  updateTotals();
-  saveToStorage();
-}
+    // === CARREGAR CATEGORIAS NO SELECT ===
+    function loadCategoriesSelect(tipo) {
+      const categories = Categories.getByType(tipo);
+      categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
 
-/****************************************************
- * Actions
- ****************************************************/
-function confirmPayment(id){
-  const tx = transactions.find(t => t.id === id);
-  if(!tx) return;
-  tx.status = 'paid';
-  showToast('Pagamento confirmado.');
-  reRenderAll();
-}
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.nome;
+        option.textContent = `${cat.icone} ${cat.nome}`;
+        option.dataset.color = cat.cor;
+        categorySelect.appendChild(option);
+      });
+    }
 
-function deleteTx(id){
-  const tx = transactions.find(t => t.id === id);
-  if(!tx) return;
-  if(!confirm('Deseja excluir esta transação?')) return;
-  transactions = transactions.filter(t => t.id !== id);
-  showToast('Transação excluída.');
-  reRenderAll();
-}
+    // === CARREGAR FILTROS ===
+    function loadFilterSelects() {
+      // Carregar contas
+      const accounts = Accounts.getByUser();
+      filterAccount.innerHTML = '<option value="">Todas</option>';
+      accounts.forEach(acc => {
+        const option = document.createElement('option');
+        option.value = acc.id;
+        option.textContent = `${acc.nome} - ${acc.tipo}`;
+        filterAccount.appendChild(option);
+      });
 
-/****************************************************
- * Modal
- ****************************************************/
-const modal = document.getElementById('modal');
-const addIncome = document.getElementById('add-income');
-const addExpense = document.getElementById('add-expense');
-const cancel = document.getElementById('cancel');
-const form = document.getElementById('tx-form');
-const fieldType = document.getElementById('field-type');
+      // Carregar categorias (todas)
+      const receitaCats = Categories.getByType('receita');
+      const despesaCats = Categories.getByType('despesa');
+      filterCategory.innerHTML = '<option value="">Todas</option>';
+      
+      const optgroupReceitas = document.createElement('optgroup');
+      optgroupReceitas.label = 'Receitas';
+      receitaCats.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.nome;
+        option.textContent = `${cat.icone} ${cat.nome}`;
+        optgroupReceitas.appendChild(option);
+      });
+      
+      const optgroupDespesas = document.createElement('optgroup');
+      optgroupDespesas.label = 'Despesas';
+      despesaCats.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.nome;
+        option.textContent = `${cat.icone} ${cat.nome}`;
+        optgroupDespesas.appendChild(option);
+      });
+      
+      filterCategory.appendChild(optgroupReceitas);
+      filterCategory.appendChild(optgroupDespesas);
+    }
 
-let lastFocused = null;
-let editingId = null;
-let transactionType = "expense";
+    // === APLICAR FILTROS ===
+    btnApplyFilters.addEventListener('click', () => {
+      activeFilters = {};
 
-// Abrir modal para criar
-function openModal(type){
-  transactionType = type;
-  editingId = null;
+      if (filterDateStart.value) {
+        activeFilters.dataInicio = filterDateStart.value;
+      }
 
-  fieldType.style.display = "none";
+      if (filterDateEnd.value) {
+        activeFilters.dataFim = filterDateEnd.value;
+      }
 
-  lastFocused = document.activeElement;
-  modal.classList.add('open');
-  modal.setAttribute('aria-hidden','false');
-  document.body.style.overflow = 'hidden';
+      if (filterCategory.value) {
+        activeFilters.categoria = filterCategory.value;
+      }
 
-  document.getElementById('modal-title').textContent = 
-    type === 'income' ? 'Nova receita' : 'Nova despesa';
+      if (filterAccount.value) {
+        activeFilters.contaId = filterAccount.value;
+      }
 
-  form.elements['title'].value = '';
-  form.elements['value'].value = '';
-  form.elements['date'].value = '';
-  form.elements['account'].value = 'nubank';
-  form.elements['status'].value = type === 'income' ? 'paid' : 'pending';
+      renderLists();
+      Utils.showToast('Filtros aplicados', 'info', 2000);
+    });
 
-  setTimeout(()=> document.getElementById('t-title').focus(), 50);
-}
+    // === LIMPAR FILTROS ===
+    btnClearFilters.addEventListener('click', () => {
+      activeFilters = {};
+      filterDateStart.value = '';
+      filterDateEnd.value = '';
+      filterCategory.value = '';
+      filterAccount.value = '';
+      renderLists();
+      Utils.showToast('Filtros removidos', 'info', 2000);
+    });
 
-// Abrir modal para editar
-function openEditModal(id){
-  const tx = transactions.find(t => t.id === id);
-  if(!tx) return;
+    // === EXPORTAR DADOS ===
+    btnExport.addEventListener('click', async () => {
+      const formato = await Utils.showConfirm(
+        'Escolha o formato de exportação:',
+        'CSV',
+        'JSON'
+      );
 
-  editingId = id;
-  transactionType = tx.type;
+      const transactions = Transactions.getFiltered(activeFilters);
 
-  fieldType.style.display = "block";
+      if (transactions.length === 0) {
+        Utils.showToast('Nenhuma transação para exportar', 'warning');
+        return;
+      }
 
-  lastFocused = document.activeElement;
-  modal.classList.add('open');
-  modal.setAttribute('aria-hidden','false');
-  document.body.style.overflow = 'hidden';
+      let content, filename, type;
 
-  document.getElementById('modal-title').textContent =
-    tx.type === 'income' ? 'Editar receita' : 'Editar despesa';
+      if (formato) {
+        // CSV
+        const headers = ['Data', 'Descrição', 'Categoria', 'Tipo', 'Valor', 'Conta'];
+        const rows = transactions.map(t => {
+          const conta = Accounts.getById(t.contaId);
+          return [
+            t.data,
+            t.descricao,
+            t.categoria,
+            t.tipo,
+            t.valor.toFixed(2),
+            conta ? conta.nome : 'N/A'
+          ];
+        });
 
-  form.elements['title'].value = tx.title;
+        content = [headers, ...rows].map(row => row.join(',')).join('\n');
+        filename = `transacoes_${new Date().toISOString().split('T')[0]}.csv`;
+        type = 'text/csv;charset=utf-8;';
+      } else {
+        // JSON
+        const data = transactions.map(t => {
+          const conta = Accounts.getById(t.contaId);
+          return {
+            ...t,
+            nomeConta: conta ? conta.nome : 'N/A'
+          };
+        });
 
-  /* AQUI ESTÁ A CORREÇÃO CRÍTICA */
-  form.elements['value'].value = centsToInput(tx.cents);
+        content = JSON.stringify(data, null, 2);
+        filename = `transacoes_${new Date().toISOString().split('T')[0]}.json`;
+        type = 'application/json;charset=utf-8;';
+      }
 
-  form.elements['date'].value = tx.date || '';
-  form.elements['account'].value = tx.account;
-  form.elements['status'].value = tx.status;
+      // Download
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
 
-  Array.from(form.elements['type']).forEach(r => {
-    r.checked = (r.value === tx.type);
-  });
+      Utils.showToast(`${transactions.length} transações exportadas!`, 'success');
+    });
 
-  setTimeout(()=> document.getElementById('t-title').focus(), 50);
-}
+    // === CRIAR CARD DE TRANSAÇÃO ===
+    function createTransactionCard(tx) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.setAttribute('role', 'listitem');
+      card.dataset.id = tx.id;
 
-function closeModal(){
-  modal.classList.remove('open');
-  modal.setAttribute('aria-hidden','true');
-  document.body.style.overflow = '';
-  lastFocused?.focus();
-}
+      const conta = Accounts.getById(tx.contaId);
+      const nomeConta = conta ? conta.nome : 'Conta removida';
 
-addIncome.addEventListener('click', ()=> openModal('income'));
-addExpense.addEventListener('click', ()=> openModal('expense'));
-cancel.addEventListener('click', closeModal);
+      const valorClass = tx.tipo === 'receita' ? 'income' : 'expense';
+      const valorFormatado = Transactions.formatarValor(tx.valor);
+      const dataFormatada = Transactions.formatarData(tx.data);
 
-modal.addEventListener('click', (e)=>{
-  if(e.target === modal) closeModal();
-});
+      card.innerHTML = `
+        <div class="tx-left">
+          <div class="small tx-title">${Utils.sanitizeString(tx.descricao)}</div>
+          <div class="subtle tx-sub">${Utils.sanitizeString(tx.categoria)} • ${nomeConta}</div>
+        </div>
+        <div class="tx-right">
+          <div class="amount tx-amt ${valorClass}">${valorFormatado}</div>
+          <div class="subtle" style="font-size:12px">${dataFormatada}</div>
+          <div class="tx-actions" style="display:${isEditMode ? 'flex' : 'none'};gap:4px;margin-top:4px">
+            <button type="button" class="icon-btn" data-action="edit" title="Editar">✎</button>
+            <button type="button" class="icon-btn" data-action="delete" title="Excluir">🗑</button>
+          </div>
+        </div>
+      `;
 
-/****************************************************
- * Mascara de dinheiro
- ****************************************************/
-const tValue = document.getElementById('t-value');
+      return card;
+    }
 
-function maskMoneyInputSimple(el){
-  el.addEventListener('input', ()=>{
-    el.value = el.value.replace(/[^\d\.,]/g,'');
-  });
-}
-maskMoneyInputSimple(tValue);
+    // === RENDERIZAR LISTAS ===
+    function renderLists() {
+      const transactions = Transactions.getFiltered(activeFilters);
+      
+      // Separa transações futuras e passadas
+      const hoje = new Date().toISOString().split('T')[0];
+      const pendentes = transactions.filter(t => t.data > hoje);
+      const historico = transactions.filter(t => t.data <= hoje);
 
-/****************************************************
- * Form submit
- ****************************************************/
-form.addEventListener('submit', (e)=>{
-  e.preventDefault();
+      // Renderiza pendentes
+      pendentesList.innerHTML = '';
+      if (pendentes.length === 0) {
+        pendentesList.innerHTML = '<div class="muted">Nenhuma transação futura.</div>';
+      } else {
+        pendentes.forEach(tx => {
+          pendentesList.appendChild(createTransactionCard(tx));
+        });
+      }
 
-  const title = form.elements['title'].value.trim();
-  const valueStr = form.elements['value'].value;
-  const dateVal = form.elements['date'].value;
-  const account = form.elements['account'].value;
-  const status = form.elements['status'].value;
+      // Renderiza histórico
+      historicoList.innerHTML = '';
+      if (historico.length === 0) {
+        historicoList.innerHTML = '<div class="muted">Nenhuma transação realizada.</div>';
+      } else {
+        historico.forEach(tx => {
+          historicoList.appendChild(createTransactionCard(tx));
+        });
+      }
 
-  if(!title){ showToast('Título inválido'); return; }
+      updateTotals();
+      updateFiltersInfo();
+    }
 
-  const cents = parseLocaleMoney(valueStr);
-  if(isNaN(cents) || cents <= 0){
-    showToast('Valor inválido');
-    return;
-  }
+    // === ATUALIZAR INFO DE FILTROS ===
+    function updateFiltersInfo() {
+      const hasFilters = Object.keys(activeFilters).some(key => activeFilters[key]);
+      if (hasFilters) {
+        toggleFiltersBtn.textContent = '🔍 Filtros Ativos';
+        toggleFiltersBtn.style.background = '#58a6ff';
+        toggleFiltersBtn.style.color = 'white';
+      } else {
+        toggleFiltersBtn.textContent = '🔍 Filtros Avançados';
+        toggleFiltersBtn.style.background = '';
+        toggleFiltersBtn.style.color = '';
+      }
+    }
 
-  let finalType = transactionType;
+    // === ATUALIZAR TOTAIS ===
+    function updateTotals() {
+      const stats = Transactions.getEstatisticas();
+      const saldoConsolidado = Accounts.getSaldoConsolidado();
 
-  if(editingId && fieldType.style.display !== "none"){
-    const selected = Array.from(form.elements['type']).find(r => r.checked);
-    if(selected) finalType = selected.value;
-  }
+      document.getElementById('saldo-consolidado').textContent = 
+        'Saldo consolidado: ' + Accounts.formatarSaldo(saldoConsolidado);
 
-  if(editingId){
-    const tx = transactions.find(t => t.id === editingId);
-    tx.title = title;
-    tx.cents = cents;
-    tx.date = dateVal || null;
-    tx.account = account;
-    tx.type = finalType;
-    tx.status = status;
-    showToast('Transação atualizada.');
-  } else {
-    const tx = {
-      id: Date.now() + "-" + Math.floor(Math.random()*9000+1000),
-      title,
-      cents,
-      date: dateVal || null,
-      recurring:true,
-      type: finalType,
-      status,
-      account
-    };
-    transactions.unshift(tx);
-    showToast('Transação salva.');
-  }
+      const saldoPrevisto = saldoConsolidado;
+      document.getElementById('saldo-previsto').textContent = 
+        'Saldo previsto: ' + Accounts.formatarSaldo(saldoPrevisto);
+    }
 
-  reRenderAll();
-  closeModal();
-});
+    // === TOGGLE EDIT MODE ===
+    toggleEdit.addEventListener('click', () => {
+      isEditMode = !isEditMode;
+      toggleEdit.setAttribute('aria-pressed', String(isEditMode));
+      toggleEdit.textContent = isEditMode ? 'Concluir edição' : 'Editar';
+      renderLists();
+    });
 
-/****************************************************
- * Edit Mode toggle
- ****************************************************/
-const toggleEdit = document.getElementById('toggle-edit');
+    // === ABRIR MODAL CRIAR ===
+    function openModal(tipo) {
+      currentType = tipo;
+      editingId = null;
 
-toggleEdit.addEventListener('click', ()=>{
-  isEditMode = !isEditMode;
-  toggleEdit.setAttribute('aria-pressed', String(isEditMode));
-  toggleEdit.textContent = isEditMode ? 'Concluir edição' : 'Editar';
-  reRenderAll();
-});
+      modalTitle.textContent = tipo === 'receita' ? 'Nova Receita' : 'Nova Despesa';
+      fieldType.style.display = 'none';
 
-/****************************************************
- * Delegação de cliques
- ****************************************************/
-function handleListClick(e){
-  const btn = e.target.closest('[data-action]');
-  if(!btn) return;
+      txForm.reset();
+      txForm.elements['date'].valueAsDate = new Date();
+      loadAccountsSelect();
+      loadCategoriesSelect(tipo);
 
-  const card = btn.closest('.card');
-  const id = card.dataset.id;
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
 
-  if(btn.dataset.action === 'confirm') confirmPayment(id);
-  if(btn.dataset.action === 'edit') openEditModal(id);
-  if(btn.dataset.action === 'delete') deleteTx(id);
-}
+    // === ABRIR MODAL EDITAR ===
+    function openEditModal(id) {
+      const tx = Transactions.getById(id);
+      if (!tx) return;
 
-pendentesList.addEventListener('click', handleListClick);
-historicoList.addEventListener('click', handleListClick);
+      editingId = id;
+      currentType = tx.tipo;
 
-/****************************************************
- * Perfil
- ****************************************************/
-document.getElementById('profile-top').addEventListener('click', ()=>{
-  showToast("Abrir perfil (placeholder).");
-});
+      modalTitle.textContent = 'Editar Transação';
+      fieldType.style.display = 'block';
 
-/****************************************************
- * Init
- ****************************************************/
-function init(){
-  loadFromStorage();
-  transactions = transactions.map(t => ({ ...t, cents:Number(t.cents)||0 }));
-  reRenderAll();
-}
-init();
-</script>
+      loadAccountsSelect();
+      loadCategoriesSelect(tx.tipo);
+
+      txForm.elements['title'].value = tx.descricao;
+      txForm.elements['value'].value = tx.valor.toFixed(2).replace('.', ',');
+      txForm.elements['date'].value = tx.data;
+      txForm.elements['account'].value = tx.contaId;
+      txForm.elements['category'].value = tx.categoria;
+
+      // Marca tipo
+      Array.from(txForm.elements['type']).forEach(radio => {
+        radio.checked = radio.value === (tx.tipo === 'receita' ? 'income' : 'expense');
+      });
+
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // === FECHAR MODAL ===
+    function closeModal() {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    // === BOTÕES ABRIR MODAL ===
+    addIncomeBtn.addEventListener('click', () => openModal('receita'));
+    addExpenseBtn.addEventListener('click', () => openModal('despesa'));
+    cancelBtn.addEventListener('click', closeModal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // === SUBMIT FORM ===
+    txForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const descricao = txForm.elements['title'].value.trim();
+      const valorStr = txForm.elements['value'].value.replace(/[^\d,]/g, '').replace(',', '.');
+      const valor = parseFloat(valorStr);
+      const data = txForm.elements['date'].value;
+      const contaId = txForm.elements['account'].value;
+      const categoria = txForm.elements['category'].value;
+
+      // Validações
+      if (!descricao) {
+        Utils.showToast('Preencha a descrição', 'error');
+        return;
+      }
+
+      if (isNaN(valor) || valor <= 0) {
+        Utils.showToast('Valor inválido', 'error');
+        return;
+      }
+
+      if (!data) {
+        Utils.showToast('Selecione a data', 'error');
+        return;
+      }
+
+      if (!contaId) {
+        Utils.showToast('Selecione uma conta', 'error');
+        return;
+      }
+
+      if (!categoria) {
+        Utils.showToast('Selecione uma categoria', 'error');
+        return;
+      }
+
+      // Define tipo
+      let tipo = currentType;
+      if (editingId && fieldType.style.display !== 'none') {
+        const selected = Array.from(txForm.elements['type']).find(r => r.checked);
+        tipo = selected && selected.value === 'income' ? 'receita' : 'despesa';
+      }
+
+      const dados = {
+        contaId,
+        tipo,
+        categoria,
+        descricao,
+        valor,
+        data
+      };
+
+      let result;
+      if (editingId) {
+        result = Transactions.atualizar(editingId, dados);
+      } else {
+        result = Transactions.criar(dados);
+      }
+
+      if (result.success) {
+        Utils.showToast(result.message, 'success');
+        closeModal();
+        renderLists();
+      } else {
+        Utils.showToast(result.message, 'error');
+      }
+    });
+
+    // === DELEGAÇÃO DE EVENTOS ===
+    function handleAction(e) {
+      const btn = e.target.closest('[data-action]');
+      if (!btn) return;
+
+      const card = btn.closest('.card');
+      const id = card.dataset.id;
+
+      if (btn.dataset.action === 'edit') {
+        openEditModal(id);
+      } else if (btn.dataset.action === 'delete') {
+        Utils.showConfirm(
+          'Tem certeza que deseja excluir esta transação? Esta ação não pode ser desfeita.',
+          'Excluir',
+          'Cancelar'
+        ).then((confirmed) => {
+          if (!confirmed) return;
+          
+          const result = Transactions.excluir(id);
+          if (result.success) {
+            Utils.showToast(result.message, 'success');
+            renderLists();
+          } else {
+            Utils.showToast(result.message, 'error');
+          }
+        });
+      }
+    }
+
+    pendentesList.addEventListener('click', handleAction);
+    historicoList.addEventListener('click', handleAction);
+
+    // === PERFIL ===
+    document.getElementById('profile-top').addEventListener('click', () => {
+      const user = Auth.getCurrentUser();
+      if (user) {
+        Utils.showToast(`Olá, ${user.nome}!`, 'info');
+      }
+    });
+
+    // === MÁSCARA VALOR ===
+    const valueInput = document.getElementById('t-value');
+    valueInput.addEventListener('input', (e) => {
+      e.target.value = e.target.value.replace(/[^\d,]/g, '');
+    });
+
+    // === MODAL DE CATEGORIAS ===
+    btnManageCategories.addEventListener('click', () => {
+      categoryTabType = currentType;
+      modalCategories.style.display = 'flex';
+      modalCategories.classList.add('open');
+      modalCategories.setAttribute('aria-hidden', 'false');
+      updateCategoryTab();
+      renderCategoriesList();
+    });
+
+    closeCategoriesBtn.addEventListener('click', () => {
+      modalCategories.style.display = 'none';
+      modalCategories.classList.remove('open');
+      modalCategories.setAttribute('aria-hidden', 'true');
+    });
+
+    tabReceitas.addEventListener('click', () => {
+      categoryTabType = 'receita';
+      updateCategoryTab();
+      renderCategoriesList();
+    });
+
+    tabDespesas.addEventListener('click', () => {
+      categoryTabType = 'despesa';
+      updateCategoryTab();
+      renderCategoriesList();
+    });
+
+    function updateCategoryTab() {
+      if (categoryTabType === 'receita') {
+        tabReceitas.classList.remove('outline');
+        tabDespesas.classList.add('outline');
+      } else {
+        tabDespesas.classList.remove('outline');
+        tabReceitas.classList.add('outline');
+      }
+    }
+
+    function renderCategoriesList() {
+      const categories = Categories.getByType(categoryTabType);
+      categoriesList.innerHTML = '';
+
+      if (categories.length === 0) {
+        categoriesList.innerHTML = `
+          <div style="text-align: center; padding: 30px; color: rgba(255,255,255,0.5); font-size: 14px;">
+            Nenhuma categoria encontrada
+          </div>
+        `;
+        return;
+      }
+
+      categories.forEach(cat => {
+        const item = document.createElement('div');
+        item.style.cssText = `
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          padding: 14px;
+          background: rgba(255,255,255,0.08);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 10px;
+          margin-bottom: 10px;
+          transition: all 0.2s ease;
+        `;
+        
+        // Efeito hover
+        item.addEventListener('mouseenter', () => {
+          item.style.background = 'rgba(255,255,255,0.12)';
+          item.style.borderColor = cat.cor;
+        });
+        item.addEventListener('mouseleave', () => {
+          item.style.background = 'rgba(255,255,255,0.08)';
+          item.style.borderColor = 'rgba(255,255,255,0.1)';
+        });
+
+        const colorDot = document.createElement('div');
+        colorDot.style.cssText = `
+          width: 40px;
+          height: 40px;
+          background: ${cat.cor};
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 20px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+          flex-shrink: 0;
+        `;
+        colorDot.textContent = cat.icone;
+
+        const info = document.createElement('div');
+        info.style.flex = '1';
+        info.innerHTML = `
+          <div style="font-weight: 600; color: #fff; font-size: 15px; margin-bottom: 3px;">${cat.nome}</div>
+          <div style="font-size: 12px; color: rgba(255,255,255,0.65);">
+            ${cat.custom ? '✏️ Personalizada' : '🔒 Padrão do sistema'}
+          </div>
+        `;
+
+        item.appendChild(colorDot);
+        item.appendChild(info);
+
+        if (cat.custom) {
+          const deleteBtn = document.createElement('button');
+          deleteBtn.type = 'button';
+          deleteBtn.className = 'btn small outline';
+          deleteBtn.textContent = 'Excluir';
+          deleteBtn.style.cssText = 'padding: 8px 14px; font-size: 13px; border-color: #ff9e9e; color: #ff9e9e; flex-shrink: 0;';
+          deleteBtn.addEventListener('mouseenter', () => {
+            deleteBtn.style.background = 'rgba(255,158,158,0.15)';
+          });
+          deleteBtn.addEventListener('mouseleave', () => {
+            deleteBtn.style.background = 'transparent';
+          });
+          deleteBtn.addEventListener('click', () => {
+            Utils.showConfirm(
+              `Deseja excluir a categoria "${cat.nome}"?`,
+              'Excluir',
+              'Cancelar'
+            ).then((confirmed) => {
+              if (!confirmed) return;
+
+              const result = Categories.excluir(cat.id, categoryTabType);
+              if (result.success) {
+                Utils.showToast(result.message, 'success');
+                renderCategoriesList();
+                loadCategoriesSelect(categoryTabType);
+              } else {
+                Utils.showToast(result.message, 'error');
+              }
+            });
+          });
+          item.appendChild(deleteBtn);
+        }
+
+        categoriesList.appendChild(item);
+      });
+    }
+
+    formNewCategory.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const nome = document.getElementById('new-cat-name').value.trim();
+      const icone = document.getElementById('new-cat-icon').value.trim() || '📌';
+      const cor = document.getElementById('new-cat-color').value;
+
+      if (!nome) {
+        Utils.showToast('Digite o nome da categoria', 'error');
+        return;
+      }
+
+      const result = Categories.criar(categoryTabType, { nome, icone, cor });
+
+      if (result.success) {
+        Utils.showToast(result.message, 'success');
+        formNewCategory.reset();
+        document.getElementById('new-cat-color').value = '#58a6ff';
+        renderCategoriesList();
+        loadCategoriesSelect(categoryTabType);
+      } else {
+        Utils.showToast(result.message, 'error');
+      }
+    });
+
+    // === INIT ===
+    function init() {
+      Accounts.init();
+      loadAccountsSelect();
+      loadCategoriesSelect(currentType);
+      loadFilterSelects();
+      renderLists();
+    }
+
+    init();
+  </script>
 </body>
 </html>
