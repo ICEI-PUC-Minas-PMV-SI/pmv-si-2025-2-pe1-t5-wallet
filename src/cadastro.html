@@ -54,7 +54,6 @@
     </section>
   </main>
 
-  <!-- Scripts -->
   <script src="js/utils.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/route-guard.js"></script>
@@ -65,7 +64,6 @@
     console.log('3. Auth disponível?', typeof Auth !== 'undefined');
     console.log('4. RouteGuard disponível?', typeof RouteGuard !== 'undefined');
     
-    // Redireciona se já estiver logado
     try {
       console.log('5. Chamando RouteGuard.redirectIfAuthenticated()...');
       RouteGuard.redirectIfAuthenticated();
@@ -74,7 +72,6 @@
       console.error('ERRO no RouteGuard:', e);
     }
 
-    // Elementos do formulário
     const form = document.querySelector('form');
     const nomeInput = document.getElementById('nome');
     const emailInput = document.getElementById('email');
@@ -92,7 +89,6 @@
       senha: senhaInput !== null
     });
 
-    // Máscara de CPF
     cpfInput.addEventListener('input', function(e) {
       let value = e.target.value.replace(/\D/g, '');
       
@@ -105,7 +101,6 @@
       e.target.value = value;
     });
 
-    // Validação de CPF ao sair do campo
     cpfInput.addEventListener('blur', function() {
       const cpf = this.value;
       if (cpf) {
@@ -114,7 +109,6 @@
       }
     });
 
-    // Validação de email ao sair do campo
     emailInput.addEventListener('blur', function() {
       const email = this.value.trim();
       if (email) {
@@ -123,7 +117,6 @@
       }
     });
 
-    // Validação de nome
     nomeInput.addEventListener('blur', function() {
       const nome = this.value.trim();
       if (nome) {
@@ -132,7 +125,6 @@
       }
     });
 
-    // Indicador de força de senha
     senhaInput.addEventListener('input', function() {
       const senha = this.value;
       
@@ -149,7 +141,6 @@
       }
     });
 
-    // Validação de senha ao sair do campo
     senhaInput.addEventListener('blur', function() {
       const senha = this.value;
       if (senha) {
@@ -158,13 +149,11 @@
       }
     });
 
-    // Listener do formulário
     form.addEventListener('submit', function(e) {
       console.log('9. === SUBMIT CLICADO ===');
       e.preventDefault();
       console.log('10. PreventDefault executado');
 
-      // Obtém valores
       const nome = nomeInput.value.trim();
       const email = emailInput.value.trim();
       const cpf = cpfInput.value;
@@ -172,7 +161,6 @@
 
       console.log('11. Valores capturados:', { nome, email, cpf, senha: '***' });
 
-      // Validações básicas
       if (!nome || !email || !cpf || !senha) {
         Utils.showToast('Preencha todos os campos', 'error');
         return;
@@ -202,13 +190,10 @@
         return;
       }
 
-      // Tenta registrar usuário
       console.log('12. Chamando Auth.registrar()...');
       
-      // Mostra loading
       Utils.showLoading('Criando sua conta...');
       
-      // Simula delay para mostrar loading
       setTimeout(() => {
         const result = Auth.registrar({
           nome,
@@ -224,7 +209,6 @@
           console.log('14. Sucesso! Redirecionando...');
           Utils.showToast(result.message, 'success');
           
-          // Redireciona para login após 1 segundo
           setTimeout(() => {
             window.location.href = 'index.html';
           }, 1000);

@@ -33,7 +33,6 @@
       </section>
 
       <section class="accounts-list" id="accountsList" aria-label="Lista de contas">
-        <!-- Contas serão carregadas dinamicamente via JavaScript -->
       </section>
 
       <div class="actions" aria-hidden="false">
@@ -75,14 +74,12 @@
     </div>
   </div>
 
-  <!-- Sistema de Autenticação e Contas -->
   <script src="js/utils.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/route-guard.js"></script>
   <script src="js/accounts.js"></script>
   
   <script>
-    // Protege a página
     RouteGuard.protect();
 
     (function(){
@@ -95,7 +92,6 @@
 
       let editMode = false;
       
-      // Carrega contas do usuário
       function loadAccounts() {
         const accounts = Accounts.getByUser();
         accountsList.innerHTML = '';
@@ -111,7 +107,6 @@
         });
       }
       
-      // Cria card de conta
       function createAccountCard(account) {
         const wrapper = document.createElement('article');
         wrapper.className = 'account-card';
@@ -139,7 +134,6 @@
         return wrapper;
       }
 
-      // Toggle para modo de edição
       editToggle.addEventListener('click', () => {
         editMode = !editMode;
         editToggle.setAttribute('aria-pressed', String(editMode));
@@ -207,7 +201,6 @@
         const editingId = modalBackdrop.dataset.editingId;
         
         if (editingId) {
-          // Editar conta existente
           const result = Accounts.atualizar(editingId, {
             nome: bankName,
             tipo: accountType,
@@ -223,7 +216,6 @@
             Utils.showToast(result.message, 'error');
           }
         } else {
-          // Criar nova conta
           const result = Accounts.criar({
             nome: bankName,
             tipo: accountType,
@@ -304,7 +296,6 @@
         }
       });
 
-      // Carrega contas ao iniciar
       loadAccounts();
 
     })();

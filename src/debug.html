@@ -17,7 +17,6 @@
         const statusDiv = document.getElementById('status');
         let messages = [];
         
-        // Verifica se os objetos foram carregados
         if (typeof Utils !== 'undefined') {
             messages.push('✅ Utils carregado');
         } else {
@@ -38,7 +37,6 @@
         
         statusDiv.innerHTML = messages.join('<br>');
         
-        // Testa uma função básica
         try {
             const testEmail = Utils.validateEmail('teste@email.com');
             messages.push('✅ Utils.validateEmail funciona: ' + testEmail);

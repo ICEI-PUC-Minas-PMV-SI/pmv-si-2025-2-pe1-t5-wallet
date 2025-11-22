@@ -31,7 +31,6 @@
 
 <body>
   <main class="container-dashboard">
-    <!-- Header -->
     <header class="dashboard-header">
       <div>
         <h2 id="welcome-message">Olá, Usuário!</h2>
@@ -45,7 +44,6 @@
       </div>
     </header>
 
-    <!-- Card de saldo -->
     <section class="saldo-card">
       <h3>Saldo Total</h3>
       <p class="valor" id="saldo-total">R$ 0,00</p>
@@ -56,7 +54,6 @@
       </div>
     </section>
 
-    <!-- Resumo de Contas -->
     <section class="movimentos">
       <h3>Suas Contas</h3>
       <ul id="contas-lista">
@@ -69,7 +66,6 @@
       </div>
     </section>
 
-    <!-- Gráfico estático -->
     <section class="grafico">
       <h3>Visão Geral</h3>
       <div id="stats-info" style="color: var(--muted); font-size: 14px; line-height: 1.6;">
@@ -99,28 +95,22 @@
       </div>
     </section>
 
-    <!-- Gráficos e Relatórios -->
     <section style="margin-top: 24px;">
       <h3 style="margin: 0 0 12px 0; font-size: 16px; color: var(--muted);">📈 Relatórios</h3>
       
-      <!-- Despesas por Categoria -->
       <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
         <h4 style="font-size: 14px; margin: 0 0 12px 0; color: var(--muted);">Despesas por Categoria (Este mês)</h4>
         <div id="chart-categorias" style="min-height: 120px;">
-          <!-- Gráfico carregado dinamicamente -->
         </div>
       </div>
       
-      <!-- Evolução Mensal -->
       <div style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 16px;">
         <h4 style="font-size: 14px; margin: 0 0 12px 0; color: var(--muted);">Evolução (Últimos 6 meses)</h4>
         <div id="chart-evolucao" style="min-height: 150px;">
-          <!-- Gráfico carregado dinamicamente -->
         </div>
       </div>
     </section>
 
-    <!-- Metas Financeiras -->
     <section id="metas-section" class="movimentos">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
         <h3 style="margin-top: 0;">🎯 Metas Ativas</h3>
@@ -129,11 +119,9 @@
         </button>
       </div>
       <div id="metas-lista" style="display: flex; flex-direction: column; gap: 12px;">
-        <!-- Metas carregadas dinamicamente -->
       </div>
     </section>
 
-    <!-- Menu de Navegação -->
     <section style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
       <h3 style="margin: 0; font-size: 16px; color: var(--muted);">Menu</h3>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
@@ -153,7 +141,6 @@
     </section>
   </main>
 
-  <!-- Modal de Meta -->
   <div id="modal-meta" class="modal">
     <div class="modal-content" style="max-width: 500px;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -234,7 +221,6 @@
     </div>
   </div>
 
-  <!-- Scripts -->
   <script src="js/utils.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/route-guard.js"></script>
@@ -243,23 +229,18 @@
   <script src="js/categories.js"></script>
   <script src="js/goals.js"></script>
   <script>
-    // Protege a página - só permite acesso se autenticado
     RouteGuard.protect();
     
-    // Inicializa sistema de categorias
     Categories.init();
 
-    // Carrega dados do usuário
     const user = Auth.getCurrentUser();
     
     if (user) {
-      // Exibe nome do usuário
       const welcomeMessage = document.getElementById('welcome-message');
       const firstName = user.nome.split(' ')[0];
       welcomeMessage.textContent = `Olá, ${firstName}!`;
     }
 
-    // Botão de logout
     const btnLogout = document.getElementById('btn-logout');
     btnLogout.addEventListener('click', function() {
       Utils.showConfirm(
@@ -273,25 +254,20 @@
       });
     });
 
-    // Carrega e exibe dados de contas
     function loadDashboardData() {
-      // Carrega contas do usuário
       const accounts = Accounts.getByUser();
       const stats = Accounts.getEstatisticas();
       
-      // Atualiza saldo total
       const saldoTotal = document.getElementById('saldo-total');
       saldoTotal.textContent = Accounts.formatarSaldo(stats.saldoTotal);
       saldoTotal.style.color = stats.saldoTotal >= 0 ? '#8fffa5' : '#ff9e9e';
       
-      // Atualiza lista de contas
       const contasLista = document.getElementById('contas-lista');
       contasLista.innerHTML = '';
       
       if (accounts.length === 0) {
         contasLista.innerHTML = '<li style="text-align: center; color: var(--muted); padding: 20px;">Nenhuma conta cadastrada.<br><a href="contas.html" style="color: var(--primary);">Adicione sua primeira conta</a></li>';
       } else {
-        // Mostra até 3 contas
         const contasParaMostrar = accounts.slice(0, 3);
         contasParaMostrar.forEach(account => {
           const li = document.createElement('li');
@@ -315,16 +291,13 @@
         }
       }
       
-      // Atualiza estatísticas
       document.getElementById('total-contas').textContent = stats.totalContas;
       document.getElementById('contas-positivas').textContent = stats.contaPositiva;
       document.getElementById('contas-negativas').textContent = stats.contaNegativa;
 
-      // Carrega estatísticas de transações do mês atual
       loadTransactionStats();
     }
 
-    // Carrega estatísticas de transações
     function loadTransactionStats() {
       const hoje = new Date();
       const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
@@ -337,37 +310,29 @@
 
       const stats = Transactions.getEstatisticas(filtros);
 
-      // Atualiza receitas
       document.getElementById('receitas-mes').textContent = 
         Transactions.formatarValor(stats.totalReceitas);
       document.getElementById('qtd-receitas').textContent = 
         `${stats.quantidadeReceitas} transação${stats.quantidadeReceitas !== 1 ? 'ões' : ''}`;
 
-      // Atualiza despesas
       document.getElementById('despesas-mes').textContent = 
         Transactions.formatarValor(stats.totalDespesas);
       document.getElementById('qtd-despesas').textContent = 
         `${stats.quantidadeDespesas} transação${stats.quantidadeDespesas !== 1 ? 'ões' : ''}`;
 
-      // Atualiza saldo do período
       const saldoPeriodoEl = document.getElementById('saldo-periodo');
       saldoPeriodoEl.textContent = Transactions.formatarValor(stats.saldo, true);
       saldoPeriodoEl.style.color = stats.saldo >= 0 ? '#8fffa5' : '#ff9e9e';
       
-      // Carrega gráficos
       loadChartCategorias();
       loadChartEvolucao();
     }
 
-    // Carrega dados ao iniciar
     loadDashboardData();
 
-    // Recarrega dados se a página voltar a ter foco (ex: depois de adicionar conta)
     window.addEventListener('focus', loadDashboardData);
 
-    // ==================== GRÁFICOS ====================
     
-    // Gráfico de despesas por categoria (barras horizontais)
     function loadChartCategorias() {
       const hoje = new Date();
       const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
@@ -387,7 +352,6 @@
         return;
       }
       
-      // Ordena por valor (maior primeiro) e pega top 5
       const top5 = porCategoria
         .sort((a, b) => b.total - a.total)
         .slice(0, 5);
@@ -421,12 +385,10 @@
       });
     }
     
-    // Gráfico de evolução mensal (últimos 6 meses)
     function loadChartEvolucao() {
       const hoje = new Date();
       const meses = [];
       
-      // Gera últimos 6 meses
       for (let i = 5; i >= 0; i--) {
         const data = new Date(hoje.getFullYear(), hoje.getMonth() - i, 1);
         meses.push({
@@ -436,7 +398,6 @@
         });
       }
       
-      // Calcula receitas e despesas por mês
       const dados = meses.map(m => {
         const primeiroDia = new Date(m.ano, m.mes, 1);
         const ultimoDia = new Date(m.ano, m.mes + 1, 0);
@@ -466,7 +427,6 @@
         return;
       }
       
-      // Container dos gráficos
       const chartDiv = document.createElement('div');
       chartDiv.style.cssText = 'display: flex; align-items: flex-end; justify-content: space-around; height: 120px; margin-bottom: 12px;';
       
@@ -504,7 +464,6 @@
       
       chartContainer.appendChild(chartDiv);
       
-      // Legenda
       const legenda = document.createElement('div');
       legenda.style.cssText = 'display: flex; justify-content: center; gap: 16px; font-size: 11px;';
       legenda.innerHTML = `
@@ -521,9 +480,6 @@
       chartContainer.appendChild(legenda);
     }
 
-    // ==================== METAS ====================
-    
-    // Carrega e exibe metas
     function loadMetas() {
       const metas = Goals.getByUser();
       const metasAtivas = metas.filter(m => m.status === 'ativa');
@@ -531,7 +487,6 @@
       const metasSection = document.getElementById('metas-section');
       const metasLista = document.getElementById('metas-lista');
       
-      // Sempre mostra a seção
       metasSection.style.display = 'block';
       metasLista.innerHTML = '';
       
@@ -546,7 +501,6 @@
         return;
       }
       
-      // Mostra até 3 metas ativas
       metasAtivas.slice(0, 3).forEach(meta => {
         const progresso = Goals.getProgresso(meta.id);
         const diasRestantes = Goals.getDiasRestantes(meta.id);
@@ -597,7 +551,6 @@
         
         metasLista.appendChild(metaCard);
         
-        // Celebração se meta concluída
         if (progresso >= 100 && meta.status === 'ativa') {
           setTimeout(() => {
             Utils.showToast(`🎉 Parabéns! Meta "${meta.titulo}" concluída!`, 'success');
@@ -608,7 +561,6 @@
       });
     }
     
-    // Modal de meta
     const modalMeta = document.getElementById('modal-meta');
     const btnAddMeta = document.getElementById('btn-add-meta');
     const closeModalMeta = document.getElementById('close-modal-meta');
@@ -619,7 +571,6 @@
       modalMeta.style.display = 'flex';
       formMeta.reset();
       
-      // Define data mínima como hoje
       const hoje = new Date().toISOString().split('T')[0];
       document.getElementById('meta-data-fim').min = hoje;
     });
@@ -632,7 +583,6 @@
       modalMeta.style.display = 'none';
     });
     
-    // Efeito visual nos radio buttons de cor
     document.querySelectorAll('input[name="meta-cor"]').forEach(radio => {
       radio.addEventListener('change', function() {
         document.querySelectorAll('input[name="meta-cor"]').forEach(r => {
@@ -642,10 +592,8 @@
       });
     });
     
-    // Marca o primeiro como selecionado visualmente
     document.querySelector('input[name="meta-cor"]:checked').nextElementSibling.style.border = '2px solid #fff';
     
-    // Submit do formulário
     formMeta.addEventListener('submit', (e) => {
       e.preventDefault();
       
@@ -675,7 +623,6 @@
       }
     });
     
-    // Carrega metas ao iniciar
     loadMetas();
   </script>
 </body>

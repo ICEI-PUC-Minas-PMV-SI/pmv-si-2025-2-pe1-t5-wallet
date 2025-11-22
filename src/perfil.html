@@ -6,7 +6,6 @@
 <title>Perfil - GoalWallet (Corrigido)</title>
 
 <style>
-  /* reset + base */
   * { box-sizing: border-box; margin:0; padding:0; font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; }
   body {
     background: linear-gradient(to bottom,#002a62,#0055c3);
@@ -23,12 +22,10 @@
     padding:20px;
   }
 
-  /* header */
   .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; padding-top:6px; }
   .header-back { color:#fff; text-decoration:none; font-weight:600; display:inline-flex; align-items:center; gap:8px; cursor:pointer; }
   .header-back .arrow { font-size:20px; line-height:1; }
   
-  /* Botão de Engrenagem (Alterado para link <a>) */
   .gear-btn { 
     background:rgba(255,255,255,0.06); 
     padding:8px 10px; 
@@ -37,12 +34,10 @@
     align-items:center; 
     justify-content:center; 
     cursor:pointer;
-    /* Necessário para que o <a> se pareça com o botão original */
     text-decoration: none; 
   }
   .gear-btn svg { width:20px; height:20px; fill:#fff; display:block; }
 
-  /* profile */
   .profile { text-align:center; margin-bottom:26px; }
   .photo-box { position:relative; display:inline-block; }
   .photo { width:112px; height:112px; border-radius:50%; object-fit:cover; display:block; }
@@ -65,7 +60,6 @@
   .name { margin-top:12px; font-size:1.35rem; font-weight:700; }
   .desc { opacity:0.9; margin-top:4px; font-size:0.95rem; }
 
-  /* metrics */
   .metrics {
     display:flex;
     gap:10px;
@@ -86,18 +80,15 @@
     background:rgba(255,255,255,0.12);
   }
   .metric-value { font-size:1.25rem; font-weight:700; }
-  .metric-value.time { color:#9fb6d6; } /* cor suave para "2h" */
+  .metric-value.time { color:#9fb6d6; } 
   .metric-label { opacity:0.78; margin-top:4px; font-size:0.86rem; }
 
-  /* button (Alterado de button para link <a>) */
   .btn-trans { 
     width:100%; 
     padding:14px 12px; 
     border-radius:10px; 
     border:none; 
-    /* Cor solicitada: Azul Escuro */
     background:#002a62; 
-    /* Cor do texto: Branco */
     color:#fff; 
     font-weight:700; 
     cursor:pointer; 
@@ -105,13 +96,10 @@
     justify-content:center; 
     gap:8px; 
     margin-bottom:26px; 
-    /* Necessário para links */
     text-decoration: none; 
   }
-  /* Hover mais sutil */
   .btn-trans:hover { filter:brightness(1.15); background: #00407a; }
 
-  /* chart */
   .chart-title { font-weight:700; margin-bottom:12px; }
   .chart-wrap {
     background: repeating-linear-gradient(to top, rgba(255,255,255,0.06), rgba(255,255,255,0.06) 1px, transparent 1px, transparent 28px);
@@ -124,7 +112,6 @@
   .bar.primary { width:100%; background:#fff; }
   .bar.secondary { width:100%; background:#1a427d; }
 
-  /* heights (same proportions que antes) */
   .d-group .secondary { height:70%; }
   .d-group .primary   { height:40%; order:2; } /* mostra principal menor à direita visual */
   .s1-group .secondary{ height:75%; order:1; }
@@ -137,7 +124,6 @@
 
   .bar-label { margin-top:8px; font-weight:600; opacity:0.85; font-size:0.8rem; }
 
-  /* small screens adjustments */
   @media (max-width:360px) {
     .container { padding:16px; }
     .photo { width:96px; height:96px; }
@@ -149,14 +135,12 @@
 
 <div class="container">
 
-  <!-- HEADER -->
   <div class="header">
     <a class="header-back" href="javascript:history.back()">
       <span class="arrow">←</span>
       <span>Voltar</span>
     </a>
 
-    <!-- BOTÃO DE CONFIGURAÇÕES (AGORA LINK) -->
     <a href="configuracoes.html" class="gear-btn" title="Configurações" aria-label="Configurações">
       <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
         <path d="M19.14 12.936a7.43 7.43 0 000-1.872l2.037-1.58a.5.5 0 00.12-.64l-1.93-3.34a.5.5 0 00-.607-.22l-2.397.96a7.56 7.56 0 00-1.62-.94L14.9 2.5a.5.5 0 00-.49-.5h-3.82a.5.5 0 00-.49.5l-.355 2.73a7.56 7.56 0 00-1.62.94l-2.397-.96a.5.5 0 00-.607.22L2.7 8.84a.5.5 0 00.12.64l2.037 1.58a7.43 7.43 0 000 1.872L2.82 15.9a.5.5 0 00-.12.64l1.93 3.34c.16.28.5.39.78.27l2.397-.96c.5.36 1.05.66 1.62.94l.355 2.73c.05.28.28.5.56.5h3.82c.28 0 .51-.22.56-.5l.355-2.73c.57-.28 1.12-.58 1.62-.94l2.397.96c.28.11.62.01.78-.27l1.93-3.34a.5.5 0 00-.12-.64l-2.02-1.64zM12 15.5A3.5 3.5 0 1112 8.5a3.5 3.5 0 010 7z"/>
@@ -195,7 +179,6 @@
     </div>
   </section>
 
-  <!-- BOTÃO VER TODAS AS TRANSAÇÕES (AGORA LINK PARA HISTÓRICO) -->
   <a href="historico.html" class="btn-trans" title="Ver todas as transações">
     Ver todas as transações →
   </a>

@@ -6,7 +6,6 @@
   <title>Histórico — GoalWallet</title>
   <link rel="stylesheet" href="css/historico.css">
   <style>
-    /* Modal de Categorias - Estilos específicos */
     #modal-categories {
       z-index: 9999;
       padding: 20px;
@@ -48,7 +47,6 @@
       outline: none;
     }
     
-    /* Botões de tab */
     #tab-receitas,
     #tab-despesas {
       color: #fff !important;
@@ -65,14 +63,12 @@
       color: #08224f !important;
     }
     
-    /* Botão Adicionar */
     #form-new-category button[type="submit"] {
       background: #58a6ff !important;
       color: #08224f !important;
       font-weight: 600 !important;
     }
     
-    /* Botão Fechar */
     #close-categories {
       color: #fff !important;
       border-color: rgba(255,255,255,0.3) !important;
@@ -108,7 +104,6 @@
       </div>
     </header>
 
-    <!-- Filtros -->
     <section style="margin-bottom: 20px;">
       <button id="toggle-filters" class="btn outline small" style="width: 100%;">
         🔍 Filtros Avançados
@@ -173,14 +168,12 @@
         <button class="btn red" id="add-expense" aria-haspopup="dialog" type="button">Adicionar Despesa</button>
       </div>
 
-      <!-- NOVO BLOCO DE SALDO -->
       <div id="totals-wrapper">
         <div class="total-line" id="saldo-consolidado">Saldo consolidado: R$ 0,00</div>
         <div class="total-line" id="saldo-previsto">Saldo previsto: R$ 0,00</div>
       </div>
     </section>
 
-    <!-- MODAL -->
     <div class="modal" id="modal" aria-hidden="true">
       <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
         <h3 id="modal-title">Nova transação</h3>
@@ -215,7 +208,6 @@
             </select>
           </div>
 
-          <!-- CAMPO TIPO — SOMENTE NO EDITAR -->
           <div class="field" id="field-type">
             <label>Tipo</label>
             <div style="display:flex;gap:8px">
@@ -239,7 +231,6 @@
       </div>
     </div>
 
-    <!-- Modal de Categorias -->
     <div class="modal" id="modal-categories" aria-hidden="true" style="display: none;">
       <div class="sheet" role="dialog" aria-modal="true" style="max-width: 550px; padding: 24px; background: linear-gradient(180deg, var(--card), var(--card-2)); border: 1px solid var(--border);">
         <h3 style="margin-top: 0; font-size: 20px; color: #fff; font-weight: 600;">⚙️ Gerenciar Categorias</h3>
@@ -250,7 +241,6 @@
         </div>
 
         <div id="categories-list" style="max-height: 320px; overflow-y: auto; margin-bottom: 20px; padding: 8px; background: rgba(0,0,0,0.15); border-radius: 8px;">
-          <!-- Categorias serão inseridas aqui -->
         </div>
 
         <div style="border-top: 2px solid rgba(255,255,255,0.15); padding-top: 16px; margin-top: 16px;">
@@ -281,7 +271,6 @@
 
   <div id="toast" role="status" aria-live="polite"></div>
 
-  <!-- Sistema -->
   <script src="js/utils.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/route-guard.js"></script>
@@ -289,12 +278,9 @@
   <script src="js/categories.js"></script>
   <script src="js/transactions.js"></script>
   <script>
-    // Protege a página
     RouteGuard.protect();
-    // Protege a página
     RouteGuard.protect();
 
-    // === ELEMENTOS DOM ===
     const pendentesList = document.getElementById('pendentes-list');
     const historicoList = document.getElementById('historico-list');
     const toggleEdit = document.getElementById('toggle-edit');
@@ -308,7 +294,6 @@
     const accountSelect = document.getElementById('t-account');
     const categorySelect = document.getElementById('t-category');
 
-    // Modal de categorias
     const modalCategories = document.getElementById('modal-categories');
     const btnManageCategories = document.getElementById('btn-manage-categories');
     const closeCategoriesBtn = document.getElementById('close-categories');
@@ -323,10 +308,8 @@
     let categoryTabType = 'receita';
     let activeFilters = {};
 
-    // === INICIALIZAR ===
     Categories.init();
 
-    // === ELEMENTOS DE FILTRO ===
     const toggleFiltersBtn = document.getElementById('toggle-filters');
     const filtersPanel = document.getElementById('filters-panel');
     const filterDateStart = document.getElementById('filter-date-start');
@@ -337,14 +320,12 @@
     const btnClearFilters = document.getElementById('btn-clear-filters');
     const btnExport = document.getElementById('btn-export');
 
-    // === TOGGLE FILTROS ===
     toggleFiltersBtn.addEventListener('click', () => {
       const isVisible = filtersPanel.style.display !== 'none';
       filtersPanel.style.display = isVisible ? 'none' : 'block';
       toggleFiltersBtn.textContent = isVisible ? '🔍 Filtros Avançados' : '✕ Fechar Filtros';
     });
 
-    // === CARREGAR CONTAS NO SELECT ===
     function loadAccountsSelect() {
       const accounts = Accounts.getByUser();
       accountSelect.innerHTML = '';
@@ -362,7 +343,6 @@
       });
     }
 
-    // === CARREGAR CATEGORIAS NO SELECT ===
     function loadCategoriesSelect(tipo) {
       const categories = Categories.getByType(tipo);
       categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
@@ -376,9 +356,7 @@
       });
     }
 
-    // === CARREGAR FILTROS ===
     function loadFilterSelects() {
-      // Carregar contas
       const accounts = Accounts.getByUser();
       filterAccount.innerHTML = '<option value="">Todas</option>';
       accounts.forEach(acc => {
@@ -388,7 +366,6 @@
         filterAccount.appendChild(option);
       });
 
-      // Carregar categorias (todas)
       const receitaCats = Categories.getByType('receita');
       const despesaCats = Categories.getByType('despesa');
       filterCategory.innerHTML = '<option value="">Todas</option>';
@@ -415,7 +392,6 @@
       filterCategory.appendChild(optgroupDespesas);
     }
 
-    // === APLICAR FILTROS ===
     btnApplyFilters.addEventListener('click', () => {
       activeFilters = {};
 
@@ -439,7 +415,6 @@
       Utils.showToast('Filtros aplicados', 'info', 2000);
     });
 
-    // === LIMPAR FILTROS ===
     btnClearFilters.addEventListener('click', () => {
       activeFilters = {};
       filterDateStart.value = '';
@@ -450,7 +425,6 @@
       Utils.showToast('Filtros removidos', 'info', 2000);
     });
 
-    // === EXPORTAR DADOS ===
     btnExport.addEventListener('click', async () => {
       const formato = await Utils.showConfirm(
         'Escolha o formato de exportação:',
@@ -486,7 +460,6 @@
         filename = `transacoes_${new Date().toISOString().split('T')[0]}.csv`;
         type = 'text/csv;charset=utf-8;';
       } else {
-        // JSON
         const data = transactions.map(t => {
           const conta = Accounts.getById(t.contaId);
           return {
@@ -500,7 +473,6 @@
         type = 'application/json;charset=utf-8;';
       }
 
-      // Download
       const blob = new Blob([content], { type });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -514,7 +486,6 @@
       Utils.showToast(`${transactions.length} transações exportadas!`, 'success');
     });
 
-    // === CRIAR CARD DE TRANSAÇÃO ===
     function createTransactionCard(tx) {
       const card = document.createElement('div');
       card.className = 'card';
@@ -546,16 +517,13 @@
       return card;
     }
 
-    // === RENDERIZAR LISTAS ===
     function renderLists() {
       const transactions = Transactions.getFiltered(activeFilters);
       
-      // Separa transações futuras e passadas
       const hoje = new Date().toISOString().split('T')[0];
       const pendentes = transactions.filter(t => t.data > hoje);
       const historico = transactions.filter(t => t.data <= hoje);
 
-      // Renderiza pendentes
       pendentesList.innerHTML = '';
       if (pendentes.length === 0) {
         pendentesList.innerHTML = '<div class="muted">Nenhuma transação futura.</div>';
@@ -565,7 +533,6 @@
         });
       }
 
-      // Renderiza histórico
       historicoList.innerHTML = '';
       if (historico.length === 0) {
         historicoList.innerHTML = '<div class="muted">Nenhuma transação realizada.</div>';
@@ -579,7 +546,6 @@
       updateFiltersInfo();
     }
 
-    // === ATUALIZAR INFO DE FILTROS ===
     function updateFiltersInfo() {
       const hasFilters = Object.keys(activeFilters).some(key => activeFilters[key]);
       if (hasFilters) {
@@ -593,7 +559,6 @@
       }
     }
 
-    // === ATUALIZAR TOTAIS ===
     function updateTotals() {
       const stats = Transactions.getEstatisticas();
       const saldoConsolidado = Accounts.getSaldoConsolidado();
@@ -606,7 +571,6 @@
         'Saldo previsto: ' + Accounts.formatarSaldo(saldoPrevisto);
     }
 
-    // === TOGGLE EDIT MODE ===
     toggleEdit.addEventListener('click', () => {
       isEditMode = !isEditMode;
       toggleEdit.setAttribute('aria-pressed', String(isEditMode));
@@ -614,7 +578,6 @@
       renderLists();
     });
 
-    // === ABRIR MODAL CRIAR ===
     function openModal(tipo) {
       currentType = tipo;
       editingId = null;
@@ -632,7 +595,6 @@
       document.body.style.overflow = 'hidden';
     }
 
-    // === ABRIR MODAL EDITAR ===
     function openEditModal(id) {
       const tx = Transactions.getById(id);
       if (!tx) return;
@@ -652,7 +614,6 @@
       txForm.elements['account'].value = tx.contaId;
       txForm.elements['category'].value = tx.categoria;
 
-      // Marca tipo
       Array.from(txForm.elements['type']).forEach(radio => {
         radio.checked = radio.value === (tx.tipo === 'receita' ? 'income' : 'expense');
       });
@@ -662,14 +623,12 @@
       document.body.style.overflow = 'hidden';
     }
 
-    // === FECHAR MODAL ===
     function closeModal() {
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
     }
 
-    // === BOTÕES ABRIR MODAL ===
     addIncomeBtn.addEventListener('click', () => openModal('receita'));
     addExpenseBtn.addEventListener('click', () => openModal('despesa'));
     cancelBtn.addEventListener('click', closeModal);
@@ -678,7 +637,6 @@
       if (e.target === modal) closeModal();
     });
 
-    // === SUBMIT FORM ===
     txForm.addEventListener('submit', (e) => {
       e.preventDefault();
 
@@ -689,7 +647,6 @@
       const contaId = txForm.elements['account'].value;
       const categoria = txForm.elements['category'].value;
 
-      // Validações
       if (!descricao) {
         Utils.showToast('Preencha a descrição', 'error');
         return;
@@ -715,7 +672,6 @@
         return;
       }
 
-      // Define tipo
       let tipo = currentType;
       if (editingId && fieldType.style.display !== 'none') {
         const selected = Array.from(txForm.elements['type']).find(r => r.checked);
@@ -747,7 +703,6 @@
       }
     });
 
-    // === DELEGAÇÃO DE EVENTOS ===
     function handleAction(e) {
       const btn = e.target.closest('[data-action]');
       if (!btn) return;
@@ -779,7 +734,6 @@
     pendentesList.addEventListener('click', handleAction);
     historicoList.addEventListener('click', handleAction);
 
-    // === PERFIL ===
     document.getElementById('profile-top').addEventListener('click', () => {
       const user = Auth.getCurrentUser();
       if (user) {
@@ -787,13 +741,11 @@
       }
     });
 
-    // === MÁSCARA VALOR ===
     const valueInput = document.getElementById('t-value');
     valueInput.addEventListener('input', (e) => {
       e.target.value = e.target.value.replace(/[^\d,]/g, '');
     });
 
-    // === MODAL DE CATEGORIAS ===
     btnManageCategories.addEventListener('click', () => {
       categoryTabType = currentType;
       modalCategories.style.display = 'flex';
@@ -858,7 +810,6 @@
           transition: all 0.2s ease;
         `;
         
-        // Efeito hover
         item.addEventListener('mouseenter', () => {
           item.style.background = 'rgba(255,255,255,0.12)';
           item.style.borderColor = cat.cor;

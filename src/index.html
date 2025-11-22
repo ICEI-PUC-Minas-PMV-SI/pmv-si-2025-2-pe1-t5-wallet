@@ -16,9 +16,6 @@
 
       <h2 style="margin:0 0 18px 0; font-size:20px;">Entrar</h2>
 
-      <!-- Exemplo de mensagem de erro (opcional). Remova se não for usar agora.
-      <div class="alert">E-mail e/ou senha incorretos. Tente novamente.</div>
-      -->
 
       <form action="#" method="post" novalidate>
         <div class="field">
@@ -40,20 +37,16 @@
     </section>
   </main>
 
-  <!-- Scripts -->
   <script src="js/utils.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/route-guard.js"></script>
   <script>
-    // Redireciona se já estiver logado
     RouteGuard.redirectIfAuthenticated();
 
-    // Elementos do formulário
     const form = document.querySelector('form');
     const emailInput = document.getElementById('email');
     const senhaInput = document.getElementById('senha');
 
-    // Validação de email ao sair do campo
     emailInput.addEventListener('blur', function() {
       const email = this.value.trim();
       if (email) {
@@ -62,7 +55,6 @@
       }
     });
 
-    // Validação de senha ao sair do campo
     senhaInput.addEventListener('blur', function() {
       const senha = this.value;
       if (senha) {
@@ -71,15 +63,12 @@
       }
     });
 
-    // Listener do formulário
     form.addEventListener('submit', function(e) {
       e.preventDefault();
 
-      // Obtém valores
       const email = emailInput.value.trim();
       const senha = senhaInput.value;
 
-      // Validações básicas
       if (!email || !senha) {
         Utils.showToast('Preencha todos os campos', 'error');
         return;
@@ -91,12 +80,9 @@
         return;
       }
 
-      // Mostra loading
       Utils.showLoading('Entrando...');
 
-      // Simula delay para mostrar loading
       setTimeout(() => {
-        // Tenta fazer login
         const result = Auth.login(email, senha);
 
         Utils.hideLoading();
@@ -104,14 +90,12 @@
         if (result.success) {
           Utils.showToast(result.message, 'success');
           
-          // Redireciona para dashboard após 500ms
           setTimeout(() => {
             window.location.href = 'dashboard.html';
           }, 500);
         } else {
           Utils.showToast(result.message, 'error');
           
-          // Limpa senha em caso de erro
           senhaInput.value = '';
           senhaInput.focus();
         }
