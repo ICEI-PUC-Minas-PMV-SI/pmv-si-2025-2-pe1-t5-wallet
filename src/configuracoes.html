@@ -100,16 +100,25 @@
 
   <div class="header">
     <div class="back">
-      <a href="javascript:history.back()"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></a>
+      <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
     </div>
     <div class="title">Configurações</div>
   </div>
 
   <nav class="menu">
-    <a href="contas.html" class="menu-item">Central de contas 
+    <a href="#" class="menu-item">Central de contas 
       <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </a>
 
+    <a href="#" class="menu-item">Notificações 
+      <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+
+    <a href="#" class="menu-item">Pagamentos 
+      <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+
+    <!-- quando clicar aqui, vai para a página idioma.html -->
     <a href="idioma.html" class="menu-item">Idioma 
       <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </a>
@@ -122,21 +131,29 @@
       <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </a>
 
-    <a href="index.html" class="menu-item logout">Sair da conta 
+    <a href="#" class="menu-item">Sobre 
+      <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+
+    <a href="#" class="menu-item logout">Sair da conta 
       <svg class="arrow" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </a>
   </nav>
 
+  <!-- Scripts -->
   <script src="js/utils.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/route-guard.js"></script>
   <script>
+    // Protege a página
     RouteGuard.protect();
 
+    // Botão voltar
     document.querySelector('.back').addEventListener('click', function() {
       window.location.href = 'dashboard.html';
     });
 
+    // Botão logout
     document.querySelector('.logout').addEventListener('click', function(e) {
       e.preventDefault();
       Utils.showConfirm(

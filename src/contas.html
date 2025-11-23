@@ -11,19 +11,19 @@
   <div class="app" role="main" aria-labelledby="page-title">
     <header>
       <div class="brand" aria-hidden="false">
-        <a href="dashboard.html"><img src="img/logo.png" alt=""></a>
+        <img src="img/logo.png" alt="">
         <div>
           <div class="title">GoalWallet</div>
           <div class="subtitle">Contas conectadas</div>
         </div>
       </div>
 
-      <a href="perfil.html"><button class="profile" aria-label="Abrir perfil" title="Perfil">
+      <button class="profile" aria-label="Abrir perfil" title="Perfil">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5z" fill="white" opacity="0.95"/>
           <path d="M4 20c0-3.313 2.687-6 6-6h4c3.313 0 6 2.687 6 6v1H4v-1z" fill="white" opacity="0.08"/>
         </svg>
-      </button></a>
+      </button>
     </header>
 
     <main id="scroll-area" tabindex="0" aria-live="polite">
@@ -33,6 +33,7 @@
       </section>
 
       <section class="accounts-list" id="accountsList" aria-label="Lista de contas">
+        <!-- Contas serão carregadas dinamicamente via JavaScript -->
       </section>
 
       <div class="actions" aria-hidden="false">
@@ -74,12 +75,14 @@
     </div>
   </div>
 
+  <!-- Sistema de Autenticação e Contas -->
   <script src="js/utils.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/route-guard.js"></script>
   <script src="js/accounts.js"></script>
   
   <script>
+    // Protege a página
     RouteGuard.protect();
 
     (function(){
@@ -92,6 +95,7 @@
 
       let editMode = false;
       
+      // Carrega contas do usuário
       function loadAccounts() {
         const accounts = Accounts.getByUser();
         accountsList.innerHTML = '';
@@ -107,6 +111,7 @@
         });
       }
       
+      // Cria card de conta
       function createAccountCard(account) {
         const wrapper = document.createElement('article');
         wrapper.className = 'account-card';
@@ -134,6 +139,7 @@
         return wrapper;
       }
 
+      // Toggle para modo de edição
       editToggle.addEventListener('click', () => {
         editMode = !editMode;
         editToggle.setAttribute('aria-pressed', String(editMode));
@@ -201,6 +207,7 @@
         const editingId = modalBackdrop.dataset.editingId;
         
         if (editingId) {
+          // Editar conta existente
           const result = Accounts.atualizar(editingId, {
             nome: bankName,
             tipo: accountType,
@@ -216,6 +223,7 @@
             Utils.showToast(result.message, 'error');
           }
         } else {
+          // Criar nova conta
           const result = Accounts.criar({
             nome: bankName,
             tipo: accountType,
@@ -296,6 +304,7 @@
         }
       });
 
+      // Carrega contas ao iniciar
       loadAccounts();
 
     })();

@@ -1,7 +1,9 @@
+/* === SEU CSS COMPLETO (COM CORREÇÃO DOS BOTÕES) === */
+
 :root{
       --bg-start:#052a63;
       --bg-end:#0a3d91;
-      --surface:#ffffff;
+      --surface:#eff1f7;
       --glass:rgba(255,255,255,0.04);
       --muted:#7a8aa3;
       --muted-2:#9aa9d0;
@@ -104,7 +106,23 @@ body{
 .actions{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap}
 .btn{padding:10px 14px;border-radius:12px;border:none;cursor:pointer;font-weight:600;transition:transform var(--transition-fast) ease, filter var(--transition-fast) ease}
 .btn.green{background:var(--success);color:#05321a}
-.btn.red{background:var(--danger);color:#fff}
+.btn.red{background:var(--danger);color:#1b2155}
+
+/* === BOTÕES QUE ESTAVAM BRANCOS (AGORA ESTÃO AZUL CLARO) === */
+.btn-secondary,
+.btn-primary {
+  background: #1e63a8 !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 600;
+  border-radius:14px;
+  transition: background 0.18s ease;
+}
+
+.btn-secondary:hover,
+.btn-primary:hover {
+  background: #8cc7ff !important;
+}
 
 .tx-left{display:flex;flex-direction:column;gap:4px;min-width:0}
 .tx-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;min-width:120px}
@@ -173,10 +191,10 @@ body{
  ****************************************************/
 #totals-wrapper{
   margin-top:12px;
-  padding:0;               /* SEM FUNDO */
-  background:none;         /* SEM BACKGROUND */
-  backdrop-filter:none;    /* SEM BLUR */
-  box-shadow:none;         /* SEM SHADOW */
+  padding:0;
+  background:none;
+  backdrop-filter:none;
+  box-shadow:none;
   display:flex;
   flex-direction:column;
   gap:4px;
@@ -190,9 +208,104 @@ body{
 }
 
 .total-line:first-child{
-  color:#aee8b8;    /* verde suave para consolidado */
+  color:#aee8b8;
 }
 
 .total-line:last-child{
-  color:#e0e5ff;    /* azul claro para previsto */
+  color:#e0e5ff;
 }
+
+/****************************************************
+ * BOTÃO "Filtros Avançados" — AZUL CLARO
+ ****************************************************/
+#toggle-filters {
+  background: #6eb6ff !important; 
+  color: #ffffff !important;
+  border: none !important;
+  width: 100%;
+  padding: 14px;
+  font-weight: 600;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.18s ease;
+}
+
+#toggle-filters:hover {
+  background: #8cc7ff !important;
+}
+
+/****************************************************
+ * BOTÕES "Limpar" e "Aplicar" — AGORA FUNCIONANDO
+ ****************************************************/
+.btn.light,
+.btn-primary,
+.btn-secondary {
+  background: #6eb6ff !important;
+  color: rgb(28, 63, 116) !important;
+  border: none !important;
+  border-radius: 14px;
+}
+
+.btn.light:hover,
+.btn-primary:hover,
+.btn-secondary:hover {
+  background: #8cc7ff !important;
+}
+/* === BOTÃO ADICIONAR RECEITA — VERDE === */
+#btn-add-receita,
+.btn-add-receita,
+#add-income {
+  background: #3ecf8e !important;     /* verde */
+  color: #07381b !important;
+  border-color: #3ecf8e !important;
+  font-weight: 600 !important;
+  border-radius: 12px;
+}
+
+#btn-add-receita:hover,
+.btn-add-receita:hover,
+#add-income:hover {
+  filter: brightness(1.15);
+}
+
+/* === BOTÃO ADICIONAR DESPESA — VERMELHO === */
+.btn-add-despesa,
+#btn-add-despesa,
+#add-expense {
+  background: #ff4d4d !important;   /* vermelho */
+  color: #fff !important;
+  border-color: #ff4d4d !important;
+  font-weight: 600;
+  border-radius: 16px;
+
+}
+
+.btn-add-despesa:hover,
+#btn-add-despesa:hover,
+#add-expense:hover {
+  filter: brightness(1.15);
+}
+/* === QUADRADOS / CARDS BONITOS === */
+.card {
+  background: rgba(255, 255, 255, 0.06);         /* vidro suave */
+  border-radius: 16px;                           /* mais arredondado */
+  padding: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);       /* sombra bonita */
+  border: 1px solid rgba(255,255,255,0.12);      /* borda brilhante */
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  transition: transform .22s ease, box-shadow .22s ease, border .22s ease;
+}
+
+/* === EFEITO AO PASSAR O MOUSE === */
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.32);
+  border: 1px solid rgba(255,255,255,0.22);      /* realce */
+}
+
+
+

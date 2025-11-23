@@ -18,6 +18,7 @@
     flex-direction: column;
   }
 
+  /* Cabeçalho */
   .header {
     display: flex;
     align-items: center;
@@ -60,6 +61,7 @@
     margin-bottom: 20px;
   }
 
+  /* Formulário */
   form {
     display: flex;
     flex-direction: column;
@@ -88,6 +90,7 @@
     min-height: 140px;
   }
 
+  /* Botão de envio */
   .submit-button {
     width: 100%;
     padding: 16px;
@@ -111,6 +114,7 @@
     background-color: #249f5c;
   }
 
+  /* Mensagem de info */
   .info-text {
     font-size: 0.85em;
     text-align: center;
@@ -119,6 +123,7 @@
     margin-top: 22px;
   }
 
+  /* Mensagem de sucesso */
   .success-msg {
     position: fixed;
     bottom: 80px;
@@ -172,6 +177,7 @@
     form.addEventListener('submit', e => {
       e.preventDefault();
 
+      // Simulação de envio
       successMsg.classList.add('show');
       setTimeout(() => successMsg.classList.remove('show'), 2000);
 
@@ -179,10 +185,12 @@
     });
   </script>
 
+  <!-- Sistema de Autenticação -->
   <script src="js/utils.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/route-guard.js"></script>
   <script>
+    // Protege a página
     RouteGuard.protect();
   </script>
 </body>

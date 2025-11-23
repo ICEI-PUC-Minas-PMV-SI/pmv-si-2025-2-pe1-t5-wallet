@@ -127,6 +127,7 @@
       max-width: 90%;
     }
 
+    /* Botão de salvar */
     .save-btn {
       position: fixed;
       bottom: 24px;
@@ -149,6 +150,7 @@
       background: #e4e6e4;
     }
 
+    /* Mensagem de sucesso */
     .success-msg {
       position: fixed;
       bottom: 90px;
@@ -221,7 +223,9 @@
   <div class="success-msg" id="successMsg">✅ Idioma salvo com sucesso!</div>
 
   <script>
-    let selectedValue = "pt"; 
+    let selectedValue = "pt"; // padrão
+
+    // seleção de idioma
     document.querySelectorAll('.choice').forEach(choice => {
       choice.addEventListener('click', () => {
         document.querySelectorAll('.choice').forEach(c => {
@@ -242,22 +246,27 @@
       });
     });
 
+    // botão salvar
     const saveBtn = document.getElementById('saveBtn');
     const successMsg = document.getElementById('successMsg');
 
     saveBtn.addEventListener('click', () => {
+      // simulação de salvar idioma
       successMsg.classList.add('show');
 
+      // esconde depois de 2 segundos
       setTimeout(() => {
         successMsg.classList.remove('show');
       }, 2000);
     });
   </script>
 
+  <!-- Sistema de Autenticação -->
   <script src="js/utils.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/route-guard.js"></script>
   <script>
+    // Protege a página
     RouteGuard.protect();
   </script>
 
